@@ -1,3 +1,3 @@
-export 'package:notesapp/models/note.dart';
-export 'package:notesapp/models/user.dart';
+export 'package:gymapp/models/note.dart';
+export 'package:gymapp/models/user.dart';
 

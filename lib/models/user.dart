@@ -1,11 +1,15 @@
 class User {
   User({
     this.key,
-    required this.user,
+    required this.name,
     required this.password,
+    required this.email,
+    this.authenticationCode,
   });
 
   String? key;
-  String user;
+  String name;
   String password;
+  String email;
+  String? authenticationCode;
 }
