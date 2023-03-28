@@ -115,7 +115,9 @@ class _MyHomePageState extends State<MyHomePage> {
               print('hola');
               LoginServices login = LoginServices();
 
-              await login.pruebasUsers();
+              var a = await login.pruebasUsers();
+
+              print(a);
             },)
           ],
         ),
