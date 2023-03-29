@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../services/appstate.dart';
+import 'package:provider/provider.dart';
+
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
-
-// ...
-
-await Firebase.initializeApp(
-options: DefaultFirebaseOptions.currentPlatform,
-);
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
