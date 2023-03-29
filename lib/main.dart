@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gymapp/services/firebase_options.dart';
 import 'package:gymapp/services/users_services.dart';
 
-void main() async  {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -57,8 +57,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
-
-
   void _incrementCounter() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -111,14 +109,16 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),
-            MaterialButton(onPressed: () async {
-              print('hola');
-              LoginServices login = LoginServices();
+            MaterialButton(
+              color: Colors.blue,
+              onPressed: () async {
+                LoginServices login = LoginServices();
 
-              var a = await login.pruebasUsers();
+                var a = await login.getUsers();
 
-              print(a);
-            },)
+                print(a.toString());
+              },
+            )
           ],
         ),
       ),
@@ -127,7 +127,6 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),
-
 
       // This trailing comma makes auto-formatting nicer for build methods.
     );

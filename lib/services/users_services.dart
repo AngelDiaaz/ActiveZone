@@ -14,83 +14,38 @@ class LoginServices {
 
   FirebaseFirestore db = FirebaseFirestore.instance;
 
-  Future<List<User>> pruebasUsers() async {
+  Future<List<User>> getUsers() async {
     CollectionReference user = db.collection("users");
 
-    DocumentSnapshot snapshot = await user.doc("user2").get();
-    var data = snapshot.data() as Map;
-    var userData = data.keys;
+    int number = 1;
 
+    // Realizo una consulta con el numero de usuarios que hay en la bbdd
     AggregateQuerySnapshot query = await user.count().get();
 
-    print(query.count);
-    print(user.snapshots().length);
-
-    print(userData.toString());
-
     for (var i = 0; i < query.count; i++) {
-      print("a");
+      // Recorro todos los usuarios de la bbdd
+      DocumentSnapshot snapshot = await user.doc("user$number").get();
+      var data = snapshot.data() as Map;
+
+      number++;
 
       if (snapshot.exists) {
-        var key = data.keys;
-        dynamic value = data.values;
-
-        print(key);
-        print(value);
-
-        Map map = {'key': key, ...value};
-
-        // Mapeo la informacion en un nuevo usuario
+        // Obtengo el usuario de la bbdd
         User newUser = User(
-          password: map['password'],
-          key: map['key'],
-          name: map['name'],
-          email: map['email'],
-          authenticationCode: map['authentication code'],
+          password: data.values.elementAt(0),
+          name: data.values.elementAt(1),
+          authenticationCode: data.values.elementAt(2),
+          email: data.values.elementAt(3),
+          key: data.values.elementAt(4),
         );
 
-        // Añado el usuario de la base de datos en una lista
+        // Añado el usuario de la bbdd en una lista
         myUsers.add(newUser);
       }
     }
 
     return myUsers;
   }
-// /// Metodo que obtiene y devuelve todos los usuarios de la base de datos
-// Future<List<User>> getUsers() async {
-//   List<User> myUsers = [];
-//   try {
-//     await Firebase.initializeApp(
-//       options: DefaultFirebaseOptions.currentPlatform,
-//     );
-//
-//     final user = db.collection("users");
-//
-//
-//     DatabaseEvent snap = db.collection("user").snapshots();
-//
-//     if (snap.snapshot.exists) {
-//       for (var i = 0; i < snap.snapshot.children.length; i++) {
-//         var key = snap.snapshot.children.elementAt(i).key;
-//         dynamic value = snap.snapshot.children.elementAt(i).value;
-//         Map map = {'key': key, ...value};
-//
-//         // Mapeo la informacion en un nuevo usuario
-//         User newUser = User(
-//           password: map['password'],
-//           key: map['key'],
-//           user: map['user'],
-//         );
-//
-//         // Añado el usuario de la base de datos en una lista
-//         myUsers.add(newUser);
-//       }
-//     }
-//     return myUsers;
-//   } catch (e) {
-//     return myUsers;
-//   }
-// }
 //
 // /// Metodo que inserta un usuario en la base de datos
 // Future<bool> saveUser(String user, String password) async {

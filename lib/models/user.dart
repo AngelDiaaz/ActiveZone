@@ -12,4 +12,9 @@ class User {
   String password;
   String email;
   String? authenticationCode;
+
+  @override
+  String toString() {
+    return "User --> Name: $name Password: $password Email: $email";
+  }
 }
