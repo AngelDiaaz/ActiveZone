@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../models/user.dart';
 import '../services/services.dart';
 
 class Register extends StatefulWidget {
@@ -14,6 +15,7 @@ class _RegisterState extends State<Register> {
   final TextEditingController userController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController passwordRepeatController = TextEditingController();
+  final TextEditingController authenticationCodeController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AppState? state;
 
@@ -30,15 +32,6 @@ class _RegisterState extends State<Register> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 60.0),
-              child: Center(
-                child: SizedBox(
-                    width: 200,
-                    height: 150,
-                    child: Image.asset('assets/images/login.jpg')),
-              ),
-            ),
             const SizedBox(
               height: 60,
             ),
@@ -60,7 +53,9 @@ class _RegisterState extends State<Register> {
                         bool response = false;
                         if (_formKey.currentState!.validate()) {
                             if (passwordController.text == passwordRepeatController.text) {
-                              // state!.saveUser(userController.text, passwordController.text);
+
+                              User u = state!.getUser("user1") as User;
+                              state!.updateUser("user1", u);
                               response = true;
                             }
                           if (response) {
@@ -117,7 +112,29 @@ class _RegisterState extends State<Register> {
             ),
           ),
           const SizedBox(
-            height: 20,
+            height: 10,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+                left: 15.0, right: 15.0, top: 15, bottom: 0),
+            //padding: EdgeInsets.symmetric(horizontal: 15),
+            child: TextFormField(
+              controller: authenticationCodeController,
+              obscureText: true,
+              decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Código autentificación',
+                  hintText: 'Introduce el código de autentificación'),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Este campo es requerido';
+                }
+                return null;
+              },
+            ),
+          ),
+          const SizedBox(
+            height: 10,
           ),
           Padding(
             padding: const EdgeInsets.only(
@@ -139,7 +156,7 @@ class _RegisterState extends State<Register> {
             ),
           ),
           const SizedBox(
-            height: 20,
+            height: 10,
           ),
           Padding(
             padding: const EdgeInsets.only(

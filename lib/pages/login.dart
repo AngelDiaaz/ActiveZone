@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import '../services/appstate.dart';
 import 'package:provider/provider.dart';
 
-import 'package:firebase_core/firebase_core.dart';
-
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
@@ -29,15 +27,15 @@ class _LoginState extends State<Login> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 60.0),
-              child: Center(
-                child: SizedBox(
-                    width: 200,
-                    height: 150,
-                    child: Image.asset('assets/images/login.jpg')),
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.only(top: 60.0),
+            //   child: Center(
+            //     child: SizedBox(
+            //         width: 200,
+            //         height: 150,
+            //         child: Image.asset('assets/images/login.jpg')),
+            //   ),
+            // ),
             const SizedBox(
               height: 60,
             ),
