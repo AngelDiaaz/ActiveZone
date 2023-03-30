@@ -61,7 +61,7 @@ class _LoginState extends State<Login> {
                         bool response = false;
                         if (_formKey.currentState!.validate()) {
                           for (var user in users) {
-                            if (user.user == userController.text &&
+                            if (user.name == userController.text &&
                                 user.password == passwordController.text) {
                               response = true;
                             }

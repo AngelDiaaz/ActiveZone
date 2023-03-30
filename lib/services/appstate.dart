@@ -15,29 +15,29 @@ class AppState with ChangeNotifier {
     }
   }
 
-  /// Metodo que guarda un usuario de la base de datos
-  Future<bool> saveUser(String user, String password) async {
-    try {
-      bool response = await LoginServices().saveUser(user, password);
-      if (response) {
-        notifyListeners();
-      }
-      return response;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  /// Metodo que elimina un usuario de la base de datos
-  Future<bool> deleteUser(String key) async {
-    try {
-      bool response = await LoginServices().deleteUser(key);
-      if (response) {
-        notifyListeners();
-      }
-      return response;
-    } catch (e) {
-      return false;
-    }
-  }
+  // /// Metodo que guarda un usuario de la base de datos
+  // Future<bool> saveUser(String user, String password) async {
+  //   try {
+  //     bool response = await LoginServices().saveUser(user, password);
+  //     if (response) {
+  //       notifyListeners();
+  //     }
+  //     return response;
+  //   } catch (e) {
+  //     return false;
+  //   }
+  // }
+  //
+  // /// Metodo que elimina un usuario de la base de datos
+  // Future<bool> deleteUser(String key) async {
+  //   try {
+  //     bool response = await LoginServices().deleteUser(key);
+  //     if (response) {
+  //       notifyListeners();
+  //     }
+  //     return response;
+  //   } catch (e) {
+  //     return false;
+  //   }
+  // }
 }
