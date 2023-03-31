@@ -101,15 +101,7 @@ class _LoginState extends State<Login> {
                     "Registrarse",
                     style: TextStyle(fontSize: 25),
                   ),
-                  onPressed: () async {
-                    LoginServices l = LoginServices();
-
-                    User a = await l.getUser("user1");
-
-                    print(a.toString());
-
-                    Navigator.pushNamed(context, 'register');
-                  }),
+                  onPressed: () => Navigator.pushNamed(context, 'register')),
             ),
             const SizedBox(
               height: 130,
