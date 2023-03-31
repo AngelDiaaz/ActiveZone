@@ -7,7 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LoginServices {
   List<User> myUsers = [];
-  final User userEmpty = User(name: "", password: "", email: "", surname1: "", surname2: "");
+  final User userEmpty = User(name: "", password: "", email: "", surname1: "", surname2: "", active: false);
 
   FirebaseFirestore db = FirebaseFirestore.instance;
 
@@ -31,11 +31,12 @@ class LoginServices {
         User newUser = User(
           password: data.values.elementAt(1),
           name: data.values.elementAt(3),
-          authenticationCode: data.values.elementAt(4),
+          authenticationCode: data.values.elementAt(5),
           email: data.values.elementAt(6),
-          key: data.values.elementAt(5),
+          key: data.values.elementAt(7),
           surname1: data.values.elementAt(0),
           surname2: data.values.elementAt(2),
+          active: data.values.elementAt(4),
         );
 
         // Añado el usuario de la bbdd en una lista
@@ -50,19 +51,17 @@ class LoginServices {
     DocumentSnapshot snapshot = await db.collection("users").doc(id).get();
     var data = snapshot.data() as Map;
 
-    print(data.values);
-    print(data.keys);
-
     if (snapshot.exists) {
       // Obtengo el usuario de la bbdd
       User user = User(
         password: data.values.elementAt(1),
         name: data.values.elementAt(3),
-        authenticationCode: data.values.elementAt(4),
+        authenticationCode: data.values.elementAt(5),
         email: data.values.elementAt(6),
-        key: data.values.elementAt(5),
+        key: data.values.elementAt(7),
         surname1: data.values.elementAt(0),
         surname2: data.values.elementAt(2),
+        active: data.values.elementAt(4),
       );
       return user;
     }

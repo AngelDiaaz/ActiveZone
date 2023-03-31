@@ -5,7 +5,7 @@ import 'package:gymapp/services/users_services.dart';
 class AppState with ChangeNotifier {
   List<User> _myUsers = [];
 
-  final User userEmpty = User(name: "", password: "", email: "", surname1: "", surname2: "");
+  final User userEmpty = User(name: "", password: "", email: "", surname1: "", surname2: "", active: false);
 
   /// Metodo que devuelve todos los usuarios de la base de datos
   Future<List<User>> getUsers() async {

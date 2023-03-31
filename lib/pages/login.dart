@@ -55,25 +55,27 @@ class _LoginState extends State<Login> {
                   (BuildContext context, AsyncSnapshot<List> snapshot) {
                 return MaterialButton(
                   onPressed: () async {
-                    final navigator = Navigator.pushNamed(context, "/");
+                    final navigator = Navigator.of(context);
                     final messenger = ScaffoldMessenger.of(context);
                     bool response = false;
                     if (_formKey.currentState!.validate()) {
                       User user = await state!.getUser(userController.text);
-                      if (user.name == userController.text &&
-                          user.password == passwordController.text) {
-                        response = true;
-                      }
-                      if (response) {
-                        navigator;
-                      } else {
-                        messenger.showSnackBar(const SnackBar(
-                          content: Text(
-                            'Error credenciales incorrectas',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          backgroundColor: Colors.red,
-                        ));
+                      if (user.name != "") {
+                        if (user.name == userController.text &&
+                            user.password == passwordController.text) {
+                          response = true;
+                        }
+                        if (response) {
+                          navigator.pushNamed('/');
+                        } else {
+                          messenger.showSnackBar(const SnackBar(
+                            content: Text(
+                              'Error credenciales incorrectas',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            backgroundColor: Colors.red,
+                          ));
+                        }
                       }
                     }
                   },
