@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gymapp/services/users_services.dart';
+import '../models/user.dart';
 import '../services/appstate.dart';
 import 'package:provider/provider.dart';
 
@@ -49,60 +51,65 @@ class _LoginState extends State<Login> {
               decoration: BoxDecoration(
                   color: Colors.lightBlue,
                   borderRadius: BorderRadius.circular(20)),
-              child: FutureBuilder(
-                  future: state!.getUsers(),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<List> snapshot) {
-                    List users = snapshot.data ?? [];
-                    return MaterialButton(
-                      onPressed: () {
-                        bool response = false;
-                        if (_formKey.currentState!.validate()) {
-                          for (var user in users) {
-                            if (user.name == userController.text &&
-                                user.password == passwordController.text) {
-                              response = true;
-                            }
-                          }
-                          if (response) {
-                            Navigator.pushNamed(context, "/");
-                          } else {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text(
-                                'Error credenciales incorrectas',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                              backgroundColor: Colors.red,
-                            ));
-                          }
-                        }
-                      },
-                      child: const Text(
-                        'Login',
-                        style: TextStyle(color: Colors.white, fontSize: 25),
-                      ),
-                    );
-                  }),
+              child: FutureBuilder(builder:
+                  (BuildContext context, AsyncSnapshot<List> snapshot) {
+                return MaterialButton(
+                  onPressed: () async {
+                    final navigator = Navigator.pushNamed(context, "/");
+                    final messenger = ScaffoldMessenger.of(context);
+                    bool response = false;
+                    if (_formKey.currentState!.validate()) {
+                      User user = await state!.getUser(userController.text);
+                      if (user.name == userController.text &&
+                          user.password == passwordController.text) {
+                        response = true;
+                      }
+                      if (response) {
+                        navigator;
+                      } else {
+                        messenger.showSnackBar(const SnackBar(
+                          content: Text(
+                            'Error credenciales incorrectas',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          backgroundColor: Colors.red,
+                        ));
+                      }
+                    }
+                  },
+                  child: const Text(
+                    'Login',
+                    style: TextStyle(color: Colors.white, fontSize: 25),
+                  ),
+                );
+              }),
             ),
-            const SizedBox(height: 30,),
+            const SizedBox(
+              height: 30,
+            ),
             SizedBox(
               width: 270,
               height: 60,
               child: OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
+                  style: OutlinedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    side: const BorderSide(width: 1, color: Colors.black12),
                   ),
-                  side: const BorderSide(width: 1, color:Colors.black12),
-                ),
-                child: const Text(
-                  "Registrarse",
-                  style: TextStyle(fontSize: 25
+                  child: const Text(
+                    "Registrarse",
+                    style: TextStyle(fontSize: 25),
                   ),
-                ),
-                onPressed: () => Navigator.pushNamed(context, 'register'),
-              ),
+                  onPressed: () async {
+                    LoginServices l = LoginServices();
+
+                    User a = await l.getUser("user1");
+
+                    print(a.toString());
+
+                    Navigator.pushNamed(context, 'register');
+                  }),
             ),
             const SizedBox(
               height: 130,
@@ -112,7 +119,6 @@ class _LoginState extends State<Login> {
       ),
     );
   }
-
 
   Form _credentials() {
     return Form(

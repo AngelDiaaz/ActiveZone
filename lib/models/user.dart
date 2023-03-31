@@ -5,6 +5,8 @@ class User {
     required this.password,
     required this.email,
     this.authenticationCode,
+    required this.surname1,
+    required this.surname2,
   });
 
   String? key;
@@ -12,9 +14,11 @@ class User {
   String password;
   String email;
   String? authenticationCode;
+  String surname1;
+  String surname2;
 
   @override
   String toString() {
-    return "User --> Name: $name Password: $password Email: $email";
+    return "User --> Name: $name, Surname1: $surname1, Surname2: $surname2, Password: $password, Email: $email";
   }
 }

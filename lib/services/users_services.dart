@@ -7,6 +7,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LoginServices {
   List<User> myUsers = [];
+  final User userEmpty = User(name: "", password: "", email: "", surname1: "", surname2: "");
+
   FirebaseFirestore db = FirebaseFirestore.instance;
 
   Future<List<User>> getUsers() async {
@@ -27,11 +29,13 @@ class LoginServices {
       if (snapshot.exists) {
         // Obtengo el usuario de la bbdd
         User newUser = User(
-          password: data.values.elementAt(0),
-          name: data.values.elementAt(1),
-          authenticationCode: data.values.elementAt(2),
-          email: data.values.elementAt(3),
-          key: data.values.elementAt(4),
+          password: data.values.elementAt(1),
+          name: data.values.elementAt(3),
+          authenticationCode: data.values.elementAt(4),
+          email: data.values.elementAt(6),
+          key: data.values.elementAt(5),
+          surname1: data.values.elementAt(0),
+          surname2: data.values.elementAt(2),
         );
 
         // Añado el usuario de la bbdd en una lista
@@ -46,18 +50,23 @@ class LoginServices {
     DocumentSnapshot snapshot = await db.collection("users").doc(id).get();
     var data = snapshot.data() as Map;
 
+    print(data.values);
+    print(data.keys);
+
     if (snapshot.exists) {
       // Obtengo el usuario de la bbdd
       User user = User(
-        password: data.values.elementAt(0),
-        name: data.values.elementAt(1),
-        authenticationCode: data.values.elementAt(2),
-        email: data.values.elementAt(3),
-        key: data.values.elementAt(4),
+        password: data.values.elementAt(1),
+        name: data.values.elementAt(3),
+        authenticationCode: data.values.elementAt(4),
+        email: data.values.elementAt(6),
+        key: data.values.elementAt(5),
+        surname1: data.values.elementAt(0),
+        surname2: data.values.elementAt(2),
       );
       return user;
     }
-    return User(name: "", password: "", email: "");
+    return userEmpty;
   }
     /// Metodo que modifica un usuario en la base de datos
     Future<bool> updateUser(String id, User user) async {
