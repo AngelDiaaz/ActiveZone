@@ -60,7 +60,7 @@ class _LoginState extends State<Login> {
                     bool response = false;
                     if (_formKey.currentState!.validate()) {
                       User user = await state!.getUser(userController.text);
-                      if (user.name != "") {
+                      if (user.name != "" && user.active!) {
                         if (user.name == userController.text &&
                             user.password == passwordController.text) {
                           response = true;
@@ -76,6 +76,14 @@ class _LoginState extends State<Login> {
                             backgroundColor: Colors.red,
                           ));
                         }
+                      } else {
+                        messenger.showSnackBar(const SnackBar(
+                          content: Text(
+                            'No existe esta cuenta o esta desactivada',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          backgroundColor: Colors.red,
+                        ));
                       }
                     }
                   },
