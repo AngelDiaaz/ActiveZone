@@ -13,8 +13,10 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   final TextEditingController userController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController passwordRepeatController = TextEditingController();
-  final TextEditingController authenticationCodeController = TextEditingController();
+  final TextEditingController passwordRepeatController =
+      TextEditingController();
+  final TextEditingController authenticationCodeController =
+      TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AppState? state;
 
@@ -44,39 +46,57 @@ class _RegisterState extends State<Register> {
               decoration: BoxDecoration(
                   color: Colors.lightBlue,
                   borderRadius: BorderRadius.circular(20)),
-              child: FutureBuilder(
-                  builder:
-                      (BuildContext context, AsyncSnapshot<List> snapshot) {
-                    return MaterialButton(
-                      onPressed: () {
-                        bool response = false;
-                        if (_formKey.currentState!.validate()) {
-                            if (passwordController.text == passwordRepeatController.text) {
+              child: FutureBuilder(builder:
+                  (BuildContext context, AsyncSnapshot<List> snapshot) {
+                return MaterialButton(
+                  onPressed: () async {
+                    final navigator = Navigator.of(context);
+                    final messenger = ScaffoldMessenger.of(context);
+                    bool response = false;
+                    if (_formKey.currentState!.validate()) {
+                      User user = await state!.getUser(userController.text);
+                      print(userController.text);
 
-                              User u = state!.getUser("user1") as User;
-                              state!.updateUser("user1", u);
-                              response = true;
-                            }
-                          if (response) {
-                            Navigator.pushNamed(context, "login");
-                          } else {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text(
-                                'Error las contraseñas no coinciden',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                              backgroundColor: Colors.red,
-                            ));
-                          }
+                      print(user.toString());
+                      if (!user.active! &&
+                          user.authenticationCode ==
+                              authenticationCodeController.text) {
+                        if (passwordController.text ==
+                            passwordRepeatController.text) {
+                          // Activo la cuenta para que usuario pueda iniciar sesion
+                          user.active = true;
+
+                          state!.updateUser(userController.text, user);
+                          response = true;
                         }
-                      },
-                      child: const Text(
-                        'Registrarse',
-                        style: TextStyle(color: Colors.white, fontSize: 25),
-                      ),
-                    );
-                  }),
+                        if (response) {
+                          navigator.pushNamed('login');
+                        } else {
+                          messenger.showSnackBar(const SnackBar(
+                            content: Text(
+                              'Error las contraseñas no coinciden',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            backgroundColor: Colors.red,
+                          ));
+                        }
+                      } else {
+                        messenger.showSnackBar(const SnackBar(
+                          content: Text(
+                            'Error usuario o código de autentificación no valido',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          backgroundColor: Colors.red,
+                        ));
+                      }
+                    }
+                  },
+                  child: const Text(
+                    'Registrarse',
+                    style: TextStyle(color: Colors.white, fontSize: 25),
+                  ),
+                );
+              }),
             ),
             const SizedBox(
               height: 130,
@@ -86,7 +106,6 @@ class _RegisterState extends State<Register> {
       ),
     );
   }
-
 
   Form _credentials() {
     return Form(

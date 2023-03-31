@@ -51,6 +51,10 @@ class LoginServices {
     DocumentSnapshot snapshot = await db.collection("users").doc(id).get();
     var data = snapshot.data() as Map;
 
+    print('hola');
+
+    //TODO arreglar obtener user2
+
     if (snapshot.exists) {
       // Obtengo el usuario de la bbdd
       User user = User(
@@ -63,7 +67,10 @@ class LoginServices {
         surname2: data.values.elementAt(2),
         active: data.values.elementAt(4),
       );
+      print('a ' + user.toString());
+
       return user;
+
     }
     return userEmpty;
   }
