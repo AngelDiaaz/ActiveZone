@@ -109,7 +109,7 @@ class _LoginState extends State<Login> {
                     side: const BorderSide(width: 1, color: Colors.black12),
                   ),
                   child: const Text(
-                    "Registrarse",
+                    "Activar cuenta",
                     style: TextStyle(fontSize: 25),
                   ),
                   onPressed: () => Navigator.pushNamed(context, 'register')),

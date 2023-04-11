@@ -3,7 +3,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LoginServices {
   List<User> myUsers = [];
-  final User userEmpty = User(name: "", password: "", email: "", surname1: "", surname2: "", active: false);
+  final User userEmpty = User(
+      name: "",
+      password: "",
+      email: "",
+      surname1: "",
+      surname2: "",
+      active: false);
 
   FirebaseFirestore db = FirebaseFirestore.instance;
 
@@ -45,10 +51,10 @@ class LoginServices {
 
   Future<User> getUser(String id) async {
     final ref = db.collection("users").doc(id).withConverter(
-      fromFirestore: User.fromFirestore,
-      toFirestore: (User user, _) => user.toFirestore(),
-    );
-    
+          fromFirestore: User.fromFirestore,
+          toFirestore: (User user, _) => user.toFirestore(),
+        );
+
     final docSnap = await ref.get();
     User? user = docSnap.data(); // Convert to City object
     if (user != null) {
@@ -83,28 +89,38 @@ class LoginServices {
   //   }
   //   return userEmpty;
   // }
-    /// Metodo que modifica un usuario en la base de datos
-    Future<bool> updateUser(String id, User user) async {
-      try {
-        db.collection("users").doc(id).update({
-          "name": user.name,
-          "password": user.password,
-          "email": user.email,
-        });
+  /// Metodo que modifica un usuario en la base de datos
+  Future<bool> updateUser(String id, User user) async {
+    try {
+      final updateUser = {
+        "name": user.name,
+        "password": user.password,
+        "email": user.email,
+        "surname1": user.surname1,
+        "surname2": user.surname2,
+        "active": user.active,
+        "key": user.key,
+        "authentication code": user.authenticationCode
+      };
 
-        return true;
-      } catch (e) {
-        return false;
-      }
-    }
-
-    /// Metodo que elimina un usuario de la base de datos
-    Future<bool> deleteUser(String key) async {
-      try {
-        db.collection("users").doc(key).delete();
-        return true;
-      } catch (e) {
-        return false;
-      }
+      db
+          .collection("users")
+          .doc(id)
+          .set(updateUser)
+          .onError((e, _) => print("Error writing document: $e"));
+      return true;
+    } catch (e) {
+      return false;
     }
   }
+
+  /// Metodo que elimina un usuario de la base de datos
+  Future<bool> deleteUser(String key) async {
+    try {
+      db.collection("users").doc(key).delete();
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+}

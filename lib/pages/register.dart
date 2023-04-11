@@ -57,14 +57,17 @@ class _RegisterState extends State<Register> {
                       User user = await state!.getUser(userController.text);
                       print(userController.text);
 
-                      print(user.toString());
                       if (!user.active! &&
                           user.authenticationCode ==
                               authenticationCodeController.text) {
                         if (passwordController.text ==
                             passwordRepeatController.text) {
+                          print(user.toString());
                           // Activo la cuenta para que usuario pueda iniciar sesion
                           user.active = true;
+                          user.password = passwordController.text;
+
+                          print(user.toString());
 
                           state!.updateUser(userController.text, user);
                           response = true;
