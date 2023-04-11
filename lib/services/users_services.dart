@@ -56,7 +56,7 @@ class LoginServices {
         );
 
     final docSnap = await ref.get();
-    User? user = docSnap.data(); // Convert to City object
+    User? user = docSnap.data();
     if (user != null) {
       return user;
     } else {
@@ -64,31 +64,6 @@ class LoginServices {
     }
   }
 
-  // Future<User> getUser(String id) async {
-  //   DocumentSnapshot snapshot = await db.collection("users").doc("user2").get();
-  //   var data = snapshot.data() as Map;
-  //
-  //   print('hola');
-  //
-  //
-  //   if (snapshot.exists) {
-  //     // Obtengo el usuario de la bbdd
-  //     User user = User(
-  //       password: data.values.elementAt(1),
-  //       name: data.values.elementAt(3),
-  //       // authenticationCode: data.values.elementAt(5),
-  //       email: data.values.elementAt(6),
-  //       key: data.values.elementAt(7),
-  //       surname1: data.values.elementAt(0),
-  //       surname2: data.values.elementAt(2),
-  //       // active: data.values.elementAt(4),
-  //     );
-  //     print('a ' + user.toString());
-  //
-  //     return user;
-  //   }
-  //   return userEmpty;
-  // }
   /// Metodo que modifica un usuario en la base de datos
   Future<bool> updateUser(String id, User user) async {
     try {
@@ -103,11 +78,7 @@ class LoginServices {
         "authentication code": user.authenticationCode
       };
 
-      db
-          .collection("users")
-          .doc(id)
-          .set(updateUser)
-          .onError((e, _) => print("Error writing document: $e"));
+      db.collection("users").doc(id).set(updateUser);
       return true;
     } catch (e) {
       return false;
@@ -115,9 +86,9 @@ class LoginServices {
   }
 
   /// Metodo que elimina un usuario de la base de datos
-  Future<bool> deleteUser(String key) async {
+  Future<bool> deleteUser(String id) async {
     try {
-      db.collection("users").doc(key).delete();
+      db.collection("users").doc(id).delete();
       return true;
     } catch (e) {
       return false;

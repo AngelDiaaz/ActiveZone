@@ -38,17 +38,17 @@ class AppState with ChangeNotifier {
       return false;
     }
   }
-  //
-  // /// Metodo que elimina un usuario de la base de datos
-  // Future<bool> deleteUser(String key) async {
-  //   try {
-  //     bool response = await LoginServices().deleteUser(key);
-  //     if (response) {
-  //       notifyListeners();
-  //     }
-  //     return response;
-  //   } catch (e) {
-  //     return false;
-  //   }
-  // }
+
+  /// Metodo que elimina un usuario de la base de datos
+  Future<bool> deleteUser(String id) async {
+    try {
+      bool response = await LoginServices().deleteUser(id);
+      if (response) {
+        notifyListeners();
+      }
+      return response;
+    } catch (e) {
+      return false;
+    }
+  }
 }

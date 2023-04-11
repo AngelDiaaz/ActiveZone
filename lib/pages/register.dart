@@ -26,7 +26,7 @@ class _RegisterState extends State<Register> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text("Register"),
+        title: const Text("Activar cuenta"),
         centerTitle: true,
         backgroundColor: Colors.lightBlue,
       ),
@@ -55,19 +55,15 @@ class _RegisterState extends State<Register> {
                     bool response = false;
                     if (_formKey.currentState!.validate()) {
                       User user = await state!.getUser(userController.text);
-                      print(userController.text);
 
                       if (!user.active! &&
                           user.authenticationCode ==
                               authenticationCodeController.text) {
                         if (passwordController.text ==
                             passwordRepeatController.text) {
-                          print(user.toString());
                           // Activo la cuenta para que usuario pueda iniciar sesion
                           user.active = true;
                           user.password = passwordController.text;
-
-                          print(user.toString());
 
                           state!.updateUser(userController.text, user);
                           response = true;
@@ -86,7 +82,7 @@ class _RegisterState extends State<Register> {
                       } else {
                         messenger.showSnackBar(const SnackBar(
                           content: Text(
-                            'Error usuario o código de autentificación no valido',
+                            'Error de usuario o código de autentificación no valido',
                             style: TextStyle(fontSize: 16),
                           ),
                           backgroundColor: Colors.red,
@@ -95,7 +91,7 @@ class _RegisterState extends State<Register> {
                     }
                   },
                   child: const Text(
-                    'Registrarse',
+                    'Activar cuenta',
                     style: TextStyle(color: Colors.white, fontSize: 25),
                   ),
                 );
@@ -116,7 +112,6 @@ class _RegisterState extends State<Register> {
       child: Column(
         children: [
           Padding(
-            //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: TextFormField(
               controller: userController,
@@ -138,10 +133,8 @@ class _RegisterState extends State<Register> {
           Padding(
             padding: const EdgeInsets.only(
                 left: 15.0, right: 15.0, top: 15, bottom: 0),
-            //padding: EdgeInsets.symmetric(horizontal: 15),
             child: TextFormField(
               controller: authenticationCodeController,
-              obscureText: true,
               decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Código autentificación',
@@ -160,7 +153,6 @@ class _RegisterState extends State<Register> {
           Padding(
             padding: const EdgeInsets.only(
                 left: 15.0, right: 15.0, top: 15, bottom: 0),
-            //padding: EdgeInsets.symmetric(horizontal: 15),
             child: TextFormField(
               controller: passwordController,
               obscureText: true,
@@ -182,7 +174,6 @@ class _RegisterState extends State<Register> {
           Padding(
             padding: const EdgeInsets.only(
                 left: 15.0, right: 15.0, top: 15, bottom: 0),
-            //padding: EdgeInsets.symmetric(horizontal: 15),
             child: TextFormField(
               controller: passwordRepeatController,
               obscureText: true,
