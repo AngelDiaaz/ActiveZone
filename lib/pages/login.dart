@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gymapp/services/users_services.dart';
 import '../models/user.dart';
-import '../services/appstate.dart';
+import '../services/services.dart';
 import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
@@ -23,7 +22,7 @@ class _LoginState extends State<Login> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text("Login"),
+        title: const Text("Iniciar sesión"),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -89,7 +88,7 @@ class _LoginState extends State<Login> {
                     }
                   },
                   child: const Text(
-                    'Login',
+                    'Iniciar sesión',
                     style: TextStyle(color: Colors.white, fontSize: 25),
                   ),
                 );
@@ -102,17 +101,23 @@ class _LoginState extends State<Login> {
               width: 270,
               height: 60,
               child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    side: const BorderSide(width: 1, color: Colors.black12),
+                style: OutlinedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
                   ),
-                  child: const Text(
-                    "Activar cuenta",
-                    style: TextStyle(fontSize: 25),
-                  ),
-                  onPressed: () => Navigator.pushNamed(context, 'register')),
+                  side: const BorderSide(width: 1, color: Colors.black12),
+                ),
+                child: const Text(
+                  "Activar cuenta",
+                  style: TextStyle(fontSize: 25),
+                ),
+                // onPressed: () => Navigator.pushNamed(context, 'register')),
+                onPressed: () {
+                  SendMessage s = SendMessage();
+
+                  s.sending_SMS("Hola", ["639532762"]);
+                },
+              ),
             ),
             const SizedBox(
               height: 130,
