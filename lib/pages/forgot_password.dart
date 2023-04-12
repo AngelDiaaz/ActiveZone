@@ -1,18 +1,21 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import '../models/user.dart';
 import '../services/services.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
-class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+class ForgotPassword extends StatefulWidget {
+  const ForgotPassword({Key? key}) : super(key: key);
 
   @override
-  State<Login> createState() => _LoginState();
+  State<ForgotPassword> createState() => _ForgotPasswordState();
 }
 
-class _LoginState extends State<Login> {
+class _ForgotPasswordState extends State<ForgotPassword> {
   final TextEditingController userController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AppState? state;
 
@@ -22,7 +25,7 @@ class _LoginState extends State<Login> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text("Iniciar sesión"),
+        title: const Text("Cambiar contraseña"),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -40,25 +43,14 @@ class _LoginState extends State<Login> {
             const SizedBox(
               height: 60,
             ),
+            const Padding(
+              padding: EdgeInsets.fromLTRB(15, 0, 15, 40),
+              child: Text(
+                'Introduce el nombre de usuario y el correo electrónico para cambiar la contraseña',
+                style: TextStyle(fontSize: 14),
+              ),
+            ),
             _credentials(),
-            const SizedBox(
-              height: 5,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      textStyle: const TextStyle(fontSize: 20),
-                    ),
-                    onPressed: () => Navigator.pushNamed(context, 'password'),
-                    child: const Text('Forgot Password'),
-                  ),
-                )
-              ],
-            ),
             const SizedBox(
               height: 80,
             ),
@@ -77,14 +69,19 @@ class _LoginState extends State<Login> {
                     bool response = false;
                     if (_formKey.currentState!.validate()) {
                       User user = await state!.getUser(userController.text);
-                      print(user.toString());
+
                       if (user.name != "" && user.active!) {
                         if (user.name == userController.text &&
-                            user.password == passwordController.text) {
+                            user.email == emailController.text) {
                           response = true;
                         }
                         if (response) {
-                          navigator.pushNamed('/');
+                          sendEmail(
+                              code: '1',
+                              name: userController.text,
+                              email: emailController.text);
+
+                          // navigator.pushNamed('/');
                         } else {
                           messenger.showSnackBar(const SnackBar(
                             content: Text(
@@ -106,7 +103,7 @@ class _LoginState extends State<Login> {
                     }
                   },
                   child: const Text(
-                    'Iniciar sesión',
+                    'Enviar correo',
                     style: TextStyle(color: Colors.white, fontSize: 25),
                   ),
                 );
@@ -115,35 +112,38 @@ class _LoginState extends State<Login> {
             const SizedBox(
               height: 30,
             ),
-            SizedBox(
-              width: 270,
-              height: 60,
-              child: OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  side: const BorderSide(width: 1, color: Colors.black12),
-                ),
-                child: const Text(
-                  "Activar cuenta",
-                  style: TextStyle(fontSize: 25),
-                ),
-                // onPressed: () => Navigator.pushNamed(context, 'register')),
-                onPressed: () {
-                  // SendMessage s = SendMessage();
-                  //
-                  // s.sending_SMS("Hola", ["639532762"]);
-                },
-              ),
-            ),
-            const SizedBox(
-              height: 130,
-            ),
           ],
         ),
       ),
     );
+  }
+
+  Future sendEmail({
+    required String name,
+    required String email,
+    required String code,
+  }) async {
+    const serviceId = 'service_lle3xmv';
+    const templateId = 'template_lad59wg';
+    const userId = '_7_zkeSG09dMxYsGG';
+
+    // TODO mirar porque no se llega a enviar el email
+    // https://www.youtube.com/watch?v=9HW3MZ_tsdo
+
+    final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+    final response = await http.post(url, headers: {
+      'Content-Type': 'aplication/json',
+    }, body: json.encode({
+      'service_id': serviceId,
+      'template_id': templateId,
+      'user_id': userId,
+      'template_params': {
+        'user_name': name,
+        'user_email': email,
+        'user_code': code,
+      },
+    }));
+    print('Correo enviado');
   }
 
   Form _credentials() {
@@ -152,14 +152,13 @@ class _LoginState extends State<Login> {
       child: Column(
         children: [
           Padding(
-            //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: TextFormField(
               controller: userController,
               decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Usuario',
-                  hintText: 'Introduce tu usuario'),
+                  hintText: 'Introduce el usuario'),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Este campo es requerido';
@@ -174,14 +173,12 @@ class _LoginState extends State<Login> {
           Padding(
             padding: const EdgeInsets.only(
                 left: 15.0, right: 15.0, top: 15, bottom: 0),
-            //padding: EdgeInsets.symmetric(horizontal: 15),
             child: TextFormField(
-              controller: passwordController,
-              obscureText: true,
+              controller: emailController,
               decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Contraseña',
-                  hintText: 'Introduce la contraseña'),
+                  labelText: 'Correo Electrónico',
+                  hintText: 'Introduce el correo electrónico'),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Este campo es requerido';
