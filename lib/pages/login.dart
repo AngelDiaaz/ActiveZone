@@ -54,7 +54,7 @@ class _LoginState extends State<Login> {
                       textStyle: const TextStyle(fontSize: 20),
                     ),
                     onPressed: () => Navigator.pushNamed(context, 'password'),
-                    child: const Text('Forgot Password'),
+                    child: const Text('Recuperar contraseña'),
                   ),
                 )
               ],
@@ -77,7 +77,7 @@ class _LoginState extends State<Login> {
                     bool response = false;
                     if (_formKey.currentState!.validate()) {
                       User user = await state!.getUser(userController.text);
-                      print(user.toString());
+
                       if (user.name != "" && user.active!) {
                         if (user.name == userController.text &&
                             user.password == passwordController.text) {
@@ -86,22 +86,12 @@ class _LoginState extends State<Login> {
                         if (response) {
                           navigator.pushNamed('/');
                         } else {
-                          messenger.showSnackBar(const SnackBar(
-                            content: Text(
-                              'Error credenciales incorrectas',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            backgroundColor: Colors.red,
-                          ));
+                          errorMessage(messenger,
+                              'Error credenciales incorrectas');
                         }
                       } else {
-                        messenger.showSnackBar(const SnackBar(
-                          content: Text(
-                            'No existe esta cuenta o esta desactivada',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          backgroundColor: Colors.red,
-                        ));
+                        errorMessage(messenger,
+                            'No existe esta cuenta o está desactivada');
                       }
                     }
                   },
@@ -138,6 +128,17 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
+  }
+
+  /// Metodo que muestra el error que le pasemos
+  void errorMessage(ScaffoldMessengerState messenger, String text) {
+    messenger.showSnackBar(SnackBar(
+      content: Text(
+        text,
+        style: const TextStyle(fontSize: 16),
+      ),
+      backgroundColor: Colors.red,
+    ));
   }
 
   Form _credentials() {

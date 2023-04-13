@@ -96,7 +96,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         }
                       } else {
                         errorMessage(messenger,
-                            'No existe esta cuenta o esta desactivada');
+                            'No existe esta cuenta o está desactivada');
                       }
                     }
                   },

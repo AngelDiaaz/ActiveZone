@@ -71,22 +71,12 @@ class _ActiveAccountState extends State<ActiveAccount> {
                         if (response) {
                           navigator.pushNamed('login');
                         } else {
-                          messenger.showSnackBar(const SnackBar(
-                            content: Text(
-                              'Error las contraseñas no coinciden',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            backgroundColor: Colors.red,
-                          ));
+                          errorMessage(
+                              messenger, 'Error las contraseñas no coinciden');
                         }
                       } else {
-                        messenger.showSnackBar(const SnackBar(
-                          content: Text(
-                            'Error de usuario o código de autentificación no valido',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          backgroundColor: Colors.red,
-                        ));
+                        errorMessage(messenger,
+                            'Error de usuario o código de autentificación no valido');
                       }
                     }
                   },
@@ -104,6 +94,17 @@ class _ActiveAccountState extends State<ActiveAccount> {
         ),
       ),
     );
+  }
+
+  /// Metodo que muestra el error que le pasemos
+  void errorMessage(ScaffoldMessengerState messenger, String text) {
+    messenger.showSnackBar(SnackBar(
+      content: Text(
+        text,
+        style: const TextStyle(fontSize: 16),
+      ),
+      backgroundColor: Colors.red,
+    ));
   }
 
   Form _credentials() {

@@ -71,13 +71,8 @@ class _ChangePasswordState extends State<ChangePassword> {
                         if (response) {
                           navigator.pushNamed('login');
                         } else {
-                          messenger.showSnackBar(const SnackBar(
-                            content: Text(
-                              'Error las contraseñas no coinciden',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            backgroundColor: Colors.red,
-                          ));
+                          errorMessage(
+                              messenger, 'Error las contraseñas no coinciden');
                         }
                       } else {
                         errorMessage(
