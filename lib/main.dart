@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:gymapp/models/models.dart';
 import 'package:gymapp/pages/pages.dart';
 import 'package:gymapp/services/firebase_options.dart';
 import 'package:gymapp/services/services.dart';
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (_) => const HomePage(),
           'login': (_) => const Login(),
-          'register': (_) => const Register(),
+          'register': (_) => const ActiveAccount(),
           'password': (_) => const ForgotPassword(),
         },
         // Inicio la app por la ruta del login

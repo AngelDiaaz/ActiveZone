@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:gymapp/pages/change_password.dart';
 import '../models/user.dart';
 import '../services/services.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +23,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   @override
   Widget build(BuildContext context) {
+    // Genero el codigo para poder cambiar la contraseña
     var code = rng.nextInt(900000) + 100000;
     state = Provider.of<AppState>(context, listen: true);
     return Scaffold(
@@ -66,7 +68,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   (BuildContext context, AsyncSnapshot<List> snapshot) {
                 return MaterialButton(
                   onPressed: () async {
-                    final navigator = Navigator.of(context);
                     final messenger = ScaffoldMessenger.of(context);
                     bool response = false;
                     if (_formKey.currentState!.validate()) {
@@ -78,12 +79,17 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           response = true;
                         }
                         if (response) {
-                          await sendEmail(
+                          final send = await sendEmail(
                               code: code.toString(),
                               name: userController.text,
                               email: emailController.text);
 
-                          // navigator.pushNamed('/');
+                          if (send) {
+                            codePopup(code.toString(), user);
+                          } else {
+                            errorMessage(
+                                messenger, 'Error credenciales incorrectas');
+                          }
                         } else {
                           errorMessage(
                               messenger, 'Error credenciales incorrectas');
@@ -110,6 +116,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     );
   }
 
+  /// Metodo que muestra el error que le pasemos
   void errorMessage(ScaffoldMessengerState messenger, String text) {
     messenger.showSnackBar(SnackBar(
       content: Text(
@@ -120,14 +127,15 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     ));
   }
 
-  Future sendEmail({
+  /// Metodo que envia un correo electronico
+  Future<bool> sendEmail({
     required String name,
     required String email,
     required String code,
   }) async {
     const serviceId = 'service_lle3xmv';
     const templateId = 'template_lad59wg';
-    const userId = "4mYNiIFd_4urj184p";
+    const userId = '4mYNiIFd_4urj184p';
 
     final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
     final response = await http.post(url,
@@ -145,9 +153,13 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             'user_code': code,
           },
         }));
-    print(response.body);
+    if (response.body == "OK") {
+      return true;
+    }
+    return false;
   }
 
+  /// Formulario con los campos de usuario y correo electronico
   Form _credentials() {
     return Form(
       key: _formKey,
@@ -191,6 +203,46 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           ),
         ],
       ),
+    );
+  }
+
+  /// Metodo que muestra el popup para introducir el codigo que se nos a enviado al correo electronico y poder cambiar la contraseña
+  void codePopup(String code, User user) {
+    showDialog(
+      context: context,
+      builder: (_) {
+        final TextEditingController codeController = TextEditingController();
+        return AlertDialog(
+          title: const Text('Inserte el código del correo'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: codeController,
+                  decoration: const InputDecoration(hintText: 'Código'),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () {
+                if (code == codeController.text) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ChangePassword(user: user),
+                  ));
+                }
+              },
+              child: const Text('Siguiente'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
