@@ -119,23 +119,17 @@ class _LoginState extends State<Login> {
               width: 270,
               height: 60,
               child: OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
+                  style: OutlinedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    side: const BorderSide(width: 1, color: Colors.black12),
                   ),
-                  side: const BorderSide(width: 1, color: Colors.black12),
-                ),
-                child: const Text(
-                  "Activar cuenta",
-                  style: TextStyle(fontSize: 25),
-                ),
-                // onPressed: () => Navigator.pushNamed(context, 'register')),
-                onPressed: () {
-                  // SendMessage s = SendMessage();
-                  //
-                  // s.sending_SMS("Hola", ["639532762"]);
-                },
-              ),
+                  child: const Text(
+                    "Activar cuenta",
+                    style: TextStyle(fontSize: 25),
+                  ),
+                  onPressed: () => Navigator.pushNamed(context, 'register')),
             ),
             const SizedBox(
               height: 130,

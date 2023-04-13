@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'dart:math';
 import 'package:flutter/material.dart';
 import '../models/user.dart';
 import '../services/services.dart';
@@ -17,10 +17,12 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   final TextEditingController userController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  var rng = Random();
   AppState? state;
 
   @override
   Widget build(BuildContext context) {
+    var code = rng.nextInt(900000) + 100000;
     state = Provider.of<AppState>(context, listen: true);
     return Scaffold(
       backgroundColor: Colors.white,
@@ -76,29 +78,19 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           response = true;
                         }
                         if (response) {
-                          sendEmail(
-                              code: '1',
+                          await sendEmail(
+                              code: code.toString(),
                               name: userController.text,
                               email: emailController.text);
 
                           // navigator.pushNamed('/');
                         } else {
-                          messenger.showSnackBar(const SnackBar(
-                            content: Text(
-                              'Error credenciales incorrectas',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            backgroundColor: Colors.red,
-                          ));
+                          errorMessage(
+                              messenger, 'Error credenciales incorrectas');
                         }
                       } else {
-                        messenger.showSnackBar(const SnackBar(
-                          content: Text(
-                            'No existe esta cuenta o esta desactivada',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          backgroundColor: Colors.red,
-                        ));
+                        errorMessage(messenger,
+                            'No existe esta cuenta o esta desactivada');
                       }
                     }
                   },
@@ -118,6 +110,16 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     );
   }
 
+  void errorMessage(ScaffoldMessengerState messenger, String text) {
+    messenger.showSnackBar(SnackBar(
+      content: Text(
+        text,
+        style: const TextStyle(fontSize: 16),
+      ),
+      backgroundColor: Colors.red,
+    ));
+  }
+
   Future sendEmail({
     required String name,
     required String email,
@@ -125,25 +127,25 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   }) async {
     const serviceId = 'service_lle3xmv';
     const templateId = 'template_lad59wg';
-    const userId = '_7_zkeSG09dMxYsGG';
-
-    // TODO mirar porque no se llega a enviar el email
-    // https://www.youtube.com/watch?v=9HW3MZ_tsdo
+    const userId = "4mYNiIFd_4urj184p";
 
     final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
-    final response = await http.post(url, headers: {
-      'Content-Type': 'aplication/json',
-    }, body: json.encode({
-      'service_id': serviceId,
-      'template_id': templateId,
-      'user_id': userId,
-      'template_params': {
-        'user_name': name,
-        'user_email': email,
-        'user_code': code,
-      },
-    }));
-    print('Correo enviado');
+    final response = await http.post(url,
+        headers: {
+          'origin': 'http://localhost',
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          'service_id': serviceId,
+          'template_id': templateId,
+          'user_id': userId,
+          'template_params': {
+            'user_name': name,
+            'user_email': email,
+            'user_code': code,
+          },
+        }));
+    print(response.body);
   }
 
   Form _credentials() {
