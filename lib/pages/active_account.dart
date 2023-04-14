@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/user.dart';
 import '../services/services.dart';
+import '../utils/utils.dart';
 
+///Clase ActiveAccount
 class ActiveAccount extends StatefulWidget {
   const ActiveAccount({Key? key}) : super(key: key);
 
@@ -56,12 +58,12 @@ class _ActiveAccountState extends State<ActiveAccount> {
                     if (_formKey.currentState!.validate()) {
                       User user = await state!.getUser(userController.text);
 
-                      if (!user.active! &&
+                      if (!user.active &&
                           user.authenticationCode ==
                               authenticationCodeController.text) {
                         if (passwordController.text ==
                             passwordRepeatController.text) {
-                          // Activo la cuenta para que usuario pueda iniciar sesion
+                          // Activo la cuenta para que el usuario pueda iniciar sesion
                           user.active = true;
                           user.password = passwordController.text;
 
@@ -71,12 +73,12 @@ class _ActiveAccountState extends State<ActiveAccount> {
                         if (response) {
                           navigator.pushNamed('login');
                         } else {
-                          errorMessage(
-                              messenger, 'Error las contraseñas no coinciden');
+                          Error.errorMessage(
+                              messenger, 'Error las contraseñas no coinciden', Colors.red);
                         }
                       } else {
-                        errorMessage(messenger,
-                            'Error de usuario o código de autentificación no valido');
+                        Error.errorMessage(messenger,
+                            'Error de usuario o código de autentificación no valido', Colors.red);
                       }
                     }
                   },
@@ -96,17 +98,7 @@ class _ActiveAccountState extends State<ActiveAccount> {
     );
   }
 
-  /// Metodo que muestra el error que le pasemos
-  void errorMessage(ScaffoldMessengerState messenger, String text) {
-    messenger.showSnackBar(SnackBar(
-      content: Text(
-        text,
-        style: const TextStyle(fontSize: 16),
-      ),
-      backgroundColor: Colors.red,
-    ));
-  }
-
+  ///
   Form _credentials() {
     return Form(
       key: _formKey,

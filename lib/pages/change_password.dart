@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:gymapp/utils/error_message.dart';
 import '../models/models.dart';
 import '../services/services.dart';
 import 'package:provider/provider.dart';
 
+/// Clase ChangePassword
 class ChangePassword extends StatefulWidget {
-  User user;
+  final User user;
 
-  ChangePassword({Key? key, required this.user}) : super(key: key);
+  const ChangePassword({Key? key, required this.user}) : super(key: key);
 
   @override
   State<ChangePassword> createState() => _ChangePasswordState();
@@ -59,28 +61,24 @@ class _ChangePasswordState extends State<ChangePassword> {
                     final messenger = ScaffoldMessenger.of(context);
                     bool response = false;
                     if (_formKey.currentState!.validate()) {
-                      User user = await state!.getUser(widget.user.name);
+                      User user = await state!.getUser(widget.user.dni);
 
-                      if (user.name != "" && user.active!) {
-                        if (passwordController.text == passwordRepeatController.text) {
-                          user.password = passwordController.text;
+                      if (passwordController.text ==
+                          passwordRepeatController.text) {
+                        user.password = passwordController.text;
 
-                          state!.updateUser(widget.user.name, user);
-                          response = true;
-                        }
-                        if (response) {
-                          navigator.pushNamed('login');
-                        } else {
-                          errorMessage(
-                              messenger, 'Error las contraseñas no coinciden');
-                        }
+                        state!.updateUser(widget.user.dni, user);
+                        response = true;
+                      }
+                      if (response) {
+                        navigator.pushNamed('login');
                       } else {
-                        errorMessage(
-                            messenger, 'Error credenciales incorrectas');
+                        Error.errorMessage(messenger,
+                            'Error las contraseñas no coinciden', Colors.red);
                       }
                     } else {
-                      errorMessage(messenger,
-                          'No existe esta cuenta o esta desactivada');
+                      Error.errorMessage(messenger,
+                          'Error credenciales incorrectas', Colors.red);
                     }
                   },
                   child: const Text(
@@ -99,17 +97,6 @@ class _ChangePasswordState extends State<ChangePassword> {
     );
   }
 
-  /// Metodo que muestra el error que le pasemos
-  void errorMessage(ScaffoldMessengerState messenger, String text) {
-    messenger.showSnackBar(SnackBar(
-      content: Text(
-        text,
-        style: const TextStyle(fontSize: 16),
-      ),
-      backgroundColor: Colors.red,
-    ));
-  }
-
   /// Formulario con los campos de usuario y correo electronico
   Form _credentials() {
     return Form(
@@ -120,10 +107,11 @@ class _ChangePasswordState extends State<ChangePassword> {
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: TextFormField(
               controller: passwordController,
+              obscureText: true,
               decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Usuario',
-                  hintText: 'Introduce el usuario'),
+                  labelText: 'Nueva Contraseña',
+                  hintText: 'Introduce la nueva contraseña'),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Este campo es requerido';
@@ -140,10 +128,11 @@ class _ChangePasswordState extends State<ChangePassword> {
                 left: 15.0, right: 15.0, top: 15, bottom: 0),
             child: TextFormField(
               controller: passwordRepeatController,
+              obscureText: true,
               decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Correo Electrónico',
-                  hintText: 'Introduce el correo electrónico'),
+                  labelText: 'Repitir Nueva Contraseña',
+                  hintText: 'Introduce la nueva contraseña'),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Este campo es requerido';

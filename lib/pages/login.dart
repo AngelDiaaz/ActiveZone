@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/user.dart';
 import '../services/services.dart';
 import 'package:provider/provider.dart';
+import '../utils/utils.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -78,20 +79,20 @@ class _LoginState extends State<Login> {
                     if (_formKey.currentState!.validate()) {
                       User user = await state!.getUser(userController.text);
 
-                      if (user.name != "" && user.active!) {
-                        if (user.name == userController.text &&
+                      if (user.dni.isNotEmpty && user.active) {
+                        if (user.dni == userController.text &&
                             user.password == passwordController.text) {
                           response = true;
                         }
                         if (response) {
                           navigator.pushNamed('/');
                         } else {
-                          errorMessage(messenger,
-                              'Error credenciales incorrectas');
+                          Error.errorMessage(messenger,
+                              'Error credenciales incorrectas', Colors.red);
                         }
                       } else {
-                        errorMessage(messenger,
-                            'No existe esta cuenta o está desactivada');
+                        Error.errorMessage(messenger,
+                            'No existe esta cuenta o está desactivada', Colors.red);
                       }
                     }
                   },
@@ -128,17 +129,6 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
-  }
-
-  /// Metodo que muestra el error que le pasemos
-  void errorMessage(ScaffoldMessengerState messenger, String text) {
-    messenger.showSnackBar(SnackBar(
-      content: Text(
-        text,
-        style: const TextStyle(fontSize: 16),
-      ),
-      backgroundColor: Colors.red,
-    ));
   }
 
   Form _credentials() {

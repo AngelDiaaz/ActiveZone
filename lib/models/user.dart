@@ -9,7 +9,9 @@ class User {
     this.authenticationCode,
     required this.surname1,
     required this.surname2,
-    this.active,
+    required this.active,
+    required this.dni,
+    required this.phone,
   });
 
   String? key;
@@ -19,7 +21,9 @@ class User {
   String? authenticationCode;
   String surname1;
   String surname2;
-  bool? active;
+  bool active;
+  String dni;
+  String phone;
 
   factory User.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
@@ -35,6 +39,8 @@ class User {
       authenticationCode: data?['authentication code'],
       key: data?['key'],
       active: data?['active'],
+      dni: data?['dni'],
+      phone: data?['phone'],
     );
   }
 
@@ -45,7 +51,9 @@ class User {
       "email": email,
       "surname1": surname1,
       "surname2": surname2,
-      if (active != null) "active": false,
+      "dni": dni,
+      "active": active,
+      "phone": phone,
       if (authenticationCode != null) "authenticationCode": authenticationCode,
       if (key != null) "key": key,
     };
@@ -53,6 +61,6 @@ class User {
 
   @override
   String toString() {
-    return "User --> Name: $name, Surname1: $surname1, Surname2: $surname2, Password: $password, Email: $email, Active: $active";
+    return "User --> DNI: $dni, Name: $name, Phone: $phone, Surname1: $surname1, Surname2: $surname2, Password: $password, Email: $email, Active: $active";
   }
 }

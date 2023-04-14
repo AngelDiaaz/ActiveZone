@@ -2,20 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:gymapp/models/models.dart';
 import 'package:gymapp/services/users_services.dart';
 
+/// Clase AppState
 class AppState with ChangeNotifier {
-  List<User> _myUsers = [];
-
-  final User userEmpty = User(name: "", password: "", email: "", surname1: "", surname2: "", active: false);
-
-  /// Metodo que devuelve todos los usuarios de la base de datos
-  Future<List<User>> getUsers() async {
-    try {
-      _myUsers = await LoginServices().getUsers();
-      return _myUsers;
-    } catch (e) {
-      return _myUsers;
-    }
-  }
+  final User userEmpty = User(dni: "", name: "", password: "", phone: "", email: "", surname1: "", surname2: "", active: false);
 
   /// Metodo que devuelve un usuario por la ID de la base de datos
   Future<User> getUser(String id) async {

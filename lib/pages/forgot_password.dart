@@ -6,7 +6,9 @@ import '../models/user.dart';
 import '../services/services.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import '../utils/utils.dart';
 
+///Clase ForgotPassword
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({Key? key}) : super(key: key);
 
@@ -73,30 +75,32 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     if (_formKey.currentState!.validate()) {
                       User user = await state!.getUser(userController.text);
 
-                      if (user.name != "" && user.active!) {
-                        if (user.name == userController.text &&
+                      if (user.dni.isNotEmpty && user.active) {
+                        if (user.dni == userController.text &&
                             user.email == emailController.text) {
                           response = true;
                         }
                         if (response) {
                           final send = await sendEmail(
                               code: code.toString(),
-                              name: userController.text,
+                              name: user.name,
                               email: emailController.text);
 
                           if (send) {
                             codePopup(code.toString(), user);
                           } else {
-                            errorMessage(
-                                messenger, 'Error credenciales incorrectas');
+                            Error.errorMessage(messenger,
+                                'Error credenciales incorrectas', Colors.red);
                           }
                         } else {
-                          errorMessage(
-                              messenger, 'Error credenciales incorrectas');
+                          Error.errorMessage(messenger,
+                              'Error credenciales incorrectas', Colors.red);
                         }
                       } else {
-                        errorMessage(messenger,
-                            'No existe esta cuenta o está desactivada');
+                        Error.errorMessage(
+                            messenger,
+                            'No existe esta cuenta o está desactivada',
+                            Colors.red);
                       }
                     }
                   },
@@ -114,17 +118,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         ),
       ),
     );
-  }
-
-  /// Metodo que muestra el error que le pasemos
-  void errorMessage(ScaffoldMessengerState messenger, String text) {
-    messenger.showSnackBar(SnackBar(
-      content: Text(
-        text,
-        style: const TextStyle(fontSize: 16),
-      ),
-      backgroundColor: Colors.red,
-    ));
   }
 
   /// Metodo que envia un correo electronico
@@ -233,9 +226,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               onPressed: () {
                 if (code == codeController.text) {
                   Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ChangePassword(user: user),
-                  ));
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ChangePassword(user: user),
+                      ));
                 }
               },
               child: const Text('Siguiente'),
