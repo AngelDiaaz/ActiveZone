@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
           'login': (_) => const Login(),
           'register': (_) => const ActiveAccount(),
           'password': (_) => const ForgotPassword(),
+          'new': (_) => const NewReserve(),
         },
         // Inicio la app por la ruta del login
         initialRoute: '/',
