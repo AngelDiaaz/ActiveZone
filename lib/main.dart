@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
           'password': (_) => const ForgotPassword(),
         },
         // Inicio la app por la ruta del login
-        initialRoute: 'login',
+        initialRoute: '/',
       ),
     );
   }
