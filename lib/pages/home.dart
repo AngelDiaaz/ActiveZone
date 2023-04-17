@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gymapp/services/gym_services.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -109,24 +110,30 @@ class _HomePageState extends State<HomePage> {
                             child: Center(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
+                                children: [
                                   SizedBox(
                                     height: 80,
                                     width: 80,
                                     child: FloatingActionButton(
                                         heroTag: 'btn3',
-                                        onPressed: null,
+                                        onPressed: () {
+                                          GymServices g = GymServices();
+
+                                          var a = g.getGym('dumbbell gym malaga');
+
+                                          print(a.toString());
+                                        },
                                         backgroundColor: Colors.white,
-                                        child: Icon(
+                                        child: const Icon(
                                           Icons.location_on,
                                           color: Colors.black,
                                           size: 40,
                                         )),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 18,
                                   ),
-                                  Text("Gimnasio",
+                                  const Text("Gimnasio",
                                       style: TextStyle(fontSize: 18)),
                                 ],
                               ),
