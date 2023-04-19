@@ -26,6 +26,8 @@ class Gym {
       ) {
     final data = snapshot.data();
     return Gym(
+      //TODO mirar video para sacar colecciones dentro de colecciones
+      // https://www.youtube.com/watch?v=MwZLVZKMFgo
       name: data?['name'],
       activities: data?['class'],
       direction: data?['direction'],
