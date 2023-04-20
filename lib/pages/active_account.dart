@@ -58,7 +58,7 @@ class _ActiveAccountState extends State<ActiveAccount> {
                     if (_formKey.currentState!.validate()) {
                       User user = await state!.getUser(userController.text);
 
-                      if (!user.active &&
+                      if (!user.active! &&
                           user.authenticationCode ==
                               authenticationCodeController.text) {
                         if (passwordController.text ==

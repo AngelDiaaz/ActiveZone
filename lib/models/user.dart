@@ -16,14 +16,14 @@ class User {
 
   String? key;
   String name;
-  String password;
-  String email;
+  String? password;
+  String? email;
   String? authenticationCode;
   String surname1;
   String surname2;
-  bool active;
+  bool? active;
   String dni;
-  String phone;
+  String? phone;
 
   factory User.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,

@@ -116,12 +116,17 @@ class _HomePageState extends State<HomePage> {
                                     width: 80,
                                     child: FloatingActionButton(
                                         heroTag: 'btn3',
-                                        onPressed: () {
+                                        onPressed: () async {
                                           GymServices g = GymServices();
 
-                                          var a = g.getGym('dumbbell gym malaga');
+                                          var a = await g.getGym('dumbbell gym malaga');
+
+                                          var b = await g.getSchedules('dumbbell gym malaga');
+                                          var c = await g.getUsers('dumbbell gym malaga');
 
                                           print(a.toString());
+                                          print(b.toString());
+                                          print(c.toString());
                                         },
                                         backgroundColor: Colors.white,
                                         child: const Icon(

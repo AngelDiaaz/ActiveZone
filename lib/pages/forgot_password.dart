@@ -75,7 +75,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     if (_formKey.currentState!.validate()) {
                       User user = await state!.getUser(userController.text);
 
-                      if (user.dni.isNotEmpty && user.active) {
+                      if (user.dni.isNotEmpty && user.active!) {
                         if (user.dni == userController.text &&
                             user.email == emailController.text) {
                           response = true;

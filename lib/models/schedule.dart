@@ -17,7 +17,7 @@ class Schedule {
       SnapshotOptions? options,
       ) {
     final data = snapshot.data();
-    return Schedule(users: data?['users'], hour: data?['hour'], date: data?['date']);
+    return Schedule(users: [], hour: data?['hour'], date: data?['date']);
   }
 
   Map<String, dynamic> toFirestore() {

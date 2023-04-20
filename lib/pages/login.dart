@@ -79,7 +79,7 @@ class _LoginState extends State<Login> {
                     if (_formKey.currentState!.validate()) {
                       User user = await state!.getUser(userController.text);
 
-                      if (user.dni.isNotEmpty && user.active) {
+                      if (user.dni.isNotEmpty && user.active!) {
                         if (user.dni == userController.text &&
                             user.password == passwordController.text) {
                           response = true;
