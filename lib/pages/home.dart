@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gymapp/services/gym_services.dart';
+import 'package:gymapp/services/appstate.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -117,16 +117,11 @@ class _HomePageState extends State<HomePage> {
                                     child: FloatingActionButton(
                                         heroTag: 'btn3',
                                         onPressed: () async {
-                                          GymServices g = GymServices();
+                                          AppState a = AppState();
 
-                                          var a = await g.getGym('dumbbell gym malaga');
+                                          var b = await a.getGyms();
+                                          print(b.elementAt(0).activities.elementAt(1).name);
 
-                                          var b = await g.getSchedules('dumbbell gym malaga');
-                                          var c = await g.getUsers('dumbbell gym malaga');
-
-                                          print(a.toString());
-                                          print(b.toString());
-                                          print(c.toString());
                                         },
                                         backgroundColor: Colors.white,
                                         child: const Icon(

@@ -6,20 +6,20 @@ class Activity {
     required this.name,
     required this.capacity,
     required this.image,
-    required this.schedule,
+    this.schedule,
   });
 
   String name;
   int capacity;
   String image;
-  Schedule schedule;
+  List<Schedule>? schedule;
 
   factory Activity.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
     SnapshotOptions? options,
   ) {
     final data = snapshot.data();
-    return Activity(name: data?['name'], capacity: data?['capacity'], image: data?['image'], schedule: data?['schedule']);
+    return Activity(name: data?['name'], capacity: data?['capacity'], image: data?['image'], schedule: []);
   }
 
   Map<String, dynamic> toFirestore() {
@@ -27,7 +27,7 @@ class Activity {
       "name": name,
       "capacity": capacity,
       "image": image,
-      "schedule": schedule,
+      if (schedule != null) "schedule": schedule,
     };
   }
 

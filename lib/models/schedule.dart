@@ -3,12 +3,12 @@ import 'package:gymapp/models/models.dart';
 
 class Schedule {
   Schedule({
-    required this.users,
+    this.users,
     required this.hour,
     this.date,
   });
 
-  List<User> users;
+  List<User>? users;
   String hour;
   String? date;
 
@@ -22,8 +22,8 @@ class Schedule {
 
   Map<String, dynamic> toFirestore() {
     return {
-      "users": users,
       "hour": hour,
+      if (users != null) "users": users,
       if (date != null) "date": date,
     };
   }

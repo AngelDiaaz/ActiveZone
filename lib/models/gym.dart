@@ -4,20 +4,14 @@ import 'package:gymapp/models/models.dart';
 class Gym {
   Gym({
     required this.name,
+    required this.id,
     required this.direction,
     required this.activities,
   });
 
-  //TODO mirar esto para el mapeado de colecciones dentro de colecciones
-  // https://firebase.google.com/docs/firestore/data-model?hl=es-419#:~:text=It%20can%27t%20directly%20contain,within%20a%20collection%20are%20unique.
-  // final messageRef = db
-  //     .collection("rooms")
-  //     .doc("roomA")
-  //     .collection("messages")
-  //     .doc("message1");
-
   String name;
   String direction;
+  String id;
   List<Activity> activities;
 
   factory Gym.fromFirestore(
@@ -26,9 +20,8 @@ class Gym {
       ) {
     final data = snapshot.data();
     return Gym(
-      //TODO mirar video para sacar colecciones dentro de colecciones
-      // https://www.youtube.com/watch?v=MwZLVZKMFgo
       name: data?['name'],
+      id: data?['id'],
       activities: [],
       direction: data?['direction'],
     );
@@ -39,11 +32,12 @@ class Gym {
       "name": name,
       "direction": direction,
       "class": activities,
+      "id": id,
     };
   }
 
   @override
   String toString() {
-    return "Gym --> Name: $name, Direction $direction, Activities: $activities";
+    return "Gym --> Id: $id, Name: $name, Direction $direction, Activities: $activities";
   }
 }
