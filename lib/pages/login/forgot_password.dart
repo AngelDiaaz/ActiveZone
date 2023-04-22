@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:gymapp/pages/change_password.dart';
-import '../models/user.dart';
-import '../services/services.dart';
+import 'package:gymapp/pages/login/change_password.dart';
+import '../../models/user.dart';
+import '../../services/services.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
-import '../utils/utils.dart';
+import '../../utils/utils.dart';
 
 ///Clase ForgotPassword
 class ForgotPassword extends StatefulWidget {

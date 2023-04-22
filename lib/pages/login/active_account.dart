@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
-import '../models/user.dart';
-import '../services/services.dart';
 import 'package:provider/provider.dart';
-import '../utils/utils.dart';
+import '../../models/user.dart';
+import '../../services/services.dart';
+import '../../utils/utils.dart';
 
-class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+///Clase ActiveAccount
+class ActiveAccount extends StatefulWidget {
+  const ActiveAccount({Key? key}) : super(key: key);
 
   @override
-  State<Login> createState() => _LoginState();
+  State<ActiveAccount> createState() => _ActiveAccountState();
 }
 
-class _LoginState extends State<Login> {
+class _ActiveAccountState extends State<ActiveAccount> {
   final TextEditingController userController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController passwordRepeatController =
+      TextEditingController();
+  final TextEditingController authenticationCodeController =
+      TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AppState? state;
 
@@ -23,45 +28,19 @@ class _LoginState extends State<Login> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text("Iniciar sesión"),
+        title: const Text("Activar cuenta"),
         centerTitle: true,
+        backgroundColor: Colors.lightBlue,
       ),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            // Padding(
-            //   padding: const EdgeInsets.only(top: 60.0),
-            //   child: Center(
-            //     child: SizedBox(
-            //         width: 200,
-            //         height: 150,
-            //         child: Image.asset('assets/images/login.jpg')),
-            //   ),
-            // ),
             const SizedBox(
               height: 60,
             ),
             _credentials(),
             const SizedBox(
-              height: 5,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      textStyle: const TextStyle(fontSize: 20),
-                    ),
-                    onPressed: () => Navigator.pushNamed(context, 'password'),
-                    child: const Text('Recuperar contraseña'),
-                  ),
-                )
-              ],
-            ),
-            const SizedBox(
-              height: 80,
+              height: 70,
             ),
             Container(
               height: 60,
@@ -79,48 +58,36 @@ class _LoginState extends State<Login> {
                     if (_formKey.currentState!.validate()) {
                       User user = await state!.getUser(userController.text);
 
-                      if (user.dni.isNotEmpty && user.active!) {
-                        if (user.dni == userController.text &&
-                            user.password == passwordController.text) {
+                      if (!user.active! &&
+                          user.authenticationCode ==
+                              authenticationCodeController.text) {
+                        if (passwordController.text ==
+                            passwordRepeatController.text) {
+                          // Activo la cuenta para que el usuario pueda iniciar sesion
+                          user.active = true;
+                          user.password = passwordController.text;
+
+                          state!.updateUser(userController.text, user);
                           response = true;
                         }
                         if (response) {
-                          navigator.pushNamed('/');
+                          navigator.pushNamed('login');
                         } else {
-                          Error.errorMessage(messenger,
-                              'Error credenciales incorrectas', Colors.red);
+                          Error.errorMessage(
+                              messenger, 'Error las contraseñas no coinciden', Colors.red);
                         }
                       } else {
                         Error.errorMessage(messenger,
-                            'No existe esta cuenta o está desactivada', Colors.red);
+                            'Error de usuario o código de autentificación no valido', Colors.red);
                       }
                     }
                   },
                   child: const Text(
-                    'Iniciar sesión',
+                    'Activar cuenta',
                     style: TextStyle(color: Colors.white, fontSize: 25),
                   ),
                 );
               }),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            SizedBox(
-              width: 270,
-              height: 60,
-              child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    side: const BorderSide(width: 1, color: Colors.black12),
-                  ),
-                  child: const Text(
-                    "Activar cuenta",
-                    style: TextStyle(fontSize: 25),
-                  ),
-                  onPressed: () => Navigator.pushNamed(context, 'register')),
             ),
             const SizedBox(
               height: 130,
@@ -131,13 +98,13 @@ class _LoginState extends State<Login> {
     );
   }
 
+  ///
   Form _credentials() {
     return Form(
       key: _formKey,
       child: Column(
         children: [
           Padding(
-            //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: TextFormField(
               controller: userController,
@@ -154,18 +121,58 @@ class _LoginState extends State<Login> {
             ),
           ),
           const SizedBox(
-            height: 20,
+            height: 10,
           ),
           Padding(
             padding: const EdgeInsets.only(
                 left: 15.0, right: 15.0, top: 15, bottom: 0),
-            //padding: EdgeInsets.symmetric(horizontal: 15),
+            child: TextFormField(
+              controller: authenticationCodeController,
+              decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Código autentificación',
+                  hintText: 'Introduce el código de autentificación'),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Este campo es requerido';
+                }
+                return null;
+              },
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+                left: 15.0, right: 15.0, top: 15, bottom: 0),
             child: TextFormField(
               controller: passwordController,
               obscureText: true,
               decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Contraseña',
+                  hintText: 'Introduce la contraseña'),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Este campo es requerido';
+                }
+                return null;
+              },
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+                left: 15.0, right: 15.0, top: 15, bottom: 0),
+            child: TextFormField(
+              controller: passwordRepeatController,
+              obscureText: true,
+              decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Repetir contraseña',
                   hintText: 'Introduce la contraseña'),
               validator: (value) {
                 if (value == null || value.isEmpty) {

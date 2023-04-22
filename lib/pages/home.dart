@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:gymapp/services/appstate.dart';
+import 'package:provider/provider.dart';
+import '../models/models.dart';
+import 'reserve/new_reserve.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final Gym gym;
+  const HomePage({Key? key, required this.gym}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  AppState? state;
+
   @override
   Widget build(BuildContext context) {
+    state = Provider.of<AppState>(context, listen: true);
     var widthScreen = MediaQuery.of(context).size.width;
     var heightScreen = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -81,8 +88,18 @@ class _HomePageState extends State<HomePage> {
                                     width: 80,
                                     child: FloatingActionButton(
                                         heroTag: 'btn2',
-                                        onPressed: () =>
-                                            Navigator.pushNamed(context, 'new'),
+                                        onPressed: () async {
+                                          List<Gym> a = await state!.getGyms();
+                                          if (!mounted) return;
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => NewReserve(
+                                                  gym: a.elementAt(0),
+                                                )),
+                                          );
+
+                                        },
                                         backgroundColor: Colors.white,
                                         child: const Icon(
                                           Icons.edit_calendar_outlined,

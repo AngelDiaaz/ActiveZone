@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Gym gym = Gym(name: "", id: "", direction: "", activities: []);
     return ChangeNotifierProvider(
       create: (BuildContext context) => AppState(),
       child: MaterialApp(
@@ -26,11 +27,12 @@ class MyApp extends StatelessWidget {
         title: 'Notas App',
         // Declaro las rutas que tiene la app
         routes: {
-          '/': (_) => const HomePage(),
+          '/': (_) => HomePage(gym: gym,),
           'login': (_) => const Login(),
           'register': (_) => const ActiveAccount(),
           'password': (_) => const ForgotPassword(),
-          'new': (_) => const NewReserve(),
+          'new': (_) => NewReserve(gym: gym,),
+          'hour': (_) => ChooseHour(activity: Activity(name: "", capacity: 0, image: "")),
         },
         // Inicio la app por la ruta del login
         initialRoute: '/',

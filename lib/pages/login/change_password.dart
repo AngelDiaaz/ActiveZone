@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gymapp/utils/error_message.dart';
-import '../models/models.dart';
-import '../services/services.dart';
+import '../../models/models.dart';
+import '../../services/services.dart';
 import 'package:provider/provider.dart';
 
 /// Clase ChangePassword
