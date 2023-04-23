@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/models.dart';
 
+/// Clase ChooseHour
 class ChooseHour extends StatefulWidget {
   final Activity activity;
 
@@ -11,9 +12,11 @@ class ChooseHour extends StatefulWidget {
 }
 
 class _ChooseHourState extends State<ChooseHour> {
+  double width = 0;
   @override
   Widget build(BuildContext context) {
     var widthScreen = MediaQuery.of(context).size.width;
+    width = widthScreen;
     var heightScreen = MediaQuery.of(context).size.height;
     var schedules = widget.activity.schedule!;
     return Scaffold(
@@ -36,12 +39,15 @@ class _ChooseHourState extends State<ChooseHour> {
                 SizedBox(
                   height: heightScreen * 4 / 6,
                   width: widthScreen,
-                  child: Row(
-                    //TODO arreglar posicionamiento de los botones
+                  child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        for (Schedule schedule in schedules)
-                          if (schedules.length >= 3) rowA(schedule),
+                      children: <Widget>[
+                        Row(
+                          children: [
+                            printHours(schedules),
+                          ],
+                        ),
+                        // for (Schedule schedule in schedules) rowA(schedule),
                       ]),
                 ),
               ],
@@ -52,20 +58,34 @@ class _ChooseHourState extends State<ChooseHour> {
     );
   }
 
-  Row rowA(Schedule schedule) {
-    return Row(
+  /// Metodo que imprime todas las horas de una clase
+  Column printHours(List<Schedule> schedules) {
+    // Para saber cuantas filas hacen falta
+    var rows = schedules.length / 3;
+    var count = 0;
+    return Column(
       children: [
-        Container(
-          color: Colors.red,
-          child: hourButton(schedule),
-        ),
+        for (int i = 0; i < rows; i++) ...[
+          Row(
+            children: [
+              for (int i = 0; i < 3; i++) ...[
+                Container(
+                    // Si no hay mas horarios imprime una columna vacia
+                    child: count + 1 <= schedules.length
+                        ? hourButton(schedules.elementAt(count++))
+                        : Column()),
+              ],
+            ],
+          ),
+        ],
       ],
     );
   }
 
+  /// Metodo que devuelve un boton con la hora de una clase
   Container hourButton(Schedule schedule) {
     return Container(
-      width: 110,
+      width: width/3 - 30,
       height: 60,
       margin: const EdgeInsets.all(15.0),
       padding: const EdgeInsets.all(3.0),
