@@ -13,6 +13,7 @@ class ChooseHour extends StatefulWidget {
 
 class _ChooseHourState extends State<ChooseHour> {
   double width = 0;
+
   @override
   Widget build(BuildContext context) {
     var widthScreen = MediaQuery.of(context).size.width;
@@ -43,11 +44,30 @@ class _ChooseHourState extends State<ChooseHour> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            printHours(schedules),
+                            SizedBox(
+                              height: 100,
+                              width: widthScreen,
+                              child: Center(
+                                  child: Text(
+                                widget.activity.name,
+                                style: const TextStyle(
+                                    fontSize: 30, fontWeight: FontWeight.bold),
+                              )),
+                            ),
                           ],
                         ),
-                        // for (Schedule schedule in schedules) rowA(schedule),
+                        const Divider(
+                            height: 10,
+                            indent: 10,
+                            endIndent: 10,
+                            color: Colors.black54),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        printHours(schedules),
                       ]),
                 ),
               ],
@@ -85,10 +105,10 @@ class _ChooseHourState extends State<ChooseHour> {
   /// Metodo que devuelve un boton con la hora de una clase
   Container hourButton(Schedule schedule) {
     return Container(
-      width: width/3 - 30,
-      height: 60,
+      width: width / 3 - 30,
+      height: 65,
       margin: const EdgeInsets.all(15.0),
-      padding: const EdgeInsets.all(3.0),
+      padding: const EdgeInsets.all(2.0),
       child: TextButton(
         onPressed: () {},
         style: ButtonStyle(
