@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:gymapp/models/models.dart';
 import 'package:gymapp/pages/pages.dart';
+import 'package:gymapp/pages/reserve/confirm_reserve.dart';
 import 'package:gymapp/services/firebase_options.dart';
 import 'package:gymapp/services/services.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +21,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Gym gym = Gym(name: "", id: "", direction: "", activities: []);
+    User user = User(name: "", password: "", email: "", surname1: "", surname2: "",
+        active: true, dni: "", phone: "");
     return ChangeNotifierProvider(
       create: (BuildContext context) => AppState(),
       child: MaterialApp(
@@ -33,6 +36,7 @@ class MyApp extends StatelessWidget {
           'password': (_) => const ForgotPassword(),
           'new': (_) => NewReserve(gym: gym,),
           'hour': (_) => ChooseHour(activity: Activity(name: "", capacity: 0, image: "")),
+          'confirm': (_) => const ConfirmReserve(users: [])
         },
         // Inicio la app por la ruta del login
         initialRoute: '/',
