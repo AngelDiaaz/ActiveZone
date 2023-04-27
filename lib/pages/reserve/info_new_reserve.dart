@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:gymapp/pages/pages.dart';
 import '../../models/models.dart';
-import 'confirm_reserve.dart';
 
-class ChooseHour extends StatefulWidget {
-  Activity activity;
-  ChooseHour({Key? key, required this.activity}) : super(key: key);
+/// Clase InfoNewReserve
+class InfoNewReserve extends StatefulWidget {
+  final Activity activity;
+
+  const InfoNewReserve({Key? key, required this.activity}) : super(key: key);
 
   @override
-  State<ChooseHour> createState() => _ChooseHourState();
+  State<InfoNewReserve> createState() => _InfoNewReserveState();
 }
 
-class _ChooseHourState extends State<ChooseHour> {
+class _InfoNewReserveState extends State<InfoNewReserve> {
   double width = 0;
   int index = 0;
   Schedule schedule = Schedule(hour: '');
@@ -19,11 +21,44 @@ class _ChooseHourState extends State<ChooseHour> {
   Widget build(BuildContext context) {
     var widthScreen = MediaQuery.of(context).size.width;
     width = widthScreen;
+    var heightScreen = MediaQuery.of(context).size.height;
     var schedules = widget.activity.schedule!;
     final pages = [
-      ChooseHour(activity: widget.activity),
+      // ChooseHour(activity: widget.activity,),
+      infoHours(widthScreen, schedules),
       ConfirmReserve(schedule: schedule, activity: widget.activity,)
     ];
+    return Scaffold(
+      body: SizedBox(
+        width: widthScreen,
+        height: heightScreen,
+        child: Column(
+          children: [
+            Row(children: [
+              SizedBox(
+                height: heightScreen * 2 / 6,
+                width: widthScreen,
+                child: Image(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(widget.activity.image)),
+              ),
+            ]),
+            Row(
+              children: [
+                SizedBox(
+                  height: heightScreen * 4 / 6,
+                  width: widthScreen,
+                  child: pages[index],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Column infoHours(double widthScreen, List<Schedule> schedules) {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -36,10 +71,10 @@ class _ChooseHourState extends State<ChooseHour> {
                 width: widthScreen,
                 child: Center(
                     child: Text(
-                      widget.activity.name,
-                      style: const TextStyle(
-                          fontSize: 30, fontWeight: FontWeight.bold),
-                    )),
+                  widget.activity.name,
+                  style: const TextStyle(
+                      fontSize: 30, fontWeight: FontWeight.bold),
+                )),
               ),
             ],
           ),
@@ -48,7 +83,7 @@ class _ChooseHourState extends State<ChooseHour> {
           const SizedBox(
             height: 20,
           ),
-          printHours(widget.activity.schedule!),
+          printHours(schedules),
         ]);
   }
 
@@ -64,7 +99,7 @@ class _ChooseHourState extends State<ChooseHour> {
             children: [
               for (int i = 0; i < 3; i++) ...[
                 Container(
-                  // Si no hay mas horarios imprime una columna vacia
+                    // Si no hay mas horarios imprime una columna vacia
                     child: count + 1 <= schedules.length
                         ? hourButton(schedules.elementAt(count++))
                         : Column()),
@@ -106,4 +141,3 @@ class _ChooseHourState extends State<ChooseHour> {
     );
   }
 }
-
