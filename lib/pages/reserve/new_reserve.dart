@@ -70,7 +70,7 @@ class _NewReserveState extends State<NewReserve> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => ChooseHour(
+                          builder: (context) => InfoNewReserve(
                             activity: activity,
                           )),
                     );
