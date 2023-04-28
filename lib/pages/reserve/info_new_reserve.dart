@@ -5,8 +5,11 @@ import '../../models/models.dart';
 /// Clase InfoNewReserve
 class InfoNewReserve extends StatefulWidget {
   final Activity activity;
+  final User? user;
+  final Gym? gym;
 
-  const InfoNewReserve({Key? key, required this.activity}) : super(key: key);
+  const InfoNewReserve({Key? key, required this.activity, this.user, this.gym})
+      : super(key: key);
 
   @override
   State<InfoNewReserve> createState() => _InfoNewReserveState();
@@ -24,9 +27,13 @@ class _InfoNewReserveState extends State<InfoNewReserve> {
     var heightScreen = MediaQuery.of(context).size.height;
     var schedules = widget.activity.schedule!;
     final pages = [
-      // ChooseHour(activity: widget.activity,),
       infoHours(widthScreen, schedules),
-      ConfirmReserve(schedule: schedule, activity: widget.activity,)
+      ConfirmReserve(
+        schedule: schedule,
+        activity: widget.activity,
+        user: widget.user,
+        gym: widget.gym,
+      )
     ];
     return Scaffold(
       body: SizedBox(
@@ -83,12 +90,12 @@ class _InfoNewReserveState extends State<InfoNewReserve> {
           const SizedBox(
             height: 20,
           ),
-          printHours(schedules),
+          printHours(schedules, widget.activity.capacity),
         ]);
   }
 
   /// Metodo que imprime todas las horas de una clase
-  Column printHours(List<Schedule> schedules) {
+  Column printHours(List<Schedule> schedules, int activityCapacity) {
     // Para saber cuantas filas hacen falta
     var rows = schedules.length / 3;
     var count = 0;
@@ -98,12 +105,22 @@ class _InfoNewReserveState extends State<InfoNewReserve> {
           Row(
             children: [
               for (int i = 0; i < 3; i++) ...[
-                Container(
-                    // Si no hay mas horarios imprime una columna vacia
-                    child: count + 1 <= schedules.length
-                        ? hourButton(schedules.elementAt(count++))
-                        : Column()),
-              ],
+                //TODO mirar la aparicion del horario con el aforo, fallo en traerme el horario despues del condicioinal
+                if (schedule.users != null) ...[
+                  if (schedule.users!.length >= activityCapacity)
+                    Container(
+                        // Si no hay mas horarios imprime una columna vacia
+                        child: count + 1 <= schedules.length
+                            ? hourButton(schedules.elementAt(count++))
+                            : Column()),
+                ] else ...[
+                  Container(
+                      // Si no hay mas horarios imprime una columna vacia
+                      child: count + 1 <= schedules.length
+                          ? hourButton(schedules.elementAt(count++))
+                          : Column()),
+                ],
+              ]
             ],
           ),
         ],

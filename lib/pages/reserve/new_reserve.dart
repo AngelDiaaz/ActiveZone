@@ -6,8 +6,9 @@ import '../../services/services.dart';
 
 class NewReserve extends StatefulWidget {
   final Gym gym;
+  final User? user;
 
-  const NewReserve({Key? key, required this.gym}) : super(key: key);
+  const NewReserve({Key? key, required this.gym, this.user}) : super(key: key);
 
   @override
   State<NewReserve> createState() => _NewReserveState();
@@ -72,6 +73,8 @@ class _NewReserveState extends State<NewReserve> {
                       MaterialPageRoute(
                           builder: (context) => InfoNewReserve(
                             activity: activity,
+                            user: widget.user,
+                            gym: widget.gym,
                           )),
                     );
                   },

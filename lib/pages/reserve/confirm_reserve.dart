@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:gymapp/pages/pages.dart';
+import 'package:gymapp/services/services.dart';
 import '../../models/models.dart';
 
 /// Clase ConfirmReserve
 class ConfirmReserve extends StatefulWidget {
   final Schedule schedule;
   final Activity activity;
+  final User? user;
+  final Gym? gym;
 
   const ConfirmReserve({
     Key? key,
     required this.schedule,
     required this.activity,
+    this.user,
+    this.gym,
   }) : super(key: key);
 
   @override
@@ -19,23 +24,15 @@ class ConfirmReserve extends StatefulWidget {
 
 class _ConfirmReserveState extends State<ConfirmReserve> {
   double width = 0;
-  int index = 0;
+  Color buttonColor = const Color.fromRGBO(114, 76, 45, 1);
+  AppState state = AppState();
 
   @override
   Widget build(BuildContext context) {
     var widthScreen = MediaQuery.of(context).size.width;
     width = widthScreen;
     var heightScreen = MediaQuery.of(context).size.height;
-    Color buttonColor = const Color.fromRGBO(114, 76, 45, 1);
 
-    //TODO arreglar vuelta atras con setState
-    final pages = [
-      // ChooseHour(activity: activity).infoHours(widthScreen, schedules),
-      ConfirmReserve(
-        schedule: widget.schedule,
-        activity: widget.activity,
-      )
-    ];
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
         Widget>[
       Row(
@@ -77,17 +74,27 @@ class _ConfirmReserveState extends State<ConfirmReserve> {
                   ),
                   divider(),
                   const SizedBox(
-                    height: 45,
+                    height: 50,
                   ),
                   Center(
                     child: Container(
-                      height: 48,
-                      width: 220,
+                      height: heightScreen * 1 / 16,
+                      width: width * 3 / 5,
                       decoration: BoxDecoration(
                           color: buttonColor,
                           borderRadius: BorderRadius.circular(10)),
                       child: MaterialButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          state.insertUserActivity(
+                              widget.gym!.id,
+                              widget.activity.name,
+                              widget.schedule.hour,
+                              widget.user!);
+                          Navigator.push(context, MaterialPageRoute(
+                          builder: (context) =>
+                              HomePage(gym: widget.gym!, user: widget.user!,)
+                          ));
+                        },
                         child: const Text('Confirmar',
                             style:
                                 TextStyle(color: Colors.white, fontSize: 20)),
@@ -95,27 +102,23 @@ class _ConfirmReserveState extends State<ConfirmReserve> {
                     ),
                   ),
                   const SizedBox(
-                    height: 15,
+                    height: 20,
                   ),
                   Center(
                     child: Container(
-                      height: 48,
-                      width: 220,
+                      height: heightScreen * 1 / 16,
+                      width: width * 3 / 5,
                       decoration: BoxDecoration(
                           border: Border.all(color: buttonColor),
                           borderRadius: BorderRadius.circular(10)),
                       child: MaterialButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => InfoNewReserve(
-                                      activity: widget.activity,
-                                    )),
-                          );
-                          setState(() {
-                            index = 0;
-                          });
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => InfoNewReserve(
+                                        activity: widget.activity,
+                                      )));
                         },
                         child: Text('Cancelar',
                             style: TextStyle(color: buttonColor, fontSize: 20)),

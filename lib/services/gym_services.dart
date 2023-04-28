@@ -77,7 +77,8 @@ class GymServices {
   }
 
   /// Metodo que obitiene todos los usuarios que hay incritos a una actividad
-  Future<List<User>> getClassUsers(String id, String activity, String hour) async {
+  Future<List<User>> getClassUsers(
+      String id, String activity, String hour) async {
     final ref = db
         .collection(collection)
         .doc(id)
@@ -99,6 +100,26 @@ class GymServices {
       users.add(docSnap.docs.elementAt(i).data());
     }
     return users;
+  }
+
+  /// Metodo que inserta un usuario en una actividad
+  Future<bool> insertUserActivity(
+      String id, String activity, String hour, User user) async {
+    try {
+      db
+          .collection(collection)
+          .doc(id)
+          .collection(this.activity)
+          .doc(activity)
+          .collection(schedule)
+          .doc(hour)
+          .collection('users')
+          .doc(user.dni)
+          .set(user.toFirestore());
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   /// Metodo que modifica un gimnasio en la base de datos

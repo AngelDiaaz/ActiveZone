@@ -3,6 +3,8 @@ import '../../models/user.dart';
 import '../../services/services.dart';
 import 'package:provider/provider.dart';
 import '../../utils/utils.dart';
+import '../home.dart';
+import '../reserve/new_reserve.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -73,11 +75,11 @@ class _LoginState extends State<Login> {
                   (BuildContext context, AsyncSnapshot<List> snapshot) {
                 return MaterialButton(
                   onPressed: () async {
-                    final navigator = Navigator.of(context);
                     final messenger = ScaffoldMessenger.of(context);
                     bool response = false;
                     if (_formKey.currentState!.validate()) {
                       User user = await state!.getUser(userController.text);
+                      var gym = await state!.getGyms();
 
                       if (user.dni.isNotEmpty && user.active!) {
                         if (user.dni == userController.text &&
@@ -85,7 +87,13 @@ class _LoginState extends State<Login> {
                           response = true;
                         }
                         if (response) {
-                          navigator.pushNamed('/');
+                          if (!mounted) return;
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                              HomePage(gym: gym.elementAt(0), user: user,)
+                          ));
                         } else {
                           Error.errorMessage(messenger,
                               'Error credenciales incorrectas', Colors.red);

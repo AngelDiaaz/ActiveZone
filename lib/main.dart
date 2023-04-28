@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         title: 'Notas App',
         // Declaro las rutas que tiene la app
         routes: {
-          '/': (_) => HomePage(gym: gym,),
+          '/': (_) => HomePage(gym: gym, user: user,),
           'login': (_) => const Login(),
           'register': (_) => const ActiveAccount(),
           'password': (_) => const ForgotPassword(),
@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
           'confirm': (_) => ConfirmReserve(schedule: Schedule(hour: ''), activity: activity,)
         },
         // Inicio la app por la ruta del login
-        initialRoute: '/',
+        initialRoute: 'login',
       ),
     );
   }

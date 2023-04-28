@@ -6,7 +6,8 @@ import 'reserve/new_reserve.dart';
 
 class HomePage extends StatefulWidget {
   final Gym gym;
-  const HomePage({Key? key, required this.gym}) : super(key: key);
+  final User user;
+  const HomePage({Key? key, required this.gym, required this.user}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -96,6 +97,7 @@ class _HomePageState extends State<HomePage> {
                                             MaterialPageRoute(
                                                 builder: (context) => NewReserve(
                                                   gym: a.elementAt(0),
+                                                  user: widget.user,
                                                 )),
                                           );
 

@@ -41,6 +41,17 @@ class AppState with ChangeNotifier {
     }
   }
 
+  /// Metodo que inserta un usuario en una actividad
+  Future<bool> insertUserActivity(
+      String id, String activity, String hour, User user) async {
+    try {
+      await GymServices().insertUserActivity(id, activity, hour, user);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   /// Metodo que devuelve todos los gimnasios de la base de datos
   Future<List<Gym>> getGyms() async {
     try {
