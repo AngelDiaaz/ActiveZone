@@ -4,7 +4,15 @@ import 'package:gymapp/services/services.dart';
 
 /// Clase AppState
 class AppState with ChangeNotifier {
-  final User userEmpty = User(dni: "", name: "", password: "", phone: "", email: "", surname1: "", surname2: "", active: false);
+  final User userEmpty = User(
+      dni: "",
+      name: "",
+      password: "",
+      phone: "",
+      email: "",
+      surname1: "",
+      surname2: "",
+      active: false);
 
   /// Metodo que devuelve un usuario por la ID de la base de datos
   Future<User> getUser(String id) async {
@@ -86,5 +94,20 @@ class AppState with ChangeNotifier {
     } catch (e) {
       return [];
     }
+  }
+
+  /// Metodo que devuelve las horas donde la actividad no esta completa
+  List<Schedule> getAvailableSchedules(Activity activity) {
+    List<Schedule> availableSchedules = [];
+
+    for (Schedule s in activity.schedule!) {
+      if (s.users != null) {
+        if (s.users!.length < activity.capacity) {
+          availableSchedules.add(s);
+        }
+      }
+    }
+
+    return availableSchedules;
   }
 }

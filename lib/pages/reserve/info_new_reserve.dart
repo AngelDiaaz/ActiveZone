@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gymapp/pages/pages.dart';
+import 'package:gymapp/services/appstate.dart';
 import '../../models/models.dart';
 
 /// Clase InfoNewReserve
@@ -19,6 +20,7 @@ class _InfoNewReserveState extends State<InfoNewReserve> {
   double width = 0;
   int index = 0;
   Schedule schedule = Schedule(hour: '');
+  AppState state = AppState();
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +68,8 @@ class _InfoNewReserveState extends State<InfoNewReserve> {
   }
 
   Column infoHours(double widthScreen, List<Schedule> schedules) {
+    var items = seeDate(schedules);
+    String choose = schedules.elementAt(0).date!;
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -90,8 +94,44 @@ class _InfoNewReserveState extends State<InfoNewReserve> {
           const SizedBox(
             height: 20,
           ),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(10,10,10,30),
+              child: DropdownButton(
+                value: choose,
+                style: const TextStyle(fontSize: 30, color: Colors.black),
+                icon: const Icon(Icons.keyboard_arrow_down),
+                items: items.map((String items) {
+                  return DropdownMenuItem(
+                    value: items,
+                    child: Text(items),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    choose = newValue!;
+                  });
+                },
+              ),
+            ),
+          ),
+          //TODO mostrar divider bien arreglar y consulta fecha
+          const Divider(
+              height: 10, indent: 10, endIndent: 10, color: Colors.black54),
+          const SizedBox(
+            height: 20,
+          ),
           printHours(schedules, widget.activity.capacity),
         ]);
+  }
+
+  List<String> seeDate(List<Schedule> schedules) {
+    List<String> dates = [];
+
+    for (Schedule s in schedules) {
+      if (!dates.contains(s.date)) dates.add(s.date!);
+    }
+    return dates;
   }
 
   /// Metodo que imprime todas las horas de una clase
@@ -99,28 +139,20 @@ class _InfoNewReserveState extends State<InfoNewReserve> {
     // Para saber cuantas filas hacen falta
     var rows = schedules.length / 3;
     var count = 0;
+    List<Schedule> s = state.getAvailableSchedules(widget.activity);
     return Column(
       children: [
         for (int i = 0; i < rows; i++) ...[
           Row(
             children: [
               for (int i = 0; i < 3; i++) ...[
-                //TODO mirar la aparicion del horario con el aforo, fallo en traerme el horario despues del condicioinal
-                if (schedule.users != null) ...[
-                  if (schedule.users!.length >= activityCapacity)
-                    Container(
-                        // Si no hay mas horarios imprime una columna vacia
-                        child: count + 1 <= schedules.length
-                            ? hourButton(schedules.elementAt(count++))
-                            : Column()),
-                ] else ...[
+                if (count + 1 <= s.length) ...[
                   Container(
-                      // Si no hay mas horarios imprime una columna vacia
-                      child: count + 1 <= schedules.length
-                          ? hourButton(schedules.elementAt(count++))
-                          : Column()),
-                ],
-              ]
+                    // Si no hay mas horarios imprime una columna vacia
+                    child: hourButton(s.elementAt(count++)),
+                  ),
+                ]
+              ],
             ],
           ),
         ],
