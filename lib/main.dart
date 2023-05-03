@@ -2,7 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:gymapp/models/models.dart';
 import 'package:gymapp/pages/pages.dart';
-import 'package:gymapp/pages/reserve/confirm_reserve.dart';
 import 'package:gymapp/services/firebase_options.dart';
 import 'package:gymapp/services/services.dart';
 import 'package:provider/provider.dart';

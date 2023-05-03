@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:gymapp/pages/pages.dart';
 import 'package:gymapp/services/appstate.dart';
 import 'package:provider/provider.dart';
 import '../models/models.dart';
-import 'reserve/new_reserve.dart';
+
 
 class HomePage extends StatefulWidget {
   final Gym gym;

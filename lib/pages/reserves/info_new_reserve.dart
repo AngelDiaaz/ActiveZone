@@ -8,7 +8,6 @@ class InfoNewReserve extends StatefulWidget {
   final Activity activity;
   final User? user;
   final Gym? gym;
-
   const InfoNewReserve({Key? key, required this.activity, this.user, this.gym})
       : super(key: key);
 
@@ -21,6 +20,7 @@ class _InfoNewReserveState extends State<InfoNewReserve> {
   int index = 0;
   Schedule schedule = Schedule(hour: '');
   AppState state = AppState();
+  String? choose = '11/05/2023';
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +69,6 @@ class _InfoNewReserveState extends State<InfoNewReserve> {
 
   Column infoHours(double widthScreen, List<Schedule> schedules) {
     var items = seeDate(schedules);
-    String choose = schedules.elementAt(0).date!;
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[

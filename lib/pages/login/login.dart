@@ -3,8 +3,7 @@ import '../../models/user.dart';
 import '../../services/services.dart';
 import 'package:provider/provider.dart';
 import '../../utils/utils.dart';
-import '../home.dart';
-import '../reserve/new_reserve.dart';
+import '../pages.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
