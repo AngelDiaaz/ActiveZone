@@ -8,6 +8,7 @@ class InfoNewReserve extends StatefulWidget {
   final Activity activity;
   final User? user;
   final Gym? gym;
+
   const InfoNewReserve({Key? key, required this.activity, this.user, this.gym})
       : super(key: key);
 
@@ -21,15 +22,16 @@ class _InfoNewReserveState extends State<InfoNewReserve> {
   Schedule schedule = Schedule(hour: '');
   AppState state = AppState();
   String? choose = '11/05/2023';
+  List<Schedule> a = [];
 
   @override
   Widget build(BuildContext context) {
     var widthScreen = MediaQuery.of(context).size.width;
+    var schedules = widget.activity.schedule!;
     width = widthScreen;
     var heightScreen = MediaQuery.of(context).size.height;
-    var schedules = widget.activity.schedule!;
-    final pages = [
-      infoHours(widthScreen, schedules),
+    var pages = [
+      infoHours(widthScreen, a, schedules),
       ConfirmReserve(
         schedule: schedule,
         activity: widget.activity,
@@ -57,7 +59,7 @@ class _InfoNewReserveState extends State<InfoNewReserve> {
                 SizedBox(
                   height: heightScreen * 4 / 6,
                   width: widthScreen,
-                  child: pages[index],
+                  child:  pages[index],
                 ),
               ],
             ),
@@ -66,9 +68,14 @@ class _InfoNewReserveState extends State<InfoNewReserve> {
       ),
     );
   }
+  Future<void> signup(String date) async {
+    a = await state.getShedulesByDate(date, widget.gym!.id, widget.activity.name);
+    print(a);
+    print(a.length);
+  }
 
-  Column infoHours(double widthScreen, List<Schedule> schedules) {
-    var items = seeDate(schedules);
+  Column infoHours(double widthScreen, List<Schedule> a, List<Schedule> schedule) {
+    var items = seeDate(schedule);
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -95,7 +102,7 @@ class _InfoNewReserveState extends State<InfoNewReserve> {
           ),
           Center(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(10,10,10,30),
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 30),
               child: DropdownButton(
                 value: choose,
                 style: const TextStyle(fontSize: 30, color: Colors.black),
@@ -106,10 +113,12 @@ class _InfoNewReserveState extends State<InfoNewReserve> {
                     child: Text(items),
                   );
                 }).toList(),
+                //TODO solucionar error al setState
                 onChanged: (String? newValue) {
                   setState(() {
                     choose = newValue!;
                   });
+                  signup(choose!);
                 },
               ),
             ),
@@ -120,10 +129,11 @@ class _InfoNewReserveState extends State<InfoNewReserve> {
           const SizedBox(
             height: 20,
           ),
-          printHours(schedules, widget.activity.capacity),
+          printHours(a, widget.activity.capacity),
         ]);
   }
 
+  ///Metodo que devuelve una lista con las fechas de los horarios
   List<String> seeDate(List<Schedule> schedules) {
     List<String> dates = [];
 
@@ -138,7 +148,7 @@ class _InfoNewReserveState extends State<InfoNewReserve> {
     // Para saber cuantas filas hacen falta
     var rows = schedules.length / 3;
     var count = 0;
-    List<Schedule> s = state.getAvailableSchedules(widget.activity);
+    List<Schedule> s = state.getAvailableSchedules(schedules, widget.activity.capacity);
     return Column(
       children: [
         for (int i = 0; i < rows; i++) ...[

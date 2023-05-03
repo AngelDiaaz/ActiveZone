@@ -97,17 +97,27 @@ class AppState with ChangeNotifier {
   }
 
   /// Metodo que devuelve las horas donde la actividad no esta completa
-  List<Schedule> getAvailableSchedules(Activity activity) {
+  List<Schedule> getAvailableSchedules(List<Schedule> schedules, int activityCapacity) {
     List<Schedule> availableSchedules = [];
 
-    for (Schedule s in activity.schedule!) {
+    for (Schedule s in schedules) {
       if (s.users != null) {
-        if (s.users!.length < activity.capacity) {
+        if (s.users!.length < activityCapacity) {
           availableSchedules.add(s);
         }
       }
     }
 
     return availableSchedules;
+  }
+
+  /// Metodo que devuelve los horarios de una fecha concreta
+  Future<List<Schedule>> getShedulesByDate(
+      String date, String id, String activity) async {
+    try {
+      return await GymServices().getShedulesByDate(date, id, activity);
+    } catch (e) {
+      return [];
+    }
   }
 }

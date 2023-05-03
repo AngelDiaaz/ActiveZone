@@ -147,4 +147,31 @@ class GymServices {
       return false;
     }
   }
+
+  /// Metodo que devuelve los horarios de una fecha concreta
+  Future<List<Schedule>> getShedulesByDate(
+      String date, String id, String activity) async {
+    final ref = db
+        .collection(collection)
+        .doc(id)
+        .collection(this.activity)
+        .doc(activity)
+        .collection(schedule)
+        .where("date", isEqualTo: date)
+        .withConverter(
+          fromFirestore: Schedule.fromFirestore,
+          toFirestore: (Schedule schedule, _) => schedule.toFirestore(),
+        );
+
+    var docSnap = await ref.get();
+    var schedules = <Schedule>[];
+
+    // Almaceno todos los usuarios inscritos a una actividad
+    for (int i = 0; i < docSnap.docs.length; i++) {
+      Schedule s = docSnap.docs.elementAt(i).data();
+      s.users = await getClassUsers(id, activity, s.hour);
+      schedules.add(s);
+    }
+    return schedules;
+  }
 }
