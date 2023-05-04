@@ -112,8 +112,6 @@ class _DatePickerState extends State<DatePicker> with RestorationMixin {
             child: OutlinedButton(
               onPressed: () async {
                 _restorableDatePickerRouteFuture.present();
-                s = await appState.getShedulesByDate(
-                    DatePicker.date!, 'dumbbell gym malaga', 'spinnig');
               },
               child: const Text('Seleccionar fecha'),
             ),

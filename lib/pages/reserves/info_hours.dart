@@ -23,6 +23,8 @@ class _InfoHoursState extends State<InfoHours> {
   List<Schedule> a = DatePicker().s;
   @override
   Widget build(BuildContext context) {
+    print(a);
+    print('aaaaaa');
     var widthScreen = MediaQuery.of(context).size.width;
     width = widthScreen;
     return Column(
