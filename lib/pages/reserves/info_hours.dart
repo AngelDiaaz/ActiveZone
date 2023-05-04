@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
 import '../../models/models.dart';
 import '../../services/services.dart';
-import 'date_picker.dart';
+import 'confirm_reserve.dart';
 
 class InfoHours extends StatefulWidget {
   final Activity activity;
   final User? user;
   final Gym? gym;
 
-  const InfoHours({Key? key, required this.activity, this.user, this.gym}) : super(key: key);
+  const InfoHours({Key? key, required this.activity, this.user, this.gym})
+      : super(key: key);
 
   @override
   State<InfoHours> createState() => _InfoHoursState();
@@ -20,13 +21,31 @@ class _InfoHoursState extends State<InfoHours> {
   AppState state = AppState();
   double width = 0;
   Schedule schedule = Schedule(hour: '');
-  List<Schedule> a = DatePicker().s;
+  TextEditingController dateController = TextEditingController();
+  List<Schedule> s = [];
+
   @override
   Widget build(BuildContext context) {
-    print(a);
-    print('aaaaaa');
+    var pages = [
+      infoHours(),
+      ConfirmReserve(
+        schedule: schedule,
+        activity: widget.activity,
+        user: widget.user,
+        gym: widget.gym,
+      )
+    ];
     var widthScreen = MediaQuery.of(context).size.width;
+    var heightScreen = MediaQuery.of(context).size.height;
     width = widthScreen;
+    return SizedBox(
+      height: heightScreen * 4 / 6,
+      width: widthScreen,
+      child: pages[index],
+    );
+  }
+
+  Column infoHours() {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -36,7 +55,7 @@ class _InfoHoursState extends State<InfoHours> {
             children: [
               SizedBox(
                 height: 100,
-                width: widthScreen,
+                width: width,
                 child: Center(
                     child: Text(
                   widget.activity.name,
@@ -51,25 +70,44 @@ class _InfoHoursState extends State<InfoHours> {
           const SizedBox(
             height: 10,
           ),
-          Center(
-            child: SizedBox(width: 200, height: 100, child: DatePicker(activity: widget.activity,gym: widget.gym,)),
-          ),
+          TextField(
+              controller: dateController,
+              decoration: const InputDecoration(
+                  icon: Icon(Icons.calendar_today), //icon of text field
+                  labelText: "Enter Date" //label text of field
+                  ),
+              readOnly: true, // when true user cannot edit text
+              onTap: () async {
+                DateTime? pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime.now(),
+                    lastDate: DateTime(2023, 12, 31));
+                if (pickedDate != null) {
+                  String formattedDate =
+                      DateFormat('dd/MM/yyyy').format(pickedDate);
+                  setState(() {
+                    dateController.text = formattedDate;
+                  });
+                }
 
-          //TODO mostrar divider bien arreglar y consulta fecha
+                await signup(dateController.text);
+
+                //Vuelvo a refrescar la pagina para que me aparezca sus horarios correspondientes
+                setState(() {});
+              }),
+          const SizedBox(
+            height: 20,
+          ),
+          //TODO mostrar divider bien arreglar
           const Divider(
               height: 10, indent: 10, endIndent: 10, color: Colors.black54),
           const SizedBox(
             height: 20,
           ),
-          printHours(a, widget.activity.capacity),
+          printHours(s, widget.activity.capacity),
         ]);
   }
-
-  // Future<void> signup() async {
-  //   a = await state.getShedulesByDate(
-  //       DatePicker.date!, widget.gym!.id, widget.activity.name);
-  //   print(a);
-  // }
 
   ///Metodo que devuelve una lista con las fechas de los horarios
   List<String> seeDate(List<Schedule> schedules) {
@@ -78,9 +116,13 @@ class _InfoHoursState extends State<InfoHours> {
     for (Schedule s in schedules) {
       if (!dates.contains(s.date)) dates.add(s.date!);
     }
-    print('hola');
-    print(DatePicker.date);
     return dates;
+  }
+
+  ///Metodo que obtiene los horarios de una fecha concreta
+  Future<void> signup(String date) async {
+    s = await state.getShedulesByDate(
+        date, widget.gym!.id, widget.activity.name);
   }
 
   /// Metodo que imprime todas las horas de una clase
@@ -118,6 +160,7 @@ class _InfoHoursState extends State<InfoHours> {
       margin: const EdgeInsets.all(15.0),
       padding: const EdgeInsets.all(2.0),
       child: TextButton(
+        //TODO arreglar boton abrir
         onPressed: () {
           this.schedule = schedule;
           setState(() {
