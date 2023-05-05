@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gymapp/pages/pages.dart';
 import 'package:gymapp/services/appstate.dart';
+import 'package:gymapp/services/services.dart';
 import 'package:provider/provider.dart';
 import '../models/models.dart';
 
@@ -137,10 +138,23 @@ class _HomePageState extends State<HomePage> {
                                     child: FloatingActionButton(
                                         heroTag: 'btn3',
                                         onPressed: () async {
-                                          AppState a = AppState();
+                                          LoginServices l = LoginServices();
 
-                                          var b = await a.getGyms();
-                                          print(b.elementAt(0).activities.elementAt(1).name);
+                                          User updateUser = User(
+                                            dni: '1',
+                                            name: '1',
+                                            password: '1',
+                                            phone: '1',
+                                            email: 'a_angel.diaz.aviles@iespablopicasso.es',
+                                            surname1: '1',
+                                            surname2: '1',
+                                            active: true,
+                                            key: '1',
+                                            authenticationCode: '1',
+                                          );
+
+                                          l.updateUser(updateUser.dni, updateUser);
+
 
                                         },
                                         backgroundColor: Colors.white,

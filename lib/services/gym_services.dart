@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class GymServices {
   // Constantes de las id de las colecciones de la base de datos
   final String collection = 'company';
+  //TODO arreglar mostrar activity
   final String activity = 'class';
   final String schedule = 'schedule';
   List<Gym> myGyms = [];
