@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gymapp/pages/pages.dart';
 import 'package:gymapp/services/appstate.dart';
 import '../../models/models.dart';
 import 'info_hours.dart';

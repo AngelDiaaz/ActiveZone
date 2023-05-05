@@ -35,12 +35,11 @@ class _InfoHoursState extends State<InfoHours> {
         gym: widget.gym,
       )
     ];
-    var widthScreen = MediaQuery.of(context).size.width;
+    width = MediaQuery.of(context).size.width;
     var heightScreen = MediaQuery.of(context).size.height;
-    width = widthScreen;
     return SizedBox(
       height: heightScreen * 4 / 6,
-      width: widthScreen,
+      width: width,
       child: pages[index],
     );
   }
@@ -57,56 +56,67 @@ class _InfoHoursState extends State<InfoHours> {
                 height: 100,
                 width: width,
                 child: Center(
+                  //TODO arreglar fallo con mostrar el nombre al abrir
                     child: Text(
                   widget.activity.name,
                   style: const TextStyle(
-                      fontSize: 30, fontWeight: FontWeight.bold),
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
                 )),
               ),
             ],
           ),
           const Divider(
               height: 10, indent: 10, endIndent: 10, color: Colors.black54),
+          selectDate(),
           const SizedBox(
             height: 10,
           ),
-          TextField(
-              controller: dateController,
-              decoration: const InputDecoration(
-                  icon: Icon(Icons.calendar_today), //icon of text field
-                  labelText: "Enter Date" //label text of field
-                  ),
-              readOnly: true, // when true user cannot edit text
-              onTap: () async {
-                DateTime? pickedDate = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime.now(),
-                    lastDate: DateTime(2023, 12, 31));
-                if (pickedDate != null) {
-                  String formattedDate =
-                      DateFormat('dd/MM/yyyy').format(pickedDate);
-                  setState(() {
-                    dateController.text = formattedDate;
-                  });
-                }
-
-                await signup(dateController.text);
-
-                //Vuelvo a refrescar la pagina para que me aparezca sus horarios correspondientes
-                setState(() {});
-              }),
-          const SizedBox(
-            height: 20,
-          ),
-          //TODO mostrar divider bien arreglar
           const Divider(
-              height: 10, indent: 10, endIndent: 10, color: Colors.black54),
+              height: 10, indent: 10, endIndent: 10, color: Colors.black87),
           const SizedBox(
-            height: 20,
+            height: 10,
           ),
           printHours(s, widget.activity.capacity),
         ]);
+  }
+
+  ///Metodo que contiene el widget para seleccionar la fecha que queremos de una actividad
+  Container selectDate() {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(20, 10, 25, 15),
+      child: TextField(
+          controller: dateController,
+          decoration: const InputDecoration(
+            icon: Icon(Icons.calendar_today, color: Colors.black),
+            labelText: "Introduce fecha",
+            labelStyle: TextStyle(color: Colors.black),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.black),
+            ),
+            focusColor: Colors.black,
+          ),
+          style: const TextStyle(color: Colors.black, fontSize: 20),
+          readOnly: true,
+          onTap: () async {
+            DateTime? pickedDate = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime.now(),
+                lastDate: DateTime(2023, 12, 31));
+            if (pickedDate != null) {
+              String formattedDate =
+                  DateFormat('dd/MM/yyyy').format(pickedDate);
+              setState(() {
+                dateController.text = formattedDate;
+              });
+            }
+            await signup(dateController.text);
+            //Vuelvo a refrescar la pagina para que me aparezca sus horarios correspondientes
+            setState(() {});
+          }),
+    );
   }
 
   ///Metodo que devuelve una lista con las fechas de los horarios
