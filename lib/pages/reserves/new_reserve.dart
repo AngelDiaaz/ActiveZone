@@ -34,8 +34,11 @@ class _NewReserveState extends State<NewReserve> {
             // Gym gym = snapshot.data ?? [];
             return ListView(
               children: [
+                const SizedBox(height: 10,),
                 for (Activity activity in widget.gym.activities)
                   _activityCard(context, widthScreen, activity),
+
+              const SizedBox(height: 15,),
               ],
             );
           }),
@@ -45,9 +48,6 @@ class _NewReserveState extends State<NewReserve> {
   Column _activityCard(
       BuildContext context, double widthScreen, Activity activity) {
     return Column(children: [
-      const SizedBox(
-        height: 10,
-      ),
       Card(
           shape: RoundedRectangleBorder(
             side: BorderSide(

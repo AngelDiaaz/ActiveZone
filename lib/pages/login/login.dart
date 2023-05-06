@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../models/user.dart';
+import '../../models/models.dart';
 import '../../services/services.dart';
 import 'package:provider/provider.dart';
 import '../../utils/utils.dart';
@@ -78,7 +78,7 @@ class _LoginState extends State<Login> {
                     bool response = false;
                     if (_formKey.currentState!.validate()) {
                       User user = await state!.getUser(userController.text);
-                      var gym = await state!.getGyms();
+                      List<Gym> gym = await state!.getGyms();
 
                       if (user.dni.isNotEmpty && user.active!) {
                         if (user.dni == userController.text &&
