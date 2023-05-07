@@ -26,8 +26,10 @@ class _InfoHoursState extends State<InfoHours> {
 
   @override
   Widget build(BuildContext context) {
+    String nameActivity = widget.activity.name;
+
     var pages = [
-      infoHours(),
+      infoHours(nameActivity),
       ConfirmReserve(
         schedule: schedule,
         activity: widget.activity,
@@ -44,7 +46,7 @@ class _InfoHoursState extends State<InfoHours> {
     );
   }
 
-  Column infoHours() {
+  Column infoHours(String nameActivity) {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -58,7 +60,7 @@ class _InfoHoursState extends State<InfoHours> {
                 child: Center(
                   //TODO arreglar fallo con mostrar el nombre al abrir
                     child: Text(
-                  widget.activity.name,
+                  nameActivity,
                   style: const TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
