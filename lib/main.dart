@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:gymapp/models/models.dart';
 import 'package:gymapp/pages/pages.dart';
+import 'package:gymapp/pages/reserves/my_reserves.dart';
 import 'package:gymapp/services/firebase_options.dart';
 import 'package:gymapp/services/services.dart';
 import 'package:provider/provider.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
           'login': (_) => const Login(),
           'register': (_) => const ActiveAccount(),
           'password': (_) => const ForgotPassword(),
+          'my': (_) => const MyReserves(),
           'new': (_) => NewReserve(gym: gym,),
           'hour': (_) => InfoNewReserve(activity: activity),
           'confirm': (_) => ConfirmReserve(schedule: Schedule(hour: ''), activity: activity,)

@@ -174,4 +174,41 @@ class GymServices {
     }
     return schedules;
   }
+
+  List<String> getReservesUser(Gym gym, User user) {
+    // final ref = db
+    //     .collection(collection)
+    //     .doc('dumbell gym malaga')
+    //     .collection(activity)
+    //     .doc(activity)
+    //     .collection(schedule)
+    //     .doc(hour)
+    //     .collection('users')
+    //     .where("dni", isEqualTo: dni);
+
+    List<String> a = [];
+
+    for (int i = 0; i < gym.activities.length; i++) {
+      if (gym.activities.elementAt(i).schedule != null) {
+        List<Schedule> s = gym.activities.elementAt(i).schedule!;
+        for (int j = 0; j < s.length; j++) {
+          if (s.elementAt(j).users !=
+              null) {
+            for (int k = 0; k < s.elementAt(j).users!.length; k++) {
+              User u = gym.activities
+                  .elementAt(i)
+                  .schedule!
+                  .elementAt(j)
+                  .users!
+                  .elementAt(k);
+              if (u.dni == user.dni) {
+                a.add("${gym.activities.elementAt(i).name} --> ${s.elementAt(j).hour} --> ${s.elementAt(j).date}");
+              }
+            }
+          }
+        }
+      }
+    }
+    return a;
+  }
 }

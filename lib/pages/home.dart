@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gymapp/pages/pages.dart';
-import 'package:gymapp/services/appstate.dart';
 import 'package:gymapp/services/services.dart';
 import 'package:provider/provider.dart';
 import '../models/models.dart';
@@ -55,24 +54,26 @@ class _HomePageState extends State<HomePage> {
                             child: Center(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
+                                children: [
                                   SizedBox(
                                     height: 80,
                                     width: 80,
                                     child: FloatingActionButton(
                                         heroTag: 'btn1',
-                                        onPressed: null,
+                                        onPressed: () {
+                                          Navigator.pushNamed(context, 'my');
+                                        },
                                         backgroundColor: Colors.white,
-                                        child: Icon(
+                                        child: const Icon(
                                           Icons.calendar_month_outlined,
                                           color: Colors.black,
                                           size: 40,
                                         )),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 18,
                                   ),
-                                  Text("Mis reservas",
+                                  const Text("Mis reservas",
                                       style: TextStyle(fontSize: 18)),
                                 ],
                               ),
@@ -180,24 +181,30 @@ class _HomePageState extends State<HomePage> {
                             child: Center(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
+                                children: [
                                   SizedBox(
                                     height: 80,
                                     width: 80,
                                     child: FloatingActionButton(
                                         heroTag: 'btn4',
-                                        onPressed: null,
+                                        onPressed: () {
+                                          GymServices g = GymServices();
+
+                                          var a = g.getReservesUser(widget.gym, widget.user);
+
+                                          print(a);
+                                          },
                                         backgroundColor: Colors.white,
-                                        child: Icon(
+                                        child: const Icon(
                                           Icons.public,
                                           color: Colors.black,
                                           size: 40,
                                         )),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 18,
                                   ),
-                                  Text("Instagram",
+                                  const Text("Instagram",
                                       style: TextStyle(fontSize: 18)),
                                 ],
                               ),
