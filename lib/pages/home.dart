@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gymapp/pages/pages.dart';
+import 'package:gymapp/pages/reserves/my_reserves.dart';
 import 'package:gymapp/services/services.dart';
 import 'package:provider/provider.dart';
 import '../models/models.dart';
@@ -60,8 +61,18 @@ class _HomePageState extends State<HomePage> {
                                     width: 80,
                                     child: FloatingActionButton(
                                         heroTag: 'btn1',
-                                        onPressed: () {
-                                          Navigator.pushNamed(context, 'my');
+                                        onPressed: () async {
+                                          List<Gym> a = await state!.getGyms();
+
+                                          if (!mounted) return;
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => MyReserves(
+                                                  gym: a.elementAt(0),
+                                                  user: widget.user,
+                                                )),
+                                          );
                                         },
                                         backgroundColor: Colors.white,
                                         child: const Icon(
@@ -94,6 +105,7 @@ class _HomePageState extends State<HomePage> {
                                         heroTag: 'btn2',
                                         onPressed: () async {
                                           List<Gym> a = await state!.getGyms();
+
                                           if (!mounted) return;
                                           Navigator.push(
                                             context,
@@ -187,12 +199,16 @@ class _HomePageState extends State<HomePage> {
                                     width: 80,
                                     child: FloatingActionButton(
                                         heroTag: 'btn4',
-                                        onPressed: () {
+                                        onPressed: () async {
                                           GymServices g = GymServices();
 
                                           var a = g.getReservesUser(widget.gym, widget.user);
 
                                           print(a);
+
+                                          var b = await g.getImageActivity(widget.gym.id, 'Yoga');
+
+                                          print(b);
                                           },
                                         backgroundColor: Colors.white,
                                         child: const Icon(

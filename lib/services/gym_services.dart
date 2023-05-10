@@ -13,7 +13,7 @@ class GymServices {
   FirebaseFirestore db = FirebaseFirestore.instance;
 
   /// Metodo que obtiene los gimnasios que hay en la base de datos
-  Future<List<Gym>> getGym() async {
+  Future<List<Gym>> getGyms() async {
     final ref = db.collection(collection).withConverter(
           fromFirestore: Gym.fromFirestore,
           toFirestore: (Gym gym, _) => gym.toFirestore(),
@@ -29,6 +29,17 @@ class GymServices {
       gyms.add(g);
     }
     return gyms;
+  }
+
+  Future<Gym> getGym() async {
+    final ref = db.collection(collection).withConverter(
+      fromFirestore: Gym.fromFirestore,
+      toFirestore: (Gym gym, _) => gym.toFirestore(),
+    );
+
+    var docSnap = await ref.get();
+
+    return docSnap.docs.elementAt(0).data();
   }
 
   /// Metodo que obtiene todas las actividades de un gimnasio
@@ -192,8 +203,7 @@ class GymServices {
       if (gym.activities.elementAt(i).schedule != null) {
         List<Schedule> s = gym.activities.elementAt(i).schedule!;
         for (int j = 0; j < s.length; j++) {
-          if (s.elementAt(j).users !=
-              null) {
+          if (s.elementAt(j).users != null) {
             for (int k = 0; k < s.elementAt(j).users!.length; k++) {
               User u = gym.activities
                   .elementAt(i)
@@ -202,7 +212,8 @@ class GymServices {
                   .users!
                   .elementAt(k);
               if (u.dni == user.dni) {
-                a.add("${gym.activities.elementAt(i).name} --> ${s.elementAt(j).hour} --> ${s.elementAt(j).date}");
+                a.add(
+                    "${gym.activities.elementAt(i).name} --> ${s.elementAt(j).hour} --> ${s.elementAt(j).date}");
               }
             }
           }
@@ -210,5 +221,20 @@ class GymServices {
       }
     }
     return a;
+  }
+
+  ///Metodo que devuelve la foto de una actividad a traves del nombre de la actividad
+  Future<String> getImageActivity(String id, String name) async {
+    final ref = db
+        .collection(collection)
+        .doc(id)
+        .collection(activity)
+        .where('name', isEqualTo: name).withConverter(
+      fromFirestore: Activity.fromFirestore,
+      toFirestore: (Activity activity, _) => activity.toFirestore(),);
+
+    var docSnap = await ref.get();
+
+    return docSnap.docs.elementAt(0).data().image;
   }
 }

@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
           'login': (_) => const Login(),
           'register': (_) => const ActiveAccount(),
           'password': (_) => const ForgotPassword(),
-          'my': (_) => const MyReserves(),
+          'my': (_) => MyReserves(gym: gym, user: user,),
           'new': (_) => NewReserve(gym: gym,),
           'hour': (_) => InfoNewReserve(activity: activity),
           'confirm': (_) => ConfirmReserve(schedule: Schedule(hour: ''), activity: activity,)

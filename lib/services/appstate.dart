@@ -63,9 +63,18 @@ class AppState with ChangeNotifier {
   /// Metodo que devuelve todos los gimnasios de la base de datos
   Future<List<Gym>> getGyms() async {
     try {
-      return await GymServices().getGym();
+      return await GymServices().getGyms();
     } catch (e) {
       return [];
+    }
+  }
+
+  /// Metodo que devuelve todos los gimnasios de la base de datos
+  Future<Gym> getGym() async {
+    try {
+      return await GymServices().getGym();
+    } catch (e) {
+      return Gym(name: "", id: "", direction: "", activities: []);
     }
   }
 
@@ -118,6 +127,15 @@ class AppState with ChangeNotifier {
       return await GymServices().getShedulesByDate(date, id, activity);
     } catch (e) {
       return [];
+    }
+  }
+
+  ///Metodo que devuelve la imagen de una actividad
+  Future<String> getImageActivity(String id, String name) async {
+    try {
+      return await GymServices().getImageActivity(id, name);
+    } catch (e) {
+      return 'https://via.placeholder.com/50x50';
     }
   }
 }
