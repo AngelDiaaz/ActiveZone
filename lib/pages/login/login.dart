@@ -78,7 +78,7 @@ class _LoginState extends State<Login> {
                     bool response = false;
                     if (_formKey.currentState!.validate()) {
                       User user = await state!.getUser(userController.text);
-                      List<Gym> gym = await state!.getGyms();
+                      Gym gym = await state!.getGym();
 
                       if (user.dni.isNotEmpty && user.active!) {
                         if (user.dni == userController.text &&
@@ -91,7 +91,7 @@ class _LoginState extends State<Login> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                              HomePage(gym: gym.elementAt(0), user: user,)
+                              HomePage(gym: gym, user: user,)
                           ));
                         } else {
                           Error.errorMessage(messenger,

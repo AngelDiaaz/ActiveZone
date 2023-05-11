@@ -33,9 +33,9 @@ class GymServices {
 
   Future<Gym> getGym() async {
     final ref = db.collection(collection).withConverter(
-      fromFirestore: Gym.fromFirestore,
-      toFirestore: (Gym gym, _) => gym.toFirestore(),
-    );
+          fromFirestore: Gym.fromFirestore,
+          toFirestore: (Gym gym, _) => gym.toFirestore(),
+        );
 
     var docSnap = await ref.get();
 
@@ -56,14 +56,14 @@ class GymServices {
     // Almaceno todas las clases de un gimnasio
     for (int i = 0; i < docSnap.docs.length; i++) {
       Activity a = docSnap.docs.elementAt(i).data();
-      a.schedule = await getSchedules(id, a.name);
+      a.schedule = await getSchedules(collection, id, a.name);
       activities.add(a);
     }
     return activities;
   }
 
   /// Metodo que obtiene todos los horarios de una actividad
-  Future<List<Schedule>> getSchedules(String id, String activity) async {
+  Future<List<Schedule>> getSchedules(String collection, String id, String activity) async {
     final ref = db
         .collection(collection)
         .doc(id)
@@ -78,10 +78,9 @@ class GymServices {
     var docSnap = await ref.get();
     var schedules = <Schedule>[];
 
-    // Almaceno todos los usuarios inscritos a una actividad
+    // Almaceno todos los horarios en una lista
     for (int i = 0; i < docSnap.docs.length; i++) {
       Schedule s = docSnap.docs.elementAt(i).data();
-      s.users = await getClassUsers(id, activity, s.hour);
       schedules.add(s);
     }
     return schedules;
@@ -180,47 +179,43 @@ class GymServices {
     // Almaceno todos los usuarios inscritos a una actividad
     for (int i = 0; i < docSnap.docs.length; i++) {
       Schedule s = docSnap.docs.elementAt(i).data();
-      s.users = await getClassUsers(id, activity, s.hour);
+      // s.users = await getClassUsers(id, activity, s.hour);
       schedules.add(s);
     }
     return schedules;
   }
 
-  List<String> getReservesUser(Gym gym, User user) {
-    // final ref = db
-    //     .collection(collection)
-    //     .doc('dumbell gym malaga')
-    //     .collection(activity)
-    //     .doc(activity)
-    //     .collection(schedule)
-    //     .doc(hour)
-    //     .collection('users')
-    //     .where("dni", isEqualTo: dni);
+  Future<User> getReservesUser(String userDni) async {
+    final ref =
+        db.collection('users').where("dni", isEqualTo: userDni).withConverter(
+              fromFirestore: User.fromFirestore,
+              toFirestore: (User user, _) => user.toFirestore(),
+            );
 
-    List<String> a = [];
+    var docSnap = await ref.get();
 
-    for (int i = 0; i < gym.activities.length; i++) {
-      if (gym.activities.elementAt(i).schedule != null) {
-        List<Schedule> s = gym.activities.elementAt(i).schedule!;
-        for (int j = 0; j < s.length; j++) {
-          if (s.elementAt(j).users != null) {
-            for (int k = 0; k < s.elementAt(j).users!.length; k++) {
-              User u = gym.activities
-                  .elementAt(i)
-                  .schedule!
-                  .elementAt(j)
-                  .users!
-                  .elementAt(k);
-              if (u.dni == user.dni) {
-                a.add(
-                    "${gym.activities.elementAt(i).name} --> ${s.elementAt(j).hour} --> ${s.elementAt(j).date}");
-              }
-            }
-          }
-        }
-      }
-    }
+    User a = docSnap.docs.elementAt(0).data();
+    a.activity = await getUserActivity(a);
+
     return a;
+  }
+
+  Future<List<Activity>> getUserActivity(User user) async {
+    final ref =
+    db.collection('users').doc(user.dni).collection(activity).withConverter(
+      fromFirestore: Activity.fromFirestore,
+      toFirestore: (Activity activity, _) => activity.toFirestore(),);
+
+    var docSnap = await ref.get();
+    var activities = <Activity>[];
+
+    // Almaceno todas las clases de un gimnasio
+    for (int i = 0; i < docSnap.docs.length; i++) {
+      Activity a = docSnap.docs.elementAt(i).data();
+      a.schedule = await getSchedules('users', user.dni, a.name);
+      activities.add(a);
+    }
+    return activities;
   }
 
   ///Metodo que devuelve la foto de una actividad a traves del nombre de la actividad
@@ -229,9 +224,11 @@ class GymServices {
         .collection(collection)
         .doc(id)
         .collection(activity)
-        .where('name', isEqualTo: name).withConverter(
-      fromFirestore: Activity.fromFirestore,
-      toFirestore: (Activity activity, _) => activity.toFirestore(),);
+        .where('name', isEqualTo: name)
+        .withConverter(
+          fromFirestore: Activity.fromFirestore,
+          toFirestore: (Activity activity, _) => activity.toFirestore(),
+        );
 
     var docSnap = await ref.get();
 

@@ -50,24 +50,18 @@ class _InfoHoursState extends State<InfoHours> {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: 100,
-                width: width,
-                child: Center(
-                  //TODO arreglar fallo con mostrar el nombre al abrir
-                    child: Text(
-                  nameActivity,
-                  style: const TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
-                )),
-              ),
-            ],
+          SizedBox(
+            height: 100,
+            width: width,
+            child: Center(
+                //TODO arreglar fallo con mostrar el nombre al abrir
+                child: Text(
+              nameActivity,
+              style: const TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
+            )),
           ),
           const Divider(
               height: 10, indent: 10, endIndent: 10, color: Colors.black54),

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'models.dart';
 
 class User {
   User({
@@ -12,6 +13,7 @@ class User {
     required this.active,
     required this.dni,
     required this.phone,
+    this.activity,
   });
 
   String? key;
@@ -24,6 +26,7 @@ class User {
   bool? active;
   String dni;
   String? phone;
+  List<Activity>? activity;
 
   factory User.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
@@ -41,6 +44,7 @@ class User {
       active: data?['active'],
       dni: data?['dni'],
       phone: data?['phone'],
+      activity: data?['activity'],
     );
   }
 
@@ -56,11 +60,16 @@ class User {
       "phone": phone,
       if (authenticationCode != null) "authenticationCode": authenticationCode,
       if (key != null) "key": key,
+      if (activity != null) "activity": activity,
     };
   }
 
   @override
   String toString() {
     return "User --> DNI: $dni, Name: $name, Phone: $phone, Surname1: $surname1, Surname2: $surname2, Password: $password, Email: $email, Active: $active";
+  }
+
+  String userActivity(){
+    return activity.toString();
   }
 }

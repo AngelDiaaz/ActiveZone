@@ -3,36 +3,40 @@ import 'package:gymapp/models/models.dart';
 
 class Schedule {
   Schedule({
-    this.users,
     required this.hour,
     this.date,
     this.duration,
+    this.numberUsers,
   });
 
-  List<User>? users;
   String hour;
   String? date;
   String? duration;
+  int? numberUsers;
 
   factory Schedule.fromFirestore(
-      DocumentSnapshot<Map<String, dynamic>> snapshot,
-      SnapshotOptions? options,
-      ) {
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
+    SnapshotOptions? options,
+  ) {
     final data = snapshot.data();
-    return Schedule(users: [], hour: data?['hour'], date: data?['date'], duration: data?['duration']);
+    return Schedule(
+        hour: data?['hour'],
+        date: data?['date'],
+        duration: data?['duration'],
+        numberUsers: data?['numberUsers']);
   }
 
   Map<String, dynamic> toFirestore() {
     return {
       "hour": hour,
       if (duration != null) "duration": duration,
-      if (users != null) "users": users,
       if (date != null) "date": date,
+      if (numberUsers != null) "numberUsers": numberUsers,
     };
   }
 
   @override
   String toString() {
-    return "Schedule --> Users: $users, Hour: $hour, Date: $date, Duration: $duration";
+    return "Schedule --> Hour: $hour, Date: $date, Duration: $duration, Number Users: $numberUsers";
   }
 }

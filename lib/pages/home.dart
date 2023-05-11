@@ -69,7 +69,6 @@ class _HomePageState extends State<HomePage> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) => MyReserves(
-                                                  gym: a.elementAt(0),
                                                   user: widget.user,
                                                 )),
                                           );
@@ -202,9 +201,10 @@ class _HomePageState extends State<HomePage> {
                                         onPressed: () async {
                                           GymServices g = GymServices();
 
-                                          var a = g.getReservesUser(widget.gym, widget.user);
+                                          var a = await g.getReservesUser(widget.user.dni);
 
                                           print(a);
+                                          print(a.userActivity());
 
                                           var b = await g.getImageActivity(widget.gym.id, 'Yoga');
 

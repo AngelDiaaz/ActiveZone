@@ -90,9 +90,17 @@ class AppState with ChangeNotifier {
   /// Metodo que obtiene todos los horarios de una actividad
   Future<List<Schedule>> getSchedules(String id, String activity) async {
     try {
-      return await GymServices().getSchedules(id, activity);
+      return await GymServices().getSchedules('company',id, activity);
     } catch (e) {
       return [];
+    }
+  }
+
+  Future<User> getReservesUser(String userDni) async {
+    try {
+      return await GymServices().getReservesUser(userDni);
+    } catch (e) {
+      return userEmpty;
     }
   }
 
@@ -110,8 +118,8 @@ class AppState with ChangeNotifier {
     List<Schedule> availableSchedules = [];
 
     for (Schedule s in schedules) {
-      if (s.users != null) {
-        if (s.users!.length < activityCapacity) {
+      if (s.numberUsers != null) {
+        if (s.numberUsers! < activityCapacity) {
           availableSchedules.add(s);
         }
       }

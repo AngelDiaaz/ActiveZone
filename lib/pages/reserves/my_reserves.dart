@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gymapp/services/appstate.dart';
-import 'package:gymapp/services/gym_services.dart';
 import 'package:provider/provider.dart';
 import '../../models/models.dart';
 
 class MyReserves extends StatelessWidget {
-  MyReserves({Key? key, required this.gym, required this.user, this.state})
+  MyReserves({Key? key, required this.user, this.state})
       : super(key: key);
 
-  final Gym gym;
   final User user;
   late AppState? state;
 
@@ -37,29 +35,33 @@ class MyReserves extends StatelessWidget {
                 SizedBox(
                   height: heightScreen * 4 / 6,
                   width: widthScreen,
-                  child: FutureBuilder(
-                      future: state!.getGyms(),
+                  child: FutureBuilder<User>(
+                      future: state!.getReservesUser(user.dni),
                       builder:
-                          (BuildContext context, AsyncSnapshot<List> snapshot) {
-                        List gym = snapshot.data ?? [];
+                          (BuildContext context, AsyncSnapshot<User> snapshot) {
+                        print(snapshot.data.toString());
+                        User? u;
+                        if(snapshot.hasData){
+                          u = snapshot.data;
 
-                        GymServices g = GymServices();
                         return ListView(
                           children: [
-                            //TODO arreglar peticion, tarda mucho
-                            if (gym.isNotEmpty)
-                              for (String s
-                                  in g.getReservesUser(gym.elementAt(0), user))
-                                reserveCard(context, widthScreen, s),
+                            if (u != null)
+                              for(int i = 0; i < u.activity!.length; i++)
+                                for(int j = 0; j > u.activity!.elementAt(i).schedule!.length; j++)
+                                  reserveCard(context, widthScreen, u.activity!.elementAt(i).name, u.activity!.elementAt(i).schedule!.elementAt(j)),
                           ],
                         );
-                      }),
+                      } else {
+                        return CircularProgressIndicator();
+                        }
+                          }),
                 )
               ])
             ])));
   }
 
-  Card reserveCard(BuildContext context, double widthScreen, String s) {
+  Card reserveCard(BuildContext context, double widthScreen, String name, Schedule schedule) {
     return Card(
         shape: RoundedRectangleBorder(
           side: BorderSide(
@@ -89,7 +91,7 @@ class MyReserves extends StatelessWidget {
                     Column(
                       children: [
                         Text(
-                          s,
+                          name,
                           style: const TextStyle(
                               fontSize: 24,
                               color: Colors.black,
