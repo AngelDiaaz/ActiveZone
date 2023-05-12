@@ -4,8 +4,7 @@ import 'package:provider/provider.dart';
 import '../../models/models.dart';
 
 class MyReserves extends StatelessWidget {
-  MyReserves({Key? key, required this.user, this.state})
-      : super(key: key);
+  MyReserves({Key? key, required this.user, this.state}) : super(key: key);
 
   final User user;
   late AppState? state;
@@ -39,89 +38,112 @@ class MyReserves extends StatelessWidget {
                       future: state!.getReservesUser(user.dni),
                       builder:
                           (BuildContext context, AsyncSnapshot<User> snapshot) {
-                        print(snapshot.data.toString());
-                        User? u;
-                        if(snapshot.hasData){
-                          u = snapshot.data;
+                        if (snapshot.hasData) {
+                          User u = snapshot.data!;
 
-                        return ListView(
-                          children: [
-                            if (u != null)
-                              for(int i = 0; i < u.activity!.length; i++)
-                                for(int j = 0; j > u.activity!.elementAt(i).schedule!.length; j++)
-                                  reserveCard(context, widthScreen, u.activity!.elementAt(i).name, u.activity!.elementAt(i).schedule!.elementAt(j)),
-                          ],
-                        );
-                      } else {
-                        return CircularProgressIndicator();
+                          return ListView(
+                            children: [
+                              for (int i = 0; i < u.activity!.length; i++)
+                                for (int j = 0;
+                                    j <
+                                        u.activity!
+                                            .elementAt(i)
+                                            .schedule!
+                                            .length;
+                                    j++)
+                                  reserveCard(
+                                      context,
+                                      widthScreen,
+                                      u.activity!.elementAt(i).name,
+                                      u.activity!
+                                          .elementAt(i)
+                                          .schedule!
+                                          .elementAt(j)),
+                            ],
+                          );
+                        } else {
+                          return const Center(
+                              child: CircularProgressIndicator());
                         }
-                          }),
+                      }),
                 )
               ])
             ])));
   }
 
-  Card reserveCard(BuildContext context, double widthScreen, String name, Schedule schedule) {
-    return Card(
-        shape: RoundedRectangleBorder(
-          side: BorderSide(
-            color: Theme.of(context).colorScheme.outline,
-          ),
-        ),
-        color: Colors.red,
-        elevation: 1,
-        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 6),
-        child: SizedBox(
-          width: widthScreen - 12,
-          height: 150,
-          child: Column(
-            children: [
-              Container(
-                  alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.fromLTRB(10, 20, 0, 0),
-                  child: Row(children: [
+  FutureBuilder<String> reserveCard(BuildContext context, double widthScreen,
+      String name, Schedule schedule) {
+    return FutureBuilder(
+      future: state!.getImageActivity('dumbbell gym malaga', name),
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        if (snapshot.hasData) {
+          String image = snapshot.data!;
+          return Card(
+              shape: RoundedRectangleBorder(
+                side: BorderSide(
+                  color: Theme.of(context).colorScheme.outline,
+                ),
+              ),
+              color: Colors.red,
+              elevation: 1,
+              margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 6),
+              child: SizedBox(
+                width: widthScreen - 12,
+                height: 150,
+                child: Column(
+                  children: [
                     Container(
-                      width: 100,
-                      height: 100,
-                      color: Colors.green,
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          name,
-                          style: const TextStyle(
-                              fontSize: 24,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        const Text(
-                          'Fecha de la actividad',
-                          style: TextStyle(
-                              fontSize: 24,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        const Text(
-                          'Hora de la actividad',
-                          style: TextStyle(
-                              fontSize: 24,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ])),
-            ],
-          ),
-        ));
+                        alignment: Alignment.centerLeft,
+                        padding: const EdgeInsets.fromLTRB(10, 20, 0, 0),
+                        child: Row(children: [
+                          Container(
+                            width: 100,
+                            height: 100,
+                            color: Colors.green,
+                            child: Image.network(image, fit: BoxFit.cover),
+                          ),
+                          SizedBox(
+                            width: widthScreen / 2 - 130,
+                          ),
+                          Column(
+                            children: [
+                              Text(
+                                name,
+                                style: const TextStyle(
+                                    fontSize: 24,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                schedule.date!,
+                                style: const TextStyle(
+                                    fontSize: 24,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                schedule.hour,
+                                style: const TextStyle(
+                                    fontSize: 24,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                        ])),
+                  ],
+                ),
+              ));
+        } else {
+          return const Center(child: CircularProgressIndicator());
+        }
+      },
+    );
   }
 }
