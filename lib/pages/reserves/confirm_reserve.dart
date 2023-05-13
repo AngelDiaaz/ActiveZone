@@ -86,7 +86,6 @@ class _ConfirmReserveState extends State<ConfirmReserve> {
                       child: MaterialButton(
                         onPressed: () {
                           state.insertUserActivity(
-                              widget.gym!.id,
                               widget.activity.name,
                               widget.schedule.hour,
                               widget.user!);

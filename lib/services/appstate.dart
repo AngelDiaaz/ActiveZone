@@ -50,10 +50,9 @@ class AppState with ChangeNotifier {
   }
 
   /// Metodo que inserta un usuario en una actividad
-  Future<bool> insertUserActivity(
-      String id, String activity, String hour, User user) async {
+  Future<bool> insertUserActivity(String activity, String hour, User user) async {
     try {
-      await GymServices().insertUserActivity(id, activity, hour, user);
+      await GymServices().insertUserActivity(activity, hour, user);
       return true;
     } catch (e) {
       return false;
@@ -79,18 +78,18 @@ class AppState with ChangeNotifier {
   }
 
   /// Metodo que obtiene todas las actividades de un gimnasio
-  Future<List<Activity>> getActivities(String id) async {
+  Future<List<Activity>> getActivities() async {
     try {
-      return await GymServices().getActivities(id);
+      return await GymServices().getActivities();
     } catch (e) {
       return [];
     }
   }
 
   /// Metodo que obtiene todos los horarios de una actividad
-  Future<List<Schedule>> getSchedules(String id, String activity) async {
+  Future<List<Schedule>> getSchedules(String activity) async {
     try {
-      return await GymServices().getSchedules('company',id, activity);
+      return await GymServices().getSchedules('company', 'dumbbell gym malaga',activity);
     } catch (e) {
       return [];
     }
@@ -105,9 +104,9 @@ class AppState with ChangeNotifier {
   }
 
   /// Metodo que obitiene todos los usuarios que hay incritos a una actividad
-  Future<List<User>> getUsers(String id, String activity, String hour) async {
+  Future<List<User>> getUsers(String activity, String hour) async {
     try {
-      return await GymServices().getClassUsers(id, activity, hour);
+      return await GymServices().getClassUsers(activity, hour);
     } catch (e) {
       return [];
     }
@@ -130,18 +129,18 @@ class AppState with ChangeNotifier {
 
   /// Metodo que devuelve los horarios de una fecha concreta
   Future<List<Schedule>> getShedulesByDate(
-      String date, String id, String activity) async {
+      String date, String activity) async {
     try {
-      return await GymServices().getShedulesByDate(date, id, activity);
+      return await GymServices().getShedulesByDate(date, activity);
     } catch (e) {
       return [];
     }
   }
 
   ///Metodo que devuelve la imagen de una actividad
-  Future<String> getImageActivity(String id, String name) async {
+  Future<String> getImageActivity(String name) async {
     try {
-      return await GymServices().getImageActivity(id, name);
+      return await GymServices().getImageActivity(name);
     } catch (e) {
       return 'https://via.placeholder.com/50x50';
     }

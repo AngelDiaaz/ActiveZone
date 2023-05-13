@@ -74,7 +74,7 @@ class MyReserves extends StatelessWidget {
   FutureBuilder<String> reserveCard(BuildContext context, double widthScreen,
       String name, Schedule schedule) {
     return FutureBuilder(
-      future: state!.getImageActivity('dumbbell gym malaga', name),
+      future: state!.getImageActivity(name),
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         if (snapshot.hasData) {
           String image = snapshot.data!;

@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class GymServices {
   // Constantes de las id de las colecciones de la base de datos
   final String collection = 'company';
+  final String gym = 'dumbbell gym malaga';
   final String activity = 'activity';
   final String schedule = 'schedule';
   List<Gym> myGyms = [];
@@ -25,7 +26,7 @@ class GymServices {
     // Almaceno todas las actividades de una gimnasio
     for (int i = 0; i < docSnap.docs.length; i++) {
       Gym g = docSnap.docs.elementAt(i).data();
-      g.activities = await getActivities(g.id);
+      g.activities = await getActivities();
       gyms.add(g);
     }
     return gyms;
@@ -43,9 +44,9 @@ class GymServices {
   }
 
   /// Metodo que obtiene todas las actividades de un gimnasio
-  Future<List<Activity>> getActivities(String id) async {
+  Future<List<Activity>> getActivities() async {
     final ref =
-        db.collection(collection).doc(id).collection(activity).withConverter(
+        db.collection(collection).doc(gym).collection(activity).withConverter(
               fromFirestore: Activity.fromFirestore,
               toFirestore: (Activity activity, _) => activity.toFirestore(),
             );
@@ -56,14 +57,14 @@ class GymServices {
     // Almaceno todas las clases de un gimnasio
     for (int i = 0; i < docSnap.docs.length; i++) {
       Activity a = docSnap.docs.elementAt(i).data();
-      a.schedule = await getSchedules(collection, id, a.name);
+      a.schedule = await getSchedules(collection, gym, a.name);
       activities.add(a);
     }
     return activities;
   }
 
   /// Metodo que obtiene todos los horarios de una actividad
-  Future<List<Schedule>> getSchedules(String collection, String id, String activity) async {
+  Future<List<Schedule>> getSchedules(String collection, String id,String activity) async {
     final ref = db
         .collection(collection)
         .doc(id)
@@ -87,11 +88,10 @@ class GymServices {
   }
 
   /// Metodo que obitiene todos los usuarios que hay incritos a una actividad
-  Future<List<User>> getClassUsers(
-      String id, String activity, String hour) async {
+  Future<List<User>> getClassUsers(String activity, String hour) async {
     final ref = db
         .collection(collection)
-        .doc(id)
+        .doc(gym)
         .collection(this.activity)
         .doc(activity)
         .collection(schedule)
@@ -113,12 +113,11 @@ class GymServices {
   }
 
   /// Metodo que inserta un usuario en una actividad
-  Future<bool> insertUserActivity(
-      String id, String activity, String hour, User user) async {
+  Future<bool> insertUserActivity(String activity, String hour, User user) async {
     try {
       db
           .collection(collection)
-          .doc(id)
+          .doc(gym)
           .collection(this.activity)
           .doc(activity)
           .collection(schedule)
@@ -133,7 +132,7 @@ class GymServices {
   }
 
   /// Metodo que modifica un gimnasio en la base de datos
-  Future<bool> updateGym(String id, Gym gym) async {
+  Future<bool> updateGym(Gym gym) async {
     try {
       final updateGym = {
         "direction": gym..direction,
@@ -141,7 +140,7 @@ class GymServices {
         "activities": gym.activities,
       };
 
-      db.collection(collection).doc(id).set(updateGym);
+      db.collection(collection).doc(this.gym).set(updateGym);
       return true;
     } catch (e) {
       return false;
@@ -160,10 +159,10 @@ class GymServices {
 
   /// Metodo que devuelve los horarios de una fecha concreta
   Future<List<Schedule>> getShedulesByDate(
-      String date, String id, String activity) async {
+      String date, String activity) async {
     final ref = db
         .collection(collection)
-        .doc(id)
+        .doc(gym)
         .collection(this.activity)
         .doc(activity)
         .collection(schedule)
@@ -219,10 +218,10 @@ class GymServices {
   }
 
   ///Metodo que devuelve la foto de una actividad a traves del nombre de la actividad
-  Future<String> getImageActivity(String id, String name) async {
+  Future<String> getImageActivity(String name) async {
     final ref = db
         .collection(collection)
-        .doc(id)
+        .doc(gym)
         .collection(activity)
         .where('name', isEqualTo: name)
         .withConverter(

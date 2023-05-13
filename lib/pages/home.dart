@@ -206,7 +206,7 @@ class _HomePageState extends State<HomePage> {
                                           print(a);
                                           print(a.userActivity());
 
-                                          var b = await g.getImageActivity(widget.gym.id, 'Yoga');
+                                          var b = await g.getImageActivity('Yoga');
 
                                           print(b);
                                           },

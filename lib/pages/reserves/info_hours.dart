@@ -128,7 +128,7 @@ class _InfoHoursState extends State<InfoHours> {
   ///Metodo que obtiene los horarios de una fecha concreta
   Future<void> signup(String date) async {
     s = await state.getShedulesByDate(
-        date, widget.gym!.id, widget.activity.name);
+        date, widget.activity.name);
   }
 
   /// Metodo que imprime todas las horas de una clase
