@@ -113,7 +113,7 @@ class GymServices {
   }
 
   /// Metodo que inserta un usuario en una actividad
-  Future<bool> insertUserActivity(Activity activity, User user) async {
+  Future<bool> insertUserActivity(Activity activity, Schedule schedule, User user) async {
     try {
       db
           .collection('users')
@@ -121,6 +121,16 @@ class GymServices {
           .collection(this.activity)
           .doc(activity.name)
           .set(activity.toFirestore());
+
+      db
+          .collection('users')
+          .doc(user.dni)
+          .collection(this.activity)
+          .doc(activity.name)
+          .collection(this.schedule)
+          .doc(schedule.id)
+          .set(schedule.toFirestore());
+
       return true;
     } catch (e) {
       return false;

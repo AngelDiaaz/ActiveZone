@@ -50,9 +50,9 @@ class AppState with ChangeNotifier {
   }
 
   /// Metodo que inserta un usuario en una actividad
-  Future<bool> insertUserActivity(Activity activity, User user) async {
+  Future<bool> insertUserActivity(Activity activity, Schedule schedule, User user) async {
     try {
-      await GymServices().insertUserActivity(activity, user);
+      await GymServices().insertUserActivity(activity, schedule, user);
       return true;
     } catch (e) {
       return false;
@@ -117,10 +117,8 @@ class AppState with ChangeNotifier {
     List<Schedule> availableSchedules = [];
 
     for (Schedule s in schedules) {
-      if (s.numberUsers != null) {
-        if (s.numberUsers! < activityCapacity) {
+        if (s.numberUsers < activityCapacity) {
           availableSchedules.add(s);
-        }
       }
     }
 

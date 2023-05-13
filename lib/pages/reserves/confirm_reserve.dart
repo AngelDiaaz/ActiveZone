@@ -52,7 +52,7 @@ class _ConfirmReserveState extends State<ConfirmReserve> {
                   const SizedBox(
                     height: 10,
                   ),
-                  showInfo('Fecha:', widget.schedule.date!),
+                  showInfo('Fecha:', widget.schedule.date),
                   const SizedBox(
                     height: 10,
                   ),
@@ -85,8 +85,14 @@ class _ConfirmReserveState extends State<ConfirmReserve> {
                           borderRadius: BorderRadius.circular(10)),
                       child: MaterialButton(
                         onPressed: () {
+                          Activity a = widget.activity;
+                          a.schedule!.clear();
+                          widget.schedule.numberUsers++;
+                          // a.schedule!.add(widget.schedule);
+
                           state.insertUserActivity(
-                              widget.activity,
+                              a,
+                              widget.schedule,
                               widget.user!);
                           Navigator.push(context, MaterialPageRoute(
                           builder: (context) =>

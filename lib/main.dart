@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
           'my': (_) => MyReserves(user: user,),
           'new': (_) => NewReserve(gym: gym,),
           'hour': (_) => InfoNewReserve(activity: activity),
-          'confirm': (_) => ConfirmReserve(schedule: Schedule(id:0, hour: ''), activity: activity,)
+          'confirm': (_) => ConfirmReserve(schedule: Schedule(id: '', hour: '', numberUsers: 0, date: ''), activity: activity)
         },
         // Inicio la app por la ruta del login
         initialRoute: 'login',

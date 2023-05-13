@@ -4,16 +4,16 @@ class Schedule {
   Schedule({
     required this.id,
     required this.hour,
-    this.date,
+    required this.date,
     this.duration,
-    this.numberUsers,
+    required this.numberUsers,
   });
 
-  int id;
+  String id;
   String hour;
-  String? date;
+  String date;
   String? duration;
-  int? numberUsers;
+  int numberUsers;
 
   factory Schedule.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
@@ -32,9 +32,9 @@ class Schedule {
     return {
       "id": id,
       "hour": hour,
+      "numberUsers": numberUsers,
+      "date": date,
       if (duration != null) "duration": duration,
-      if (date != null) "date": date,
-      if (numberUsers != null) "numberUsers": numberUsers,
     };
   }
 

@@ -20,7 +20,7 @@ class _InfoHoursState extends State<InfoHours> {
   var index = 0;
   AppState state = AppState();
   double width = 0;
-  Schedule schedule = Schedule(id:0, hour: '');
+  Schedule schedule = Schedule(id: '', hour: '', numberUsers: 0, date: '');
   TextEditingController dateController = TextEditingController();
   List<Schedule> s = [];
 
@@ -120,7 +120,7 @@ class _InfoHoursState extends State<InfoHours> {
     List<String> dates = [];
 
     for (Schedule s in schedules) {
-      if (!dates.contains(s.date)) dates.add(s.date!);
+      if (!dates.contains(s.date)) dates.add(s.date);
     }
     return dates;
   }
