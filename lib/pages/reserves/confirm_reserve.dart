@@ -87,7 +87,6 @@ class _ConfirmReserveState extends State<ConfirmReserve> {
                           Activity a = widget.activity;
                           a.schedule!.clear();
                           widget.schedule.numberUsers++;
-                          // a.schedule!.add(widget.schedule);
 
                           state.insertUserActivity(
                               a,

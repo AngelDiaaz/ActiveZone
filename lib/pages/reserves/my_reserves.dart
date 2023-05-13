@@ -34,40 +34,61 @@ class MyReserves extends StatelessWidget {
                 SizedBox(
                   height: heightScreen * 4 / 6,
                   width: widthScreen,
-                  child: FutureBuilder<User>(
-                      future: state!.getReservesUser(user.dni),
-                      builder:
-                          (BuildContext context, AsyncSnapshot<User> snapshot) {
-                        if (snapshot.hasData) {
-                          User u = snapshot.data!;
+                  child: Column(children: [
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Center(
+                      child: Text(
+                        'Mis reservas',
+                        style: TextStyle(
+                            fontSize: 40, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    const Divider(
+                        height: 10,
+                        indent: 20,
+                        endIndent: 20,
+                        color: Colors.black26),
+                    SizedBox(
+                      height: heightScreen * 4/6 - 100,
+                      child: FutureBuilder<User>(
+                          future: state!.getReservesUser(user.dni),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<User> snapshot) {
+                            if (snapshot.hasData) {
+                              User u = snapshot.data!;
 
-                          return ListView(
-                            children: [
-                              for (int i = 0; i < u.activity!.length; i++)
-                                for (int j = 0;
-                                    j <
-                                        u.activity!
-                                            .elementAt(i)
-                                            .schedule!
-                                            .length;
-                                    j++)
-                                  reserveCard(
-                                      context,
-                                      widthScreen,
-                                      u.activity!.elementAt(i).name,
-                                      u.activity!
-                                          .elementAt(i)
-                                          .schedule!
-                                          .elementAt(j)),
-                            ],
-                          );
-                        } else {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
-                      }),
+                              return ListView(
+                                padding: const EdgeInsets.all(2),
+                                children: [
+                                  for (int i = 0; i < u.activity!.length; i++)
+                                    for (int j = 0;
+                                        j <
+                                            u.activity!
+                                                .elementAt(i)
+                                                .schedule!
+                                                .length;
+                                        j++)
+                                      reserveCard(
+                                          context,
+                                          widthScreen,
+                                          u.activity!.elementAt(i).name,
+                                          u.activity!
+                                              .elementAt(i)
+                                              .schedule!
+                                              .elementAt(j)),
+                                ],
+                              );
+                            } else {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            }
+                          }),
+                    ),
+                  ]),
                 )
-              ])
+              ]),
             ])));
   }
 
@@ -84,8 +105,7 @@ class MyReserves extends StatelessWidget {
                   color: Theme.of(context).colorScheme.outline,
                 ),
               ),
-              color: Colors.red,
-              elevation: 1,
+              elevation: 4,
               margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 6),
               child: SizedBox(
                 width: widthScreen - 12,
@@ -96,10 +116,9 @@ class MyReserves extends StatelessWidget {
                         alignment: Alignment.centerLeft,
                         padding: const EdgeInsets.fromLTRB(10, 20, 0, 0),
                         child: Row(children: [
-                          Container(
+                          SizedBox(
                             width: 100,
                             height: 100,
-                            color: Colors.green,
                             child: Image.network(image, fit: BoxFit.cover),
                           ),
                           SizedBox(
@@ -118,7 +137,7 @@ class MyReserves extends StatelessWidget {
                                 height: 10,
                               ),
                               Text(
-                                schedule.date!,
+                                schedule.date,
                                 style: const TextStyle(
                                     fontSize: 24,
                                     color: Colors.black,

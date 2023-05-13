@@ -1,5 +1,6 @@
 import 'package:gymapp/models/models.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 /// Clase GymServices
 class GymServices {
@@ -115,6 +116,17 @@ class GymServices {
   /// Metodo que inserta un usuario en una actividad
   Future<bool> insertUserActivity(Activity activity, Schedule schedule, User user) async {
     try {
+      //Sumo uno al campo de los numeros de usarios en una actividad a una hora concreta
+      db
+          .collection(collection)
+          .doc(gym)
+          .collection(this.activity)
+          .doc(activity.name)
+          .collection(this.schedule)
+          .doc(schedule.id)
+          .set(schedule.toFirestore());
+
+      //Añado la actividad en el usuario
       db
           .collection('users')
           .doc(user.dni)
@@ -122,6 +134,7 @@ class GymServices {
           .doc(activity.name)
           .set(activity.toFirestore());
 
+      //Añado el horario en la actividad del usuario
       db
           .collection('users')
           .doc(user.dni)
