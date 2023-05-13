@@ -7,9 +7,8 @@ import 'confirm_reserve.dart';
 class InfoHours extends StatefulWidget {
   final Activity activity;
   final User? user;
-  final Gym? gym;
 
-  const InfoHours({Key? key, required this.activity, this.user, this.gym})
+  const InfoHours({Key? key, required this.activity, this.user})
       : super(key: key);
 
   @override
@@ -34,7 +33,6 @@ class _InfoHoursState extends State<InfoHours> {
         schedule: schedule,
         activity: widget.activity,
         user: widget.user,
-        gym: widget.gym,
       )
     ];
     width = MediaQuery.of(context).size.width;

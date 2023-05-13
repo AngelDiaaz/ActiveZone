@@ -5,10 +5,9 @@ import '../../models/models.dart';
 import '../../services/services.dart';
 
 class NewReserve extends StatefulWidget {
-  final Gym gym;
-  final User? user;
+  final User user;
 
-  const NewReserve({Key? key, required this.gym, this.user}) : super(key: key);
+  const NewReserve({Key? key, required this.user}) : super(key: key);
 
   @override
   State<NewReserve> createState() => _NewReserveState();
@@ -28,19 +27,28 @@ class _NewReserveState extends State<NewReserve> {
         centerTitle: true,
         backgroundColor: Colors.white,
       ),
-      body: FutureBuilder(
-          future: null,
-          builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
-            // Gym gym = snapshot.data ?? [];
-            return ListView(
-              children: [
-                const SizedBox(height: 10,),
-                for (Activity activity in widget.gym.activities)
-                  _activityCard(context, widthScreen, activity),
-
-              const SizedBox(height: 15,),
-              ],
-            );
+      body: FutureBuilder (
+          future: state!.getActivities(),
+          builder: (BuildContext context, AsyncSnapshot<List<Activity>> snapshot) {
+            if (snapshot.hasData) {
+              List<Activity> activities = snapshot.data!;
+              return ListView(
+                children: [
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  for (Activity activity in activities)
+                    _activityCard(context, widthScreen, activity),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                ],
+              );
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
           }),
     );
   }
@@ -72,10 +80,9 @@ class _NewReserveState extends State<NewReserve> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => InfoNewReserve(
-                            activity: activity,
-                            user: widget.user,
-                            gym: widget.gym,
-                          )),
+                                activity: activity,
+                                user: widget.user,
+                              )),
                     );
                   },
                   child: ListTile(

@@ -8,14 +8,12 @@ class ConfirmReserve extends StatefulWidget {
   final Schedule schedule;
   final Activity activity;
   final User? user;
-  final Gym? gym;
 
   const ConfirmReserve({
     Key? key,
     required this.schedule,
     required this.activity,
     this.user,
-    this.gym,
   }) : super(key: key);
 
   @override
@@ -84,7 +82,8 @@ class _ConfirmReserveState extends State<ConfirmReserve> {
                           color: buttonColor,
                           borderRadius: BorderRadius.circular(10)),
                       child: MaterialButton(
-                        onPressed: () {
+                        onPressed: () async {
+                          Gym gym = await state.getGym();
                           Activity a = widget.activity;
                           a.schedule!.clear();
                           widget.schedule.numberUsers++;
@@ -94,9 +93,12 @@ class _ConfirmReserveState extends State<ConfirmReserve> {
                               a,
                               widget.schedule,
                               widget.user!);
+
+                          if (!mounted) return;
+
                           Navigator.push(context, MaterialPageRoute(
                           builder: (context) =>
-                              HomePage(gym: widget.gym!, user: widget.user!,)
+                              HomePage(gym: gym, user: widget.user!,)
                           ));
                         },
                         child: const Text('Confirmar',

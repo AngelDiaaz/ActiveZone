@@ -7,9 +7,8 @@ import 'info_hours.dart';
 class InfoNewReserve extends StatefulWidget {
   final Activity activity;
   final User? user;
-  final Gym? gym;
 
-  const InfoNewReserve({Key? key, required this.activity, this.user, this.gym})
+  const InfoNewReserve({Key? key, required this.activity, this.user})
       : super(key: key);
 
   @override
@@ -51,7 +50,6 @@ class _InfoNewReserveState extends State<InfoNewReserve> {
                   //TODO arreglar nombre de la actividad
                   child: InfoHours(
                       activity: widget.activity,
-                      gym: widget.gym,
                       user: widget.user),
                 ),
               ],

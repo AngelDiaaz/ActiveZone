@@ -61,9 +61,7 @@ class _HomePageState extends State<HomePage> {
                                     width: 80,
                                     child: FloatingActionButton(
                                         heroTag: 'btn1',
-                                        onPressed: () async {
-                                          List<Gym> a = await state!.getGyms();
-
+                                        onPressed: () {
                                           if (!mounted) return;
                                           Navigator.push(
                                             context,
@@ -102,15 +100,11 @@ class _HomePageState extends State<HomePage> {
                                     width: 80,
                                     child: FloatingActionButton(
                                         heroTag: 'btn2',
-                                        onPressed: () async {
-                                          List<Gym> a = await state!.getGyms();
-
-                                          if (!mounted) return;
+                                        onPressed: () {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) => NewReserve(
-                                                  gym: a.elementAt(0),
                                                   user: widget.user,
                                                 )),
                                           );
