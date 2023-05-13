@@ -88,14 +88,14 @@ class GymServices {
   }
 
   /// Metodo que obitiene todos los usuarios que hay incritos a una actividad
-  Future<List<User>> getClassUsers(String activity, String hour) async {
+  Future<List<User>> getClassUsers(String activity, String hourId) async {
     final ref = db
         .collection(collection)
         .doc(gym)
         .collection(this.activity)
         .doc(activity)
         .collection(schedule)
-        .doc(hour)
+        .doc(hourId)
         .collection('users')
         .withConverter(
           fromFirestore: User.fromFirestore,
@@ -113,18 +113,14 @@ class GymServices {
   }
 
   /// Metodo que inserta un usuario en una actividad
-  Future<bool> insertUserActivity(String activity, String hour, User user) async {
+  Future<bool> insertUserActivity(Activity activity, User user) async {
     try {
       db
-          .collection(collection)
-          .doc(gym)
-          .collection(this.activity)
-          .doc(activity)
-          .collection(schedule)
-          .doc(hour)
           .collection('users')
           .doc(user.dni)
-          .set(user.toFirestore());
+          .collection(this.activity)
+          .doc(activity.name)
+          .set(activity.toFirestore());
       return true;
     } catch (e) {
       return false;
@@ -178,7 +174,6 @@ class GymServices {
     // Almaceno todos los usuarios inscritos a una actividad
     for (int i = 0; i < docSnap.docs.length; i++) {
       Schedule s = docSnap.docs.elementAt(i).data();
-      // s.users = await getClassUsers(id, activity, s.hour);
       schedules.add(s);
     }
     return schedules;

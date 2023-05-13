@@ -20,7 +20,7 @@ class _InfoHoursState extends State<InfoHours> {
   var index = 0;
   AppState state = AppState();
   double width = 0;
-  Schedule schedule = Schedule(hour: '');
+  Schedule schedule = Schedule(id:0, hour: '');
   TextEditingController dateController = TextEditingController();
   List<Schedule> s = [];
 

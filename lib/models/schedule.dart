@@ -2,12 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Schedule {
   Schedule({
+    required this.id,
     required this.hour,
     this.date,
     this.duration,
     this.numberUsers,
   });
 
+  int id;
   String hour;
   String? date;
   String? duration;
@@ -19,6 +21,7 @@ class Schedule {
   ) {
     final data = snapshot.data();
     return Schedule(
+        id: data?['id'],
         hour: data?['hour'],
         date: data?['date'],
         duration: data?['duration'],
@@ -27,6 +30,7 @@ class Schedule {
 
   Map<String, dynamic> toFirestore() {
     return {
+      "id": id,
       "hour": hour,
       if (duration != null) "duration": duration,
       if (date != null) "date": date,
@@ -36,6 +40,6 @@ class Schedule {
 
   @override
   String toString() {
-    return "Schedule --> Hour: $hour, Date: $date, Duration: $duration, Number Users: $numberUsers";
+    return "Schedule --> Id: $id, Hour: $hour, Date: $date, Duration: $duration, Number Users: $numberUsers";
   }
 }

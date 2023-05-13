@@ -19,7 +19,7 @@ class InfoNewReserve extends StatefulWidget {
 class _InfoNewReserveState extends State<InfoNewReserve> {
   double width = 0;
   int index = 0;
-  Schedule schedule = Schedule(hour: '');
+  Schedule schedule = Schedule(id: 0,hour: '');
   AppState state = AppState();
   List<Schedule> a = [];
 

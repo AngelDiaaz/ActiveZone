@@ -86,8 +86,7 @@ class _ConfirmReserveState extends State<ConfirmReserve> {
                       child: MaterialButton(
                         onPressed: () {
                           state.insertUserActivity(
-                              widget.activity.name,
-                              widget.schedule.hour,
+                              widget.activity,
                               widget.user!);
                           Navigator.push(context, MaterialPageRoute(
                           builder: (context) =>

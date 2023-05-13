@@ -50,9 +50,9 @@ class AppState with ChangeNotifier {
   }
 
   /// Metodo que inserta un usuario en una actividad
-  Future<bool> insertUserActivity(String activity, String hour, User user) async {
+  Future<bool> insertUserActivity(Activity activity, User user) async {
     try {
-      await GymServices().insertUserActivity(activity, hour, user);
+      await GymServices().insertUserActivity(activity, user);
       return true;
     } catch (e) {
       return false;
