@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gymapp/pages/pages.dart';
 import 'package:gymapp/services/services.dart';
+import 'package:intl/intl.dart';
 import '../../models/models.dart';
 
 /// Clase ConfirmReserve
@@ -50,7 +51,7 @@ class _ConfirmReserveState extends State<ConfirmReserve> {
                   const SizedBox(
                     height: 10,
                   ),
-                  showInfo('Fecha:', widget.schedule.date),
+                  showInfo('Fecha:', DateFormat('dd/MM/yyyy').format(widget.schedule.date.toDate())),
                   const SizedBox(
                     height: 10,
                   ),

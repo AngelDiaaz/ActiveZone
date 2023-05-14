@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../models/models.dart';
@@ -19,7 +20,8 @@ class _InfoHoursState extends State<InfoHours> {
   var index = 0;
   AppState state = AppState();
   double width = 0;
-  Schedule schedule = Schedule(id: '', hour: '', numberUsers: 0, date: '');
+  Schedule schedule =
+      Schedule(id: '', hour: '', numberUsers: 0, date: Timestamp(0, 0));
   TextEditingController dateController = TextEditingController();
   List<Schedule> s = [];
 
@@ -105,8 +107,8 @@ class _InfoHoursState extends State<InfoHours> {
               setState(() {
                 dateController.text = formattedDate;
               });
+            await signup(Timestamp.fromDate(pickedDate));
             }
-            await signup(dateController.text);
             //Vuelvo a refrescar la pagina para que me aparezca sus horarios correspondientes
             setState(() {});
           }),
@@ -118,15 +120,20 @@ class _InfoHoursState extends State<InfoHours> {
     List<String> dates = [];
 
     for (Schedule s in schedules) {
-      if (!dates.contains(s.date)) dates.add(s.date);
+      print(schedule.date);
+      if (!dates.contains(DateFormat('dd/MM/yyyy').format(s.date.toDate()))) {
+        dates.add(DateFormat('dd/MM/yyyy').format(s.date.toDate()));
+      }
     }
     return dates;
   }
 
   ///Metodo que obtiene los horarios de una fecha concreta
-  Future<void> signup(String date) async {
-    s = await state.getShedulesByDate(
-        date, widget.activity.name);
+  Future<void> signup(Timestamp date) async {
+  Timestamp finalDate = Timestamp.fromDate(date.toDate().add(const Duration(days: 1)));
+
+  print(finalDate.toDate());
+    s = await state.getShedulesByDate(date, widget.activity.name, finalDate);
   }
 
   /// Metodo que imprime todas las horas de una clase
@@ -144,7 +151,6 @@ class _InfoHoursState extends State<InfoHours> {
               for (int i = 0; i < 3; i++) ...[
                 if (count + 1 <= s.length) ...[
                   Container(
-                    // Si no hay mas horarios imprime una columna vacia
                     child: hourButton(s.elementAt(count++)),
                   ),
                 ]
@@ -164,7 +170,6 @@ class _InfoHoursState extends State<InfoHours> {
       margin: const EdgeInsets.all(15.0),
       padding: const EdgeInsets.all(2.0),
       child: TextButton(
-        //TODO arreglar boton abrir
         onPressed: () {
           this.schedule = schedule;
           setState(() {

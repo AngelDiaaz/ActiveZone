@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:gymapp/models/models.dart';
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
           'my': (_) => MyReserves(user: user,),
           'new': (_) => NewReserve(user: user,),
           'hour': (_) => InfoNewReserve(activity: activity),
-          'confirm': (_) => ConfirmReserve(schedule: Schedule(id: '', hour: '', numberUsers: 0, date: ''), activity: activity)
+          'confirm': (_) => ConfirmReserve(schedule: Schedule(id: '', hour: '', numberUsers: 0, date: Timestamp(0,0)), activity: activity)
         },
         // Inicio la app por la ruta del login
         initialRoute: 'login',

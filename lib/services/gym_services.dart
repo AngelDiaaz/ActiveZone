@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:gymapp/models/models.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
@@ -178,14 +180,15 @@ class GymServices {
 
   /// Metodo que devuelve los horarios de una fecha concreta
   Future<List<Schedule>> getShedulesByDate(
-      String date, String activity) async {
+      Timestamp initialDate, String activity, Timestamp finalDate) async {
     final ref = db
         .collection(collection)
         .doc(gym)
         .collection(this.activity)
         .doc(activity)
         .collection(schedule)
-        .where("date", isEqualTo: date)
+        .where("date", isGreaterThanOrEqualTo: initialDate)
+        .where("date", isLessThan: finalDate)
         .withConverter(
           fromFirestore: Schedule.fromFirestore,
           toFirestore: (Schedule schedule, _) => schedule.toFirestore(),
@@ -202,6 +205,7 @@ class GymServices {
     return schedules;
   }
 
+  ///Metodo que obtiene un usuario a traves del dni
   Future<User> getReservesUser(String userDni) async {
     final ref =
         db.collection('users').where("dni", isEqualTo: userDni).withConverter(
@@ -211,12 +215,13 @@ class GymServices {
 
     var docSnap = await ref.get();
 
-    User a = docSnap.docs.elementAt(0).data();
-    a.activity = await getUserActivity(a);
+    User user = docSnap.docs.elementAt(0).data();
+    user.activity = await getUserActivity(user);
 
-    return a;
+    return user;
   }
 
+  ///Metodo que obtiene todas las actividades que esta inscrito un usuario
   Future<List<Activity>> getUserActivity(User user) async {
     final ref =
     db.collection('users').doc(user.dni).collection(activity).withConverter(

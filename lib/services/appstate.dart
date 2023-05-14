@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:gymapp/models/models.dart';
 import 'package:gymapp/services/services.dart';
@@ -95,6 +96,7 @@ class AppState with ChangeNotifier {
     }
   }
 
+  ///Metodo que obtiene un usuario a traves del dni
   Future<User> getReservesUser(String userDni) async {
     try {
       return await GymServices().getReservesUser(userDni);
@@ -103,7 +105,16 @@ class AppState with ChangeNotifier {
     }
   }
 
-  /// Metodo que obitiene todos los usuarios que hay incritos a una actividad
+  ///Metodo que obtiene todas las actividades que esta inscrito un usuario
+  Future<List<Activity>> getUserActivity(User user) async {
+    try {
+      return await GymServices().getUserActivity(user);
+    } catch (e) {
+      return [];
+    }
+  }
+
+    /// Metodo que obitiene todos los usuarios que hay incritos a una actividad
   Future<List<User>> getUsers(String activity, String hour) async {
     try {
       return await GymServices().getClassUsers(activity, hour);
@@ -127,9 +138,9 @@ class AppState with ChangeNotifier {
 
   /// Metodo que devuelve los horarios de una fecha concreta
   Future<List<Schedule>> getShedulesByDate(
-      String date, String activity) async {
+      Timestamp initialDate, String activity, Timestamp finalDate) async {
     try {
-      return await GymServices().getShedulesByDate(date, activity);
+      return await GymServices().getShedulesByDate(initialDate, activity, finalDate);
     } catch (e) {
       return [];
     }

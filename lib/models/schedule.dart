@@ -11,7 +11,7 @@ class Schedule {
 
   String id;
   String hour;
-  String date;
+  Timestamp date;
   String? duration;
   int numberUsers;
 

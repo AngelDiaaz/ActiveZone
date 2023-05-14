@@ -1,7 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:gymapp/services/appstate.dart';
+import 'package:gymapp/services/services.dart';
 import '../../models/models.dart';
-import 'info_hours.dart';
+import 'package:gymapp/pages/pages.dart';
 
 /// Clase InfoNewReserve
 class InfoNewReserve extends StatefulWidget {
@@ -18,7 +19,7 @@ class InfoNewReserve extends StatefulWidget {
 class _InfoNewReserveState extends State<InfoNewReserve> {
   double width = 0;
   int index = 0;
-  Schedule schedule = Schedule(id: '',hour: '', numberUsers: 0, date: '');
+  Schedule schedule = Schedule(id: '',hour: '', numberUsers: 0, date: Timestamp(0,0));
   AppState state = AppState();
   List<Schedule> a = [];
 
