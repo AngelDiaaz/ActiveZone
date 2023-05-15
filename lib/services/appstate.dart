@@ -88,9 +88,9 @@ class AppState with ChangeNotifier {
   }
 
   /// Metodo que obtiene todos los horarios de una actividad
-  Future<List<Schedule>> getSchedules(String activity) async {
+  Future<List<Schedule>> getSchedules(String collection, String id,String activity) async {
     try {
-      return await GymServices().getSchedules('company', 'dumbbell gym malaga',activity);
+      return await GymServices().getSchedules(collection, id, activity);
     } catch (e) {
       return [];
     }

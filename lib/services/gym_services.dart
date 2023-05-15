@@ -67,13 +67,15 @@ class GymServices {
   }
 
   /// Metodo que obtiene todos los horarios de una actividad
-  Future<List<Schedule>> getSchedules(String collection, String id,String activity) async {
+  Future<List<Schedule>> getSchedules(
+      String collection, String id, String activity) async {
     final ref = db
         .collection(collection)
         .doc(id)
         .collection(this.activity)
         .doc(activity)
         .collection(schedule)
+        .orderBy('date')
         .withConverter(
           fromFirestore: Schedule.fromFirestore,
           toFirestore: (Schedule schedule, _) => schedule.toFirestore(),
@@ -116,7 +118,8 @@ class GymServices {
   }
 
   /// Metodo que inserta un usuario en una actividad
-  Future<bool> insertUserActivity(Activity activity, Schedule schedule, User user) async {
+  Future<bool> insertUserActivity(
+      Activity activity, Schedule schedule, User user) async {
     try {
       //Sumo uno al campo de los numeros de usarios en una actividad a una hora concreta
       db
@@ -224,9 +227,10 @@ class GymServices {
   ///Metodo que obtiene todas las actividades que esta inscrito un usuario
   Future<List<Activity>> getUserActivity(User user) async {
     final ref =
-    db.collection('users').doc(user.dni).collection(activity).withConverter(
-      fromFirestore: Activity.fromFirestore,
-      toFirestore: (Activity activity, _) => activity.toFirestore(),);
+        db.collection('users').doc(user.dni).collection(activity).withConverter(
+              fromFirestore: Activity.fromFirestore,
+              toFirestore: (Activity activity, _) => activity.toFirestore(),
+            );
 
     var docSnap = await ref.get();
     var activities = <Activity>[];

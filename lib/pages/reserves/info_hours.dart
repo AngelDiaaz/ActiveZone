@@ -115,12 +115,13 @@ class _InfoHoursState extends State<InfoHours> {
     );
   }
 
+  //TODO controlar hora para mostrar horarios
+
   ///Metodo que devuelve una lista con las fechas de los horarios
   List<String> seeDate(List<Schedule> schedules) {
     List<String> dates = [];
 
     for (Schedule s in schedules) {
-      print(schedule.date);
       if (!dates.contains(DateFormat('dd/MM/yyyy').format(s.date.toDate()))) {
         dates.add(DateFormat('dd/MM/yyyy').format(s.date.toDate()));
       }
@@ -132,7 +133,6 @@ class _InfoHoursState extends State<InfoHours> {
   Future<void> signup(Timestamp date) async {
   Timestamp finalDate = Timestamp.fromDate(date.toDate().add(const Duration(days: 1)));
 
-  print(finalDate.toDate());
     s = await state.getShedulesByDate(date, widget.activity.name, finalDate);
   }
 

@@ -22,16 +22,19 @@ class _MyReservesState extends State<MyReserves> {
 
   ///Metodo que carga las listas con los nombres de las actividades
   Future<bool> loadList() async {
-    activities = await state.getUserActivity(widget.user);
+    try {
+      activities = await state.getUserActivity(widget.user);
 
-    for (Activity a in activities) {
-      //Si el nombre de la actividad no esta ya almacenada en la lista
-      if (!nameActivities.contains(a.name)) {
-        nameActivities.add(a.name);
+      for (Activity a in activities) {
+        //Si el nombre de la actividad no esta ya almacenada en la lista
+        if (!nameActivities.contains(a.name)) {
+          nameActivities.add(a.name);
+        }
       }
+      return true;
+    } catch (e) {
+      return false;
     }
-
-    return true;
   }
 
   @override
@@ -85,23 +88,19 @@ class _MyReservesState extends State<MyReserves> {
                             AsyncSnapshot<void> snapshot) {
                           if (snapshot.hasData) {
                             //Si es la primera vez que se carga la pagina
-                            if (first) {
-                              dropdownValue = nameActivities.first;
-                              first = false;
-                            }
+                            checkFirstTime();
 
                             return DropdownButton(
                               value: dropdownValue,
-                              icon: const Icon(Icons.arrow_downward),
+                              icon: const Icon(Icons.arrow_downward,
+                                  color: Colors.black),
                               elevation: 16,
+                              alignment: Alignment.centerLeft,
                               style: const TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 20),
-                              underline: Container(
-                                height: 2,
-                                color: Colors.black,
-                              ),
+                                  fontSize: 30),
+                              iconSize: 34,
                               onChanged: (String? value) {
                                 setState(() {
                                   dropdownValue = value!;
@@ -121,36 +120,52 @@ class _MyReservesState extends State<MyReserves> {
                                 child: CircularProgressIndicator());
                           }
                         }),
+                    // const SizedBox(
+                    //   height: 10,
+                    // ),
+                    const Divider(
+                        height: 10,
+                        indent: 30,
+                        endIndent: 30,
+                        color: Colors.black26),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     SizedBox(
-                      height: heightScreen * 4 / 6,
-                      child: FutureBuilder<List<Activity>>(
-                          future: state.getUserActivity(widget.user),
+                      height: heightScreen * 4 / 6 - 20,
+                      child: FutureBuilder(
+                          future: loadList(),
                           builder: (BuildContext context,
-                              AsyncSnapshot<List<Activity>> snapshot) {
+                              AsyncSnapshot<void> snapshot) {
                             if (snapshot.hasData) {
-                              List<Activity> activities = snapshot.data!;
+                              checkFirstTime();
 
-                              return ListView(
-                                padding: const EdgeInsets.all(2),
-                                children: [
-                                  for (int i = 0; i < activities.length; i++)
-                                    for (int j = 0;
-                                        j <
-                                            activities
-                                                .elementAt(i)
-                                                .schedule!
-                                                .length;
-                                        j++)
-                                      reserveCard(
-                                          context,
-                                          widthScreen,
-                                          activities.elementAt(i).name,
-                                          activities
-                                              .elementAt(i)
-                                              .schedule!
-                                              .elementAt(j)),
-                                ],
-                              );
+                              return FutureBuilder<List<Schedule>>(
+                                  future: state.getSchedules(
+                                      'users', widget.user.dni, dropdownValue),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<List<Schedule>> snapshot) {
+                                    if (snapshot.hasData) {
+                                      List<Schedule> schedules = snapshot.data!;
+
+                                      return ListView(
+                                        padding: const EdgeInsets.all(2),
+                                        children: [
+                                          for (int i = 0;
+                                              i < schedules.length;
+                                              i++)
+                                            reserveCard(
+                                                context,
+                                                widthScreen,
+                                                dropdownValue,
+                                                schedules.elementAt(i)),
+                                        ],
+                                      );
+                                    } else {
+                                      return const Center(
+                                          child: CircularProgressIndicator());
+                                    }
+                                  });
                             } else {
                               return const Center(
                                   child: CircularProgressIndicator());
@@ -161,6 +176,19 @@ class _MyReservesState extends State<MyReserves> {
                 )
               ]),
             ])));
+  }
+
+  ///Metodo que comprueba si la pagina ha sido abierta por primera vez
+  void checkFirstTime() {
+    if (first) {
+      //Si se ha abierto por primera vez, asigno el primer valor de la base de datos por defecto
+      if (nameActivities.first.isNotEmpty) {
+        dropdownValue = nameActivities.first;
+      } else {
+        dropdownValue = '';
+      }
+      first = false;
+    }
   }
 
   FutureBuilder<String> reserveCard(BuildContext context, double widthScreen,
