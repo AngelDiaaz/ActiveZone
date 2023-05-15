@@ -184,7 +184,7 @@ class _MyReservesState extends State<MyReserves> {
                               }
                             } catch (e) {
                               return const AlertDialog(
-                                title: Text('Lo sentimos no dispones de ninguna reserva pendiente',textAlign: TextAlign.center, style: TextStyle(wordSpacing: 2)),
+                                title: Text('Lo sentimos no dispones de ninguna reserva pendiente',textAlign: TextAlign.center, style: TextStyle(wordSpacing: )),
                                 icon: Icon(Icons.sentiment_dissatisfied_outlined, color:  Colors.redAccent,size: 50),
                               );
                             }
