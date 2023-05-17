@@ -28,7 +28,7 @@ class _NewReserveState extends State<NewReserve> {
         backgroundColor: Colors.white,
       ),
       body: FutureBuilder(
-          future: state!.getActivities(),
+          future: state!.getActivities(false),
           builder:
               (BuildContext context, AsyncSnapshot<List<Activity>> snapshot) {
             try {
@@ -86,7 +86,7 @@ class _NewReserveState extends State<NewReserve> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => InfoNewReserve(
-                                activity: activity,
+                                activityName: activity.name,
                                 user: widget.user,
                               )),
                     );

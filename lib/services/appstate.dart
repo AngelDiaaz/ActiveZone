@@ -61,9 +61,9 @@ class AppState with ChangeNotifier {
   }
 
   /// Metodo que devuelve todos los gimnasios de la base de datos
-  Future<List<Gym>> getGyms() async {
+  Future<List<Gym>> getAllGyms() async {
     try {
-      return await GymServices().getGyms();
+      return await GymServices().getAllGyms();
     } catch (e) {
       return [];
     }
@@ -79,15 +79,24 @@ class AppState with ChangeNotifier {
   }
 
   /// Metodo que obtiene todas las actividades de un gimnasio
-  Future<List<Activity>> getActivities() async {
+  Future<List<Activity>> getActivities(bool schedule) async {
     try {
-      return await GymServices().getActivities();
+      return await GymServices().getActivities(schedule);
     } catch (e) {
       return [];
     }
   }
 
-  /// Metodo que obtiene todos los horarios de una actividad
+  /// Metodo que obtiene una actividad a traves de su nombre
+  Future<Activity> getActivity(String nameActivity) async {
+    try {
+      return await GymServices().getActivity(nameActivity);
+    } catch (e) {
+      return Activity(name: '', capacity: 0, image: '');
+    }
+  }
+
+    /// Metodo que obtiene todos los horarios de una actividad
   Future<List<Schedule>> getSchedules(String collection, String id,String activity) async {
     try {
       return await GymServices().getSchedules(collection, id, activity);

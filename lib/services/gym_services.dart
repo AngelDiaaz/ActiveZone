@@ -14,7 +14,7 @@ class GymServices {
   FirebaseFirestore db = FirebaseFirestore.instance;
 
   /// Metodo que obtiene los gimnasios que hay en la base de datos
-  Future<List<Gym>> getGyms() async {
+  Future<List<Gym>> getAllGyms() async {
     final ref = db.collection(collection).withConverter(
           fromFirestore: Gym.fromFirestore,
           toFirestore: (Gym gym, _) => gym.toFirestore(),
@@ -26,7 +26,7 @@ class GymServices {
     // Almaceno todas las actividades de una gimnasio
     for (int i = 0; i < docSnap.docs.length; i++) {
       Gym g = docSnap.docs.elementAt(i).data();
-      g.activities = await getActivities();
+      g.activities = await getActivities(true);
       gyms.add(g);
     }
     return gyms;
@@ -44,7 +44,7 @@ class GymServices {
   }
 
   /// Metodo que obtiene todas las actividades de un gimnasio
-  Future<List<Activity>> getActivities() async {
+  Future<List<Activity>> getActivities(bool schedules) async {
     final ref =
         db.collection(collection).doc(gym).collection(activity).withConverter(
               fromFirestore: Activity.fromFirestore,
@@ -57,10 +57,33 @@ class GymServices {
     // Almaceno todas las clases de un gimnasio
     for (int i = 0; i < docSnap.docs.length; i++) {
       Activity a = docSnap.docs.elementAt(i).data();
-      a.schedule = await getSchedules(collection, gym, a.name);
+      if (schedules) {
+        a.schedule = await getSchedules(collection, gym, a.name);
+      }
       activities.add(a);
     }
     return activities;
+  }
+
+  /// Metodo que obtiene una actividad a traves de su nombre
+  Future<Activity> getActivity(String nameActivity) async {
+    final ref = db
+        .collection(collection)
+        .doc(gym)
+        .collection(this.activity)
+        .where('name', isEqualTo: nameActivity)
+        .withConverter(
+          fromFirestore: Activity.fromFirestore,
+          toFirestore: (Activity activity, _) => activity.toFirestore(),
+        );
+
+    var docSnap = await ref.get();
+
+    // Obtengo todos los horarios de una actividad
+    Activity activity = docSnap.docs.elementAt(0).data();
+    activity.schedule = await getSchedules(collection, gym, activity.name);
+
+    return activity;
   }
 
   /// Metodo que obtiene todos los horarios de una actividad

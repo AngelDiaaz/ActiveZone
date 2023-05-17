@@ -6,10 +6,10 @@ import '../../services/services.dart';
 import 'confirm_reserve.dart';
 
 class InfoHours extends StatefulWidget {
-  final Activity activity;
+  final String activityName;
   final User user;
 
-  const InfoHours({Key? key, required this.activity, required this.user})
+  const InfoHours({Key? key, required this.activityName, required this.user})
       : super(key: key);
 
   @override
@@ -27,10 +27,9 @@ class _InfoHoursState extends State<InfoHours> {
 
   @override
   Widget build(BuildContext context) {
-    String nameActivity = widget.activity.name;
 
     var pages = [
-      infoHours(nameActivity),
+      infoHours(widget.activityName),
       ConfirmReserve(
         schedule: schedule,
         activity: widget.activity,
@@ -74,6 +73,7 @@ class _InfoHoursState extends State<InfoHours> {
           const SizedBox(
             height: 10,
           ),
+          //TODO poner future builder con  la funcion getActivity y luego pasar los campos oprtunos
           printHours(s, widget.activity.capacity),
         ]);
   }
@@ -133,7 +133,7 @@ class _InfoHoursState extends State<InfoHours> {
   Future<void> signup(Timestamp date) async {
   Timestamp finalDate = Timestamp.fromDate(date.toDate().add(const Duration(days: 1)));
 
-    s = await state.getShedulesByDate(date, widget.activity.name, finalDate);
+    s = await state.getShedulesByDate(date, widget.activityName, finalDate);
   }
 
   /// Metodo que imprime todas las horas de una clase

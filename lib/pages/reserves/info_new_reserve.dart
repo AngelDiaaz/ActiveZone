@@ -6,10 +6,11 @@ import 'package:gymapp/pages/pages.dart';
 
 /// Clase InfoNewReserve
 class InfoNewReserve extends StatefulWidget {
-  final Activity activity;
+  final String activityName;
   final User user;
 
-  const InfoNewReserve({Key? key, required this.activity, required this.user})
+  const InfoNewReserve(
+      {Key? key, required this.activityName, required this.user})
       : super(key: key);
 
   @override
@@ -19,7 +20,8 @@ class InfoNewReserve extends StatefulWidget {
 class _InfoNewReserveState extends State<InfoNewReserve> {
   double width = 0;
   int index = 0;
-  Schedule schedule = Schedule(id: '',hour: '', numberUsers: 0, date: Timestamp(0,0));
+  Schedule schedule =
+      Schedule(id: '', hour: '', numberUsers: 0, date: Timestamp(0, 0));
   AppState state = AppState();
   List<Schedule> a = [];
 
@@ -38,9 +40,18 @@ class _InfoNewReserveState extends State<InfoNewReserve> {
               SizedBox(
                 height: heightScreen * 2 / 6,
                 width: widthScreen,
-                child: Image(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(widget.activity.image)),
+                child: FutureBuilder(
+                  future: state.getImageActivity(widget.activityName),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Image(
+                          fit: BoxFit.cover,
+                          image: NetworkImage(snapshot.data!));
+                    } else {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                  },
+                ),
               ),
             ]),
             Row(
@@ -49,9 +60,8 @@ class _InfoNewReserveState extends State<InfoNewReserve> {
                   height: heightScreen * 4 / 6,
                   width: widthScreen,
                   //TODO arreglar nombre de la actividad
-                  child: InfoHours(
-                      activity: widget.activity,
-                      user: widget.user),
+                  child:
+                      InfoHours(activityName: widget.activityName, user: widget.user),
                 ),
               ],
             ),
