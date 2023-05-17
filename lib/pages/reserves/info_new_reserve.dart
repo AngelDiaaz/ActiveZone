@@ -7,9 +7,9 @@ import 'package:gymapp/pages/pages.dart';
 /// Clase InfoNewReserve
 class InfoNewReserve extends StatefulWidget {
   final Activity activity;
-  final User? user;
+  final User user;
 
-  const InfoNewReserve({Key? key, required this.activity, this.user})
+  const InfoNewReserve({Key? key, required this.activity, required this.user})
       : super(key: key);
 
   @override

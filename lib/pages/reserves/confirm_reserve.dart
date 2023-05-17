@@ -8,13 +8,13 @@ import '../../models/models.dart';
 class ConfirmReserve extends StatefulWidget {
   final Schedule schedule;
   final Activity activity;
-  final User? user;
+  final User user;
 
   const ConfirmReserve({
     Key? key,
     required this.schedule,
     required this.activity,
-    this.user,
+    required this.user,
   }) : super(key: key);
 
   @override
@@ -51,7 +51,10 @@ class _ConfirmReserveState extends State<ConfirmReserve> {
                   const SizedBox(
                     height: 10,
                   ),
-                  showInfo('Fecha:', DateFormat('dd/MM/yyyy').format(widget.schedule.date.toDate())),
+                  showInfo(
+                      'Fecha:',
+                      DateFormat('dd/MM/yyyy')
+                          .format(widget.schedule.date.toDate())),
                   const SizedBox(
                     height: 10,
                   ),
@@ -90,16 +93,17 @@ class _ConfirmReserveState extends State<ConfirmReserve> {
                           widget.schedule.numberUsers++;
 
                           state.insertUserActivity(
-                              a,
-                              widget.schedule,
-                              widget.user!);
+                              a, widget.schedule, widget.user);
 
                           if (!mounted) return;
 
-                          Navigator.push(context, MaterialPageRoute(
-                          builder: (context) =>
-                              HomePage(gym: gym, user: widget.user!,)
-                          ));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomePage(
+                                        gym: gym,
+                                        user: widget.user,
+                                      )));
                         },
                         child: const Text('Confirmar',
                             style:
@@ -123,6 +127,7 @@ class _ConfirmReserveState extends State<ConfirmReserve> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => InfoNewReserve(
+                                        user: widget.user,
                                         activity: widget.activity,
                                       )));
                         },

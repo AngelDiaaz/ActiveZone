@@ -1,8 +1,5 @@
-import 'dart:developer';
-
 import 'package:gymapp/models/models.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
 
 /// Clase GymServices
 class GymServices {

@@ -27,32 +27,38 @@ class _NewReserveState extends State<NewReserve> {
         centerTitle: true,
         backgroundColor: Colors.white,
       ),
-      body: FutureBuilder (
+      body: FutureBuilder(
           future: state!.getActivities(),
-          builder: (BuildContext context, AsyncSnapshot<List<Activity>> snapshot) {
-            if (snapshot.hasData) {
-              List<Activity> activities = snapshot.data!;
-              return ListView(
-                children: [
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  for (Activity activity in activities)
-                    _activityCard(context, widthScreen, activity),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                ],
-              );
-            } else {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+          builder:
+              (BuildContext context, AsyncSnapshot<List<Activity>> snapshot) {
+            try {
+              if (snapshot.hasData) {
+                List<Activity> activities = snapshot.data!;
+                return ListView(
+                  children: [
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    for (Activity activity in activities)
+                      _activityCard(context, widthScreen, activity),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                  ],
+                );
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            } catch (e) {
+              return Row();
             }
           }),
     );
   }
 
+  ///Metodo que devuelve la card con la informacion de la actividad que le pasamos
   Column _activityCard(
       BuildContext context, double widthScreen, Activity activity) {
     return Column(children: [

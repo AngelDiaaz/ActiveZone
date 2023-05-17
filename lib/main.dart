@@ -38,8 +38,8 @@ class MyApp extends StatelessWidget {
           'password': (_) => const ForgotPassword(),
           'my': (_) => MyReserves(user: user,),
           'new': (_) => NewReserve(user: user,),
-          'hour': (_) => InfoNewReserve(activity: activity),
-          'confirm': (_) => ConfirmReserve(schedule: Schedule(id: '', hour: '', numberUsers: 0, date: Timestamp(0,0)), activity: activity)
+          'hour': (_) => InfoNewReserve(user: user, activity: activity),
+          'confirm': (_) => ConfirmReserve(user: user, schedule: Schedule(id: '', hour: '', numberUsers: 0, date: Timestamp(0,0)), activity: activity)
         },
         // Inicio la app por la ruta del login
         initialRoute: 'login',

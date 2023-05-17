@@ -7,9 +7,9 @@ import 'confirm_reserve.dart';
 
 class InfoHours extends StatefulWidget {
   final Activity activity;
-  final User? user;
+  final User user;
 
-  const InfoHours({Key? key, required this.activity, this.user})
+  const InfoHours({Key? key, required this.activity, required this.user})
       : super(key: key);
 
   @override
