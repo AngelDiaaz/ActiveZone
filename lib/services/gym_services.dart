@@ -92,6 +92,50 @@ class GymServices {
     return schedules;
   }
 
+  /// Metodo que obtiene todos los horarios en los que esta inscrito un usuario tanto los que
+  /// estan finalizados o los que no,   /// dependiendo de lo que le pasemos por el booleano end
+  Future<List<Schedule>> getSchedulesForUser(
+      String collection, String id, String activity, bool end) async {
+    final Query<Schedule> ref;
+    if (!end) {
+      ref = db
+          .collection(collection)
+          .doc(id)
+          .collection(this.activity)
+          .doc(activity)
+          .collection(schedule)
+          .where('date', isGreaterThanOrEqualTo: DateTime.now())
+          .orderBy('date')
+          .withConverter(
+            fromFirestore: Schedule.fromFirestore,
+            toFirestore: (Schedule schedule, _) => schedule.toFirestore(),
+          );
+    } else {
+      ref = db
+          .collection(collection)
+          .doc(id)
+          .collection(this.activity)
+          .doc(activity)
+          .collection(schedule)
+          .where('date', isLessThan: DateTime.now())
+          .orderBy('date')
+          .withConverter(
+            fromFirestore: Schedule.fromFirestore,
+            toFirestore: (Schedule schedule, _) => schedule.toFirestore(),
+          );
+    }
+
+    var docSnap = await ref.get();
+    var schedules = <Schedule>[];
+
+    // Almaceno todos los horarios en una lista
+    for (int i = 0; i < docSnap.docs.length; i++) {
+      Schedule s = docSnap.docs.elementAt(i).data();
+      schedules.add(s);
+    }
+    return schedules;
+  }
+
   /// Metodo que obitiene todos los usuarios que hay incritos a una actividad
   Future<List<User>> getClassUsers(String activity, String hourId) async {
     final ref = db

@@ -96,6 +96,16 @@ class AppState with ChangeNotifier {
     }
   }
 
+  /// Metodo que obtiene todos los horarios en los que esta inscrito un usuario tanto los que
+  /// estan finalizados o los que no,   /// dependiendo de lo que le pasemos por el booleano end
+  Future<List<Schedule>> getSchedulesForUsers(String collection, String id,String activity, bool end) async {
+    try {
+      return await GymServices().getSchedulesForUser(collection, id, activity, end);
+    } catch (e) {
+      return [];
+    }
+  }
+
   ///Metodo que obtiene un usuario a traves del dni
   Future<User> getReservesUser(String userDni) async {
     try {

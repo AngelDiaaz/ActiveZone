@@ -19,6 +19,9 @@ class _MyReservesState extends State<MyReserves> {
   List<Activity> activities = [];
   bool first = true;
   String dropdownValue = '';
+  bool end = false;
+  Color buttonAvailable = Colors.white;
+  Color buttonEnd = Colors.white70;
 
   ///Metodo que carga las listas con los nombres de las actividades
   Future<bool> loadList() async {
@@ -64,23 +67,65 @@ class _MyReservesState extends State<MyReserves> {
                   height: heightScreen * 5 / 6,
                   width: widthScreen,
                   child: Column(children: [
+                    // const SizedBox(
+                    //   height: 20,
+                    // ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: widthScreen / 2,
+                          height: 80,
+                          child: MaterialButton(
+                              onPressed: () {
+                                setState(() {
+                                  end = false;
+                                  buttonAvailable = Colors.white;
+                                  buttonEnd = Colors.white70;
+                                });
+                              },
+                              color: buttonAvailable,
+                              minWidth: widthScreen / 2,
+                              child: const Center(
+                                child: Text('Reservas pendientes',
+                                    style: TextStyle(
+                                        fontSize: 18, wordSpacing: 2)),
+                              )),
+                        ),
+                        SizedBox(
+                          height: 80,
+                          width: widthScreen / 2,
+                          child: MaterialButton(
+                              color: buttonEnd,
+                              minWidth: widthScreen / 2,
+                              onPressed: () {
+                                setState(() {
+                                  end = true;
+                                  buttonAvailable = Colors.white70;
+                                  buttonEnd = Colors.white;
+                                });
+                              },
+                              child: const Center(
+                                child: Text('Reservas finalizadas',
+                                    style: TextStyle(
+                                        fontSize: 18, wordSpacing: 2)),
+                              )),
+                        ),
+                      ],
+                    ),
+                    // const Center(
+                    //   child: Text(
+                    //     'Mis reservas',
+                    //     style: TextStyle(
+                    //         fontSize: 40, fontWeight: FontWeight.bold),
+                    //   ),
+                    // ),
+                    // const Divider(
+                    //     height: 10,
+                    //     indent: 20,
+                    //     endIndent: 20,
+                    //     color: Colors.black26),
                     const SizedBox(
                       height: 20,
-                    ),
-                    const Center(
-                      child: Text(
-                        'Mis reservas',
-                        style: TextStyle(
-                            fontSize: 40, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    const Divider(
-                        height: 10,
-                        indent: 20,
-                        endIndent: 20,
-                        color: Colors.black26),
-                    const SizedBox(
-                      height: 10,
                     ),
                     FutureBuilder(
                         future: loadList(),
@@ -124,9 +169,9 @@ class _MyReservesState extends State<MyReserves> {
                             return Row();
                           }
                         }),
-                    // const SizedBox(
-                    //   height: 10,
-                    // ),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     const Divider(
                         height: 10,
                         indent: 30,
@@ -136,7 +181,7 @@ class _MyReservesState extends State<MyReserves> {
                       height: 10,
                     ),
                     SizedBox(
-                      height: heightScreen * 4 / 6 - 20,
+                      height: heightScreen * 4 / 6 - 30,
                       child: FutureBuilder(
                           future: loadList(),
                           builder: (BuildContext context,
@@ -146,8 +191,8 @@ class _MyReservesState extends State<MyReserves> {
                                 checkFirstTime();
 
                                 return FutureBuilder<List<Schedule>>(
-                                    future: state.getSchedules('users',
-                                        widget.user.dni, dropdownValue),
+                                    future: state.getSchedulesForUsers('users',
+                                        widget.user.dni, dropdownValue, end),
                                     builder: (BuildContext context,
                                         AsyncSnapshot<List<Schedule>>
                                             snapshot) {
@@ -155,20 +200,34 @@ class _MyReservesState extends State<MyReserves> {
                                         if (snapshot.hasData) {
                                           List<Schedule> schedules =
                                               snapshot.data!;
-
-                                          return ListView(
-                                            padding: const EdgeInsets.all(2),
-                                            children: [
-                                              for (int i = 0;
-                                                  i < schedules.length;
-                                                  i++)
-                                                reserveCard(
-                                                    context,
-                                                    widthScreen,
-                                                    dropdownValue,
-                                                    schedules.elementAt(i)),
-                                            ],
-                                          );
+                                          if (schedules.isNotEmpty) {
+                                            return ListView(
+                                              padding: const EdgeInsets.all(2),
+                                              children: [
+                                                for (int i = 0;
+                                                    i < schedules.length;
+                                                    i++)
+                                                  reserveCard(
+                                                      context,
+                                                      widthScreen,
+                                                      dropdownValue,
+                                                      schedules.elementAt(i)),
+                                              ],
+                                            );
+                                          } else {
+                                            return const AlertDialog(
+                                              title: Text(
+                                                  'Lo sentimos no dispones de ninguna reserva finalizada',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      wordSpacing: 2)),
+                                              icon: Icon(
+                                                  Icons
+                                                      .sentiment_dissatisfied_outlined,
+                                                  color: Colors.redAccent,
+                                                  size: 50),
+                                            );
+                                          }
                                         } else {
                                           return const Center(
                                               child:
@@ -184,8 +243,14 @@ class _MyReservesState extends State<MyReserves> {
                               }
                             } catch (e) {
                               return const AlertDialog(
-                                title: Text('Lo sentimos no dispones de ninguna reserva pendiente',textAlign: TextAlign.center, style: TextStyle(wordSpacing: 2)),
-                                icon: Icon(Icons.sentiment_dissatisfied_outlined, color:  Colors.redAccent,size: 50),
+                                title: Text(
+                                    'Lo sentimos no dispones de ninguna reserva pendiente, ni finalizada',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(wordSpacing: 2)),
+                                icon: Icon(
+                                    Icons.sentiment_dissatisfied_outlined,
+                                    color: Colors.redAccent,
+                                    size: 50),
                               );
                             }
                           }),
