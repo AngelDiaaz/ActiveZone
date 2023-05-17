@@ -22,6 +22,8 @@ class _MyReservesState extends State<MyReserves> {
   bool end = false;
   Color buttonAvailable = Colors.white;
   Color buttonEnd = Colors.white70;
+  String infoEmptyText =
+      'Lo sentimos no dispones de ninguna reserva pendiente para esta actividad';
 
   ///Metodo que carga las listas con los nombres de las actividades
   Future<bool> loadList() async {
@@ -81,6 +83,8 @@ class _MyReservesState extends State<MyReserves> {
                                   end = false;
                                   buttonAvailable = Colors.white;
                                   buttonEnd = Colors.white70;
+                                  infoEmptyText =
+                                      'Lo sentimos no dispones de ninguna reserva pendiente para esta actividad';
                                 });
                               },
                               color: buttonAvailable,
@@ -102,6 +106,8 @@ class _MyReservesState extends State<MyReserves> {
                                   end = true;
                                   buttonAvailable = Colors.white70;
                                   buttonEnd = Colors.white;
+                                  infoEmptyText =
+                                      'Lo sentimos no dispones de ninguna reserva finalizada para esta actividad';
                                 });
                               },
                               child: const Center(
@@ -112,18 +118,11 @@ class _MyReservesState extends State<MyReserves> {
                         ),
                       ],
                     ),
-                    // const Center(
-                    //   child: Text(
-                    //     'Mis reservas',
-                    //     style: TextStyle(
-                    //         fontSize: 40, fontWeight: FontWeight.bold),
-                    //   ),
-                    // ),
-                    // const Divider(
-                    //     height: 10,
-                    //     indent: 20,
-                    //     endIndent: 20,
-                    //     color: Colors.black26),
+                    const Divider(
+                        height: 10,
+                        indent: 20,
+                        endIndent: 20,
+                        color: Colors.black26),
                     const SizedBox(
                       height: 20,
                     ),
@@ -181,7 +180,7 @@ class _MyReservesState extends State<MyReserves> {
                       height: 10,
                     ),
                     SizedBox(
-                      height: heightScreen * 4 / 6 - 30,
+                      height: heightScreen * 4 / 6 - 40,
                       child: FutureBuilder(
                           future: loadList(),
                           builder: (BuildContext context,
@@ -215,18 +214,8 @@ class _MyReservesState extends State<MyReserves> {
                                               ],
                                             );
                                           } else {
-                                            return const AlertDialog(
-                                              title: Text(
-                                                  'Lo sentimos no dispones de ninguna reserva finalizada',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      wordSpacing: 2)),
-                                              icon: Icon(
-                                                  Icons
-                                                      .sentiment_dissatisfied_outlined,
-                                                  color: Colors.redAccent,
-                                                  size: 50),
-                                            );
+                                            return messageNotReserves(
+                                                widthScreen, infoEmptyText);
                                           }
                                         } else {
                                           return const Center(
@@ -242,16 +231,8 @@ class _MyReservesState extends State<MyReserves> {
                                     child: CircularProgressIndicator());
                               }
                             } catch (e) {
-                              return const AlertDialog(
-                                title: Text(
-                                    'Lo sentimos no dispones de ninguna reserva pendiente, ni finalizada',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(wordSpacing: 2)),
-                                icon: Icon(
-                                    Icons.sentiment_dissatisfied_outlined,
-                                    color: Colors.redAccent,
-                                    size: 50),
-                              );
+                              return messageNotReserves(widthScreen,
+                                  'Lo sentimos no dispones de ninguna reserva pendiente, ni finalizada');
                             }
                           }),
                     ),
@@ -259,6 +240,23 @@ class _MyReservesState extends State<MyReserves> {
                 )
               ]),
             ])));
+  }
+
+  ///Metodo que muestra una alerta indicando que no hay reservas para esa solicitud
+  Stack messageNotReserves(double width, String text) {
+    return Stack(children: [
+      Positioned(
+        top: 80,
+        width: width,
+        child: AlertDialog(
+          title: Text(text,
+              textAlign: TextAlign.center,
+              style: const TextStyle(wordSpacing: 2)),
+          icon: const Icon(Icons.sentiment_dissatisfied_outlined,
+              color: Colors.redAccent, size: 50),
+        ),
+      ),
+    ]);
   }
 
   ///Metodo que comprueba si la pagina ha sido abierta por primera vez
@@ -274,6 +272,7 @@ class _MyReservesState extends State<MyReserves> {
     }
   }
 
+  ///Metodo que devuelve la carta que muestra la informacion de una actividad ya reservada
   FutureBuilder<String> reserveCard(BuildContext context, double widthScreen,
       String name, Schedule schedule) {
     return FutureBuilder(
