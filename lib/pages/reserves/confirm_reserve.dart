@@ -171,7 +171,7 @@ class _ConfirmReserveState extends State<ConfirmReserve> {
     );
   }
 
-  /// Metodo que inserta el divider de la pestaña
+  /// Metodo que devuelve un  divider
   Divider divider() {
     return const Divider(
         height: 10, indent: 20, endIndent: 20, color: Colors.black26);

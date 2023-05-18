@@ -23,12 +23,14 @@ class _InfoHoursState extends State<InfoHours> {
   Schedule schedule =
       Schedule(id: '', hour: '', numberUsers: 0, date: Timestamp(0, 0));
   TextEditingController dateController = TextEditingController();
-  List<Schedule> s = [];
+  List<Schedule> schedules = [];
+  DateTime? pickedDate = DateTime.now();
+  bool first = true;
 
   @override
   Widget build(BuildContext context) {
     var pages = [
-      infoHours(widget.activityName),
+      infoHours(),
       ConfirmReserve(
         schedule: schedule,
         activityName: widget.activityName,
@@ -44,28 +46,23 @@ class _InfoHoursState extends State<InfoHours> {
     );
   }
 
-  Column infoHours(String nameActivity) {
+  Column infoHours() {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          SizedBox(
-            height: 100,
-            width: width,
-            child: Center(
-                //TODO arreglar fallo con mostrar el nombre al abrir
+          Center(
+            child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 16, 0, 10),
                 child: Text(
-              nameActivity,
-              style: const TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
-            )),
+                  widget.activityName,
+                  style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w500),
+                )),
           ),
           const Divider(
               height: 10, indent: 10, endIndent: 10, color: Colors.black54),
           selectDate(),
           const SizedBox(
-            height: 10,
+            height: 20,
           ),
           const Divider(
               height: 10, indent: 10, endIndent: 10, color: Colors.black87),
@@ -73,16 +70,26 @@ class _InfoHoursState extends State<InfoHours> {
             height: 10,
           ),
           FutureBuilder(
-            future: state.getActivity(nameActivity),
+            future: state.getActivity(widget.activityName),
             builder: (context, snapshot) {
               try {
                 if (snapshot.hasData) {
-                  Activity activity = snapshot.data!;
+                  if (schedules.isNotEmpty) {
+                    Activity activity = snapshot.data!;
 
-                  return printHours(s, activity.capacity);
+                    return printHours(schedules, activity.capacity);
+                  } else {
+                    return const AlertDialog(
+                      title: Text(
+                          'No hay actividades disponibles para esta fecha',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(wordSpacing: 2)),
+                      icon: Icon(Icons.priority_high,
+                          color: Colors.redAccent, size: 50),
+                    );
+                  }
                 } else {
-                  return const Center(
-                      child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
               } catch (e) {
                 return Row();
@@ -94,38 +101,53 @@ class _InfoHoursState extends State<InfoHours> {
 
   ///Metodo que contiene el widget para seleccionar la fecha que queremos de una actividad
   Container selectDate() {
+    if (first) {
+      dateController.text =
+          DateFormat('dd/MM/yyyy').format(DateTime.now()).toString();
+      pickedDate = DateTime.now();
+      first = false;
+    }
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 10, 25, 15),
-      child: TextField(
-          controller: dateController,
-          decoration: const InputDecoration(
-            icon: Icon(Icons.calendar_today, color: Colors.black),
-            labelText: "Introduce fecha",
-            labelStyle: TextStyle(color: Colors.black),
-            focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.black),
-            ),
-            focusColor: Colors.black,
-          ),
-          style: const TextStyle(color: Colors.black, fontSize: 20),
-          readOnly: true,
-          onTap: () async {
-            DateTime? pickedDate = await showDatePicker(
-                context: context,
-                initialDate: DateTime.now(),
-                firstDate: DateTime.now(),
-                lastDate: DateTime(2023, 12, 31));
-            if (pickedDate != null) {
-              String formattedDate =
-                  DateFormat('dd/MM/yyyy').format(pickedDate);
-              setState(() {
-                dateController.text = formattedDate;
-              });
-              await signup(Timestamp.fromDate(pickedDate));
-            }
-            //Vuelvo a refrescar la pagina para que me aparezca sus horarios correspondientes
-            setState(() {});
-          }),
+      child: FutureBuilder(
+        future: signup(Timestamp.fromDate(pickedDate!)),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return TextField(
+                controller: dateController,
+                decoration: const InputDecoration(
+                  icon: Icon(Icons.calendar_today, color: Colors.black),
+                  labelStyle: TextStyle(color: Colors.black),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                  ),
+                  focusColor: Colors.black,
+                ),
+                style: const TextStyle(color: Colors.black, fontSize: 20),
+                readOnly: true,
+                onTap: () async {
+                  pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime.now(),
+                      lastDate: DateTime(2023, 12, 31));
+                  if (pickedDate != null) {
+                    String formattedDate =
+                        DateFormat('dd/MM/yyyy').format(pickedDate!);
+                    setState(() {
+                      dateController.text = formattedDate;
+                    });
+                    //await signup(Timestamp.fromDate(pickedDate!));
+                  }
+                  loadSchedules(Timestamp.fromDate(pickedDate!));
+                  //Vuelvo a refrescar la pagina para que me aparezca los horarios correspondientes
+                  setState(() {});
+                });
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
     );
   }
 
@@ -144,11 +166,29 @@ class _InfoHoursState extends State<InfoHours> {
   }
 
   ///Metodo que obtiene los horarios de una fecha concreta
-  Future<void> signup(Timestamp date) async {
+  FutureBuilder loadSchedules(Timestamp date) {
+    Timestamp finalDate =
+        Timestamp.fromDate(date.toDate().add(const Duration(days: 1)));
+    return FutureBuilder(
+      future: state.getShedulesByDate(date, widget.activityName, finalDate),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.hasData) {
+          schedules = snapshot.data!;
+        }
+        setState(() {});
+        return const SizedBox();
+      },
+    );
+  }
+
+  Future<List<Schedule>> signup(Timestamp date) async {
     Timestamp finalDate =
         Timestamp.fromDate(date.toDate().add(const Duration(days: 1)));
 
-    s = await state.getShedulesByDate(date, widget.activityName, finalDate);
+    schedules =
+        await state.getShedulesByDate(date, widget.activityName, finalDate);
+
+    return schedules;
   }
 
   /// Metodo que imprime todas las horas de una clase
@@ -156,8 +196,7 @@ class _InfoHoursState extends State<InfoHours> {
     // Para saber cuantas filas hacen falta
     var rows = schedules.length / 3;
     var count = 0;
-    List<Schedule> s =
-        state.getAvailableSchedules(schedules, activityCapacity);
+    List<Schedule> s = state.getAvailableSchedules(schedules, activityCapacity);
     return Column(
       children: [
         for (int i = 0; i < rows; i++) ...[
