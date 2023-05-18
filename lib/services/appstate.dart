@@ -116,9 +116,9 @@ class AppState with ChangeNotifier {
   }
 
   ///Metodo que elimina una reserva de una actividad de un usuario
-  Future<bool> deleteScheduleUser(Activity activity, String userDni, Schedule schedule) async {
+  Future<bool> deleteScheduleUser(String activityName, String userDni, Schedule schedule) async {
     try {
-      return await GymServices().deleteScheduleUser(activity, userDni, schedule);
+      return await GymServices().deleteScheduleUser(activityName, userDni, schedule);
     } catch (e) {
       return false;
     }

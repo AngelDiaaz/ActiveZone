@@ -158,14 +158,14 @@ class GymServices {
   }
 
   ///Metodo que elimina una reserva de una actividad de un usuario
-  Future<bool> deleteScheduleUser(Activity activity, String userDni, Schedule schedule) async {
+  Future<bool> deleteScheduleUser(String activityName, String userDni, Schedule schedule) async {
     try {
       //Resto uno al campo de los numeros de usarios en una actividad a una hora concreta
       db
           .collection(collection)
           .doc(gym)
-          .collection(this.activity)
-          .doc(activity.name)
+          .collection(activity)
+          .doc(activityName)
           .collection(this.schedule)
           .doc(schedule.id)
           .set(schedule.toFirestore());
@@ -174,8 +174,8 @@ class GymServices {
       db
           .collection(users)
           .doc(userDni)
-          .collection(this.activity)
-          .doc(activity.name)
+          .collection(activity)
+          .doc(activityName)
           .collection(this.schedule)
           .doc(schedule.id)
           .delete();

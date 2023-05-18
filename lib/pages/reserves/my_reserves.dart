@@ -333,26 +333,27 @@ class _MyReservesState extends State<MyReserves> {
                               ],
                             ),
                             const SizedBox(width: 16),
+                            //Si es una reserva que no ha finalizado
                             if (!end)
                               SizedBox(
                                 width: 50,
                                 height: 50,
-                                child: FutureBuilder(
-                                  future: state.getActivity(dropdownValue),
-                                  builder: (context, snapshot) {
-                                    return IconButton(
-                                        onPressed: () async {
+                                child: IconButton(
+                                    onPressed: () async {
+                                      //Le restamos al horario el usuario inscrito
+                                      schedule.numberUsers--;
 
-                                          //TODO terminar funcionalidad de eliminar horario
+                                      await state.deleteScheduleUser(dropdownValue,
+                                          widget.user.dni, schedule);
 
-                                          state.deleteScheduleUser(snapshot.data!, widget.user.dni, schedule);
-
-                                          setState(() {});
-                                        },
-                                        icon: const Icon(Icons.delete_outline, color: Colors.redAccent, size: 30,));
-
-                                  },
-                                ),
+                                      //Refrescamos la pantalla para que ya no se muestra esta reserva
+                                      setState(() {});
+                                    },
+                                    icon: const Icon(
+                                      Icons.delete_outline,
+                                      color: Colors.redAccent,
+                                      size: 30,
+                                    )),
                               ),
                           ])),
                     ],
