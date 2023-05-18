@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class GymServices {
   // Constantes de las id de las colecciones de la base de datos
   final String collection = 'company';
+  final String users = 'users';
   final String gym = 'dumbbell gym malaga';
   final String activity = 'activity';
   final String schedule = 'schedule';
@@ -156,6 +157,36 @@ class GymServices {
     return schedules;
   }
 
+  ///Metodo que elimina una reserva de una actividad de un usuario
+  Future<bool> deleteScheduleUser(Activity activity, String userDni, Schedule schedule) async {
+    try {
+      //Resto uno al campo de los numeros de usarios en una actividad a una hora concreta
+      db
+          .collection(collection)
+          .doc(gym)
+          .collection(this.activity)
+          .doc(activity.name)
+          .collection(this.schedule)
+          .doc(schedule.id)
+          .set(schedule.toFirestore());
+
+      //Elimino la actividad del usuario en ese horario
+      db
+          .collection(users)
+          .doc(userDni)
+          .collection(this.activity)
+          .doc(activity.name)
+          .collection(this.schedule)
+          .doc(schedule.id)
+          .delete();
+
+
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   /// Metodo que obitiene todos los usuarios que hay incritos a una actividad
   Future<List<User>> getClassUsers(String activity, String hourId) async {
     final ref = db
@@ -197,7 +228,7 @@ class GymServices {
 
       //Añado la actividad en el usuario
       db
-          .collection('users')
+          .collection(users)
           .doc(user.dni)
           .collection(this.activity)
           .doc(activity.name)
@@ -205,7 +236,7 @@ class GymServices {
 
       //Añado el horario en la actividad del usuario
       db
-          .collection('users')
+          .collection(users)
           .doc(user.dni)
           .collection(this.activity)
           .doc(activity.name)
@@ -275,7 +306,7 @@ class GymServices {
   ///Metodo que obtiene un usuario a traves del dni
   Future<User> getReservesUser(String userDni) async {
     final ref =
-        db.collection('users').where("dni", isEqualTo: userDni).withConverter(
+        db.collection(users).where("dni", isEqualTo: userDni).withConverter(
               fromFirestore: User.fromFirestore,
               toFirestore: (User user, _) => user.toFirestore(),
             );
@@ -291,7 +322,7 @@ class GymServices {
   ///Metodo que obtiene todas las actividades que esta inscrito un usuario
   Future<List<Activity>> getUserActivity(User user) async {
     final ref =
-        db.collection('users').doc(user.dni).collection(activity).withConverter(
+        db.collection(users).doc(user.dni).collection(activity).withConverter(
               fromFirestore: Activity.fromFirestore,
               toFirestore: (Activity activity, _) => activity.toFirestore(),
             );

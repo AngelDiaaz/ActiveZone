@@ -115,7 +115,16 @@ class AppState with ChangeNotifier {
     }
   }
 
-  ///Metodo que obtiene un usuario a traves del dni
+  ///Metodo que elimina una reserva de una actividad de un usuario
+  Future<bool> deleteScheduleUser(Activity activity, String userDni, Schedule schedule) async {
+    try {
+      return await GymServices().deleteScheduleUser(activity, userDni, schedule);
+    } catch (e) {
+      return false;
+    }
+  }
+
+    ///Metodo que obtiene un usuario a traves del dni
   Future<User> getReservesUser(String userDni) async {
     try {
       return await GymServices().getReservesUser(userDni);

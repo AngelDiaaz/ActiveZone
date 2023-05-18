@@ -22,8 +22,7 @@ class _MyReservesState extends State<MyReserves> {
   bool end = false;
   Color buttonAvailable = Colors.white;
   Color buttonEnd = Colors.white70;
-  String infoEmptyText =
-      'Lo sentimos no dispones de ninguna reserva pendiente para esta actividad';
+  String infoEmptyText = '';
 
   ///Metodo que carga las listas con los nombres de las actividades
   Future<bool> loadList() async {
@@ -44,6 +43,8 @@ class _MyReservesState extends State<MyReserves> {
 
   @override
   Widget build(BuildContext context) {
+    if (first) infoEmptyText = 'hola';
+
     state = Provider.of<AppState>(context, listen: true);
 
     var widthScreen = MediaQuery.of(context).size.width;
@@ -69,9 +70,6 @@ class _MyReservesState extends State<MyReserves> {
                   height: heightScreen * 5 / 6,
                   width: widthScreen,
                   child: Column(children: [
-                    // const SizedBox(
-                    //   height: 20,
-                    // ),
                     Row(
                       children: [
                         SizedBox(
@@ -118,11 +116,6 @@ class _MyReservesState extends State<MyReserves> {
                         ),
                       ],
                     ),
-                    const Divider(
-                        height: 10,
-                        indent: 20,
-                        endIndent: 20,
-                        color: Colors.black26),
                     const SizedBox(
                       height: 20,
                     ),
@@ -305,7 +298,7 @@ class _MyReservesState extends State<MyReserves> {
                               child: Image.network(image, fit: BoxFit.cover),
                             ),
                             SizedBox(
-                              width: widthScreen / 2 - 130,
+                              width: widthScreen / 2 - 155,
                             ),
                             Column(
                               children: [
@@ -339,6 +332,28 @@ class _MyReservesState extends State<MyReserves> {
                                 ),
                               ],
                             ),
+                            const SizedBox(width: 16),
+                            if (!end)
+                              SizedBox(
+                                width: 50,
+                                height: 50,
+                                child: FutureBuilder(
+                                  future: state.getActivity(dropdownValue),
+                                  builder: (context, snapshot) {
+                                    return IconButton(
+                                        onPressed: () async {
+
+                                          //TODO terminar funcionalidad de eliminar horario
+
+                                          state.deleteScheduleUser(snapshot.data!, widget.user.dni, schedule);
+
+                                          setState(() {});
+                                        },
+                                        icon: const Icon(Icons.delete_outline, color: Colors.redAccent, size: 30,)),
+
+                                  },
+                                ),
+                              ),
                           ])),
                     ],
                   ),
