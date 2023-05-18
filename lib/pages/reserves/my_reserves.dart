@@ -180,7 +180,7 @@ class _MyReservesState extends State<MyReserves> {
                       height: 10,
                     ),
                     SizedBox(
-                      height: heightScreen * 4 / 6 - 40,
+                      height: heightScreen * 4 / 6 - 60,
                       child: FutureBuilder(
                           future: loadList(),
                           builder: (BuildContext context,

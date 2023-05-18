@@ -7,13 +7,13 @@ import '../../models/models.dart';
 /// Clase ConfirmReserve
 class ConfirmReserve extends StatefulWidget {
   final Schedule schedule;
-  final Activity activity;
+  final String activityName;
   final User user;
 
   const ConfirmReserve({
     Key? key,
     required this.schedule,
-    required this.activity,
+    required this.activityName,
     required this.user,
   }) : super(key: key);
 
@@ -43,7 +43,7 @@ class _ConfirmReserveState extends State<ConfirmReserve> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   const SizedBox(height: 10),
-                  showInfo('Clase:', widget.activity.name),
+                  showInfo('Clase:', widget.activityName),
                   const SizedBox(
                     height: 10,
                   ),
@@ -88,7 +88,7 @@ class _ConfirmReserveState extends State<ConfirmReserve> {
                       child: MaterialButton(
                         onPressed: () async {
                           Gym gym = await state.getGym();
-                          Activity a = widget.activity;
+                          Activity a = await state.getActivity(widget.activityName);
                           a.schedule!.clear();
                           widget.schedule.numberUsers++;
 
@@ -128,7 +128,7 @@ class _ConfirmReserveState extends State<ConfirmReserve> {
                               MaterialPageRoute(
                                   builder: (context) => InfoNewReserve(
                                         user: widget.user,
-                                        activity: widget.activity,
+                                        activityName: widget.activityName,
                                       )));
                         },
                         child: Text('Cancelar',

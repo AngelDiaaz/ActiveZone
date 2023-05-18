@@ -27,12 +27,11 @@ class _InfoHoursState extends State<InfoHours> {
 
   @override
   Widget build(BuildContext context) {
-
     var pages = [
       infoHours(widget.activityName),
       ConfirmReserve(
         schedule: schedule,
-        activity: widget.activity,
+        activityName: widget.activityName,
         user: widget.user,
       )
     ];
@@ -73,8 +72,23 @@ class _InfoHoursState extends State<InfoHours> {
           const SizedBox(
             height: 10,
           ),
-          //TODO poner future builder con  la funcion getActivity y luego pasar los campos oprtunos
-          printHours(s, widget.activity.capacity),
+          FutureBuilder(
+            future: state.getActivity(nameActivity),
+            builder: (context, snapshot) {
+              try {
+                if (snapshot.hasData) {
+                  Activity activity = snapshot.data!;
+
+                  return printHours(s, activity.capacity);
+                } else {
+                  return const Center(
+                      child: CircularProgressIndicator());
+                }
+              } catch (e) {
+                return Row();
+              }
+            },
+          ),
         ]);
   }
 
@@ -107,7 +121,7 @@ class _InfoHoursState extends State<InfoHours> {
               setState(() {
                 dateController.text = formattedDate;
               });
-            await signup(Timestamp.fromDate(pickedDate));
+              await signup(Timestamp.fromDate(pickedDate));
             }
             //Vuelvo a refrescar la pagina para que me aparezca sus horarios correspondientes
             setState(() {});
@@ -131,7 +145,8 @@ class _InfoHoursState extends State<InfoHours> {
 
   ///Metodo que obtiene los horarios de una fecha concreta
   Future<void> signup(Timestamp date) async {
-  Timestamp finalDate = Timestamp.fromDate(date.toDate().add(const Duration(days: 1)));
+    Timestamp finalDate =
+        Timestamp.fromDate(date.toDate().add(const Duration(days: 1)));
 
     s = await state.getShedulesByDate(date, widget.activityName, finalDate);
   }
@@ -142,7 +157,7 @@ class _InfoHoursState extends State<InfoHours> {
     var rows = schedules.length / 3;
     var count = 0;
     List<Schedule> s =
-        state.getAvailableSchedules(schedules, widget.activity.capacity);
+        state.getAvailableSchedules(schedules, activityCapacity);
     return Column(
       children: [
         for (int i = 0; i < rows; i++) ...[
