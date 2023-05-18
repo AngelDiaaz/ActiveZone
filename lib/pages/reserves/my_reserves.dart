@@ -349,7 +349,7 @@ class _MyReservesState extends State<MyReserves> {
 
                                           setState(() {});
                                         },
-                                        icon: const Icon(Icons.delete_outline, color: Colors.redAccent, size: 30,)),
+                                        icon: const Icon(Icons.delete_outline, color: Colors.redAccent, size: 30,));
 
                                   },
                                 ),
