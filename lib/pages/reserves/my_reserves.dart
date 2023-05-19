@@ -339,15 +339,8 @@ class _MyReservesState extends State<MyReserves> {
                                 width: 50,
                                 height: 50,
                                 child: IconButton(
-                                    onPressed: () async {
-                                      //Le restamos al horario el usuario inscrito
-                                      schedule.numberUsers--;
-
-                                      await state.deleteScheduleUser(dropdownValue,
-                                          widget.user.dni, schedule);
-
-                                      //Refrescamos la pantalla para que ya no se muestra esta reserva
-                                      setState(() {});
+                                    onPressed: () {
+                                      showAlertDialog(context, schedule);
                                     },
                                     icon: const Icon(
                                       Icons.delete_outline,
@@ -366,6 +359,40 @@ class _MyReservesState extends State<MyReserves> {
           return Row();
         }
       },
+    );
+  }
+
+  ///Metodo que muestra una alert para confirmar si quieres eliminar la reserva o no
+  showAlertDialog(BuildContext context, Schedule schedule) {
+    Widget cancelButton = OutlinedButton(
+      child: const Text("No"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = OutlinedButton(
+      child: const Text("Sí"),
+      onPressed: () async {
+        //Le restamos al horario el usuario inscrito
+        schedule.numberUsers--;
+
+        await state.deleteScheduleUser(
+            dropdownValue, widget.user.dni, schedule);
+
+        //Refrescamos la pantalla para que ya no se muestra esta reserva
+        setState(() {});
+
+        if (!mounted) return;
+        Navigator.pop(context);
+      },
+    );
+    AlertDialog(
+      title: const Text("Eliminar reserva"),
+      content: const Text("¿Quieres eliminar esta reserva?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
     );
   }
 }
