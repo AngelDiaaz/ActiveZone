@@ -59,7 +59,6 @@ class _InfoNewReserveState extends State<InfoNewReserve> {
                 SizedBox(
                   height: heightScreen * 4 / 6,
                   width: widthScreen,
-                  //TODO arreglar nombre de la actividad
                   child:
                       InfoHours(activityName: widget.activityName, user: widget.user),
                 ),

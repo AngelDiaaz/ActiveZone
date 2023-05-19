@@ -108,7 +108,6 @@ class _HomePageState extends State<HomePage> {
                                                   user: widget.user,
                                                 )),
                                           );
-
                                         },
                                         backgroundColor: Colors.white,
                                         child: const Icon(

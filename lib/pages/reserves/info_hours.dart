@@ -47,56 +47,54 @@ class _InfoHoursState extends State<InfoHours> {
   }
 
   Column infoHours() {
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Center(
-            child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 16, 0, 10),
-                child: Text(
-                  widget.activityName,
-                  style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w500),
-                )),
-          ),
-          const Divider(
-              height: 10, indent: 10, endIndent: 10, color: Colors.black54),
-          selectDate(),
-          const SizedBox(
-            height: 20,
-          ),
-          const Divider(
-              height: 10, indent: 10, endIndent: 10, color: Colors.black87),
-          const SizedBox(
-            height: 10,
-          ),
-          FutureBuilder(
-            future: state.getActivity(widget.activityName),
-            builder: (context, snapshot) {
-              try {
-                if (snapshot.hasData) {
-                  if (schedules.isNotEmpty) {
-                    Activity activity = snapshot.data!;
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
+        Widget>[
+      Center(
+        child: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 16, 0, 10),
+            child: Text(
+              widget.activityName,
+              style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w500),
+            )),
+      ),
+      const Divider(
+          height: 10, indent: 10, endIndent: 10, color: Colors.black54),
+      selectDate(),
+      const SizedBox(
+        height: 20,
+      ),
+      const Divider(
+          height: 10, indent: 10, endIndent: 10, color: Colors.black87),
+      const SizedBox(
+        height: 10,
+      ),
+      FutureBuilder(
+        future: state.getActivity(widget.activityName),
+        builder: (context, snapshot) {
+          try {
+            if (snapshot.hasData) {
+              if (schedules.isNotEmpty) {
+                Activity activity = snapshot.data!;
 
-                    return printHours(schedules, activity.capacity);
-                  } else {
-                    return const AlertDialog(
-                      title: Text(
-                          'No hay actividades disponibles para esta fecha',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(wordSpacing: 2)),
-                      icon: Icon(Icons.priority_high,
-                          color: Colors.redAccent, size: 50),
-                    );
-                  }
-                } else {
-                  return const Center(child: CircularProgressIndicator());
-                }
-              } catch (e) {
-                return Row();
+                return printHours(schedules, activity.capacity);
+              } else {
+                return const AlertDialog(
+                  title: Text('No hay actividades disponibles para esta fecha',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(wordSpacing: 2)),
+                  icon: Icon(Icons.priority_high,
+                      color: Colors.redAccent, size: 50),
+                );
               }
-            },
-          ),
-        ]);
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          } catch (e) {
+            return Row();
+          }
+        },
+      ),
+    ]);
   }
 
   ///Metodo que contiene el widget para seleccionar la fecha que queremos de una actividad
@@ -110,7 +108,7 @@ class _InfoHoursState extends State<InfoHours> {
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 10, 25, 15),
       child: FutureBuilder(
-        future: signup(Timestamp.fromDate(pickedDate!)),
+        future: loadSchedules(Timestamp.fromDate(pickedDate!)),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return TextField(
@@ -139,7 +137,6 @@ class _InfoHoursState extends State<InfoHours> {
                     });
                     //await signup(Timestamp.fromDate(pickedDate!));
                   }
-                  loadSchedules(Timestamp.fromDate(pickedDate!));
                   //Vuelvo a refrescar la pagina para que me aparezca los horarios correspondientes
                   setState(() {});
                 });
@@ -165,23 +162,9 @@ class _InfoHoursState extends State<InfoHours> {
     return dates;
   }
 
-  ///Metodo que obtiene los horarios de una fecha concreta
-  FutureBuilder loadSchedules(Timestamp date) {
-    Timestamp finalDate =
-        Timestamp.fromDate(date.toDate().add(const Duration(days: 1)));
-    return FutureBuilder(
-      future: state.getShedulesByDate(date, widget.activityName, finalDate),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.hasData) {
-          schedules = snapshot.data!;
-        }
-        setState(() {});
-        return const SizedBox();
-      },
-    );
-  }
-
-  Future<List<Schedule>> signup(Timestamp date) async {
+  ///Metodo que carga los horarios de una fecha concreta
+  Future<List<Schedule>> loadSchedules(Timestamp date) async {
+    //Le sumo un dia a la fecha que le paso, para traerme los horarios entre esa fecha y el dia siguiente
     Timestamp finalDate =
         Timestamp.fromDate(date.toDate().add(const Duration(days: 1)));
 
@@ -224,11 +207,39 @@ class _InfoHoursState extends State<InfoHours> {
       margin: const EdgeInsets.all(15.0),
       padding: const EdgeInsets.all(2.0),
       child: TextButton(
-        onPressed: () {
-          this.schedule = schedule;
-          setState(() {
-            index = 1;
-          });
+        onPressed: () async {
+          bool find = false;
+
+          //Obtengo los horarios en los que esta apuntado el usuario
+          List<Schedule> schedules = await state.getSchedulesForUsers(
+              'users', widget.user.dni, widget.activityName, false);
+
+          //Compruebo si esta inscrito o no en ese horario
+          for (Schedule s in schedules) {
+            if (s.id == schedule.id) {
+              find = true;
+            }
+          }
+
+          //Si no esta inscrito
+          if (!find) {
+            //Para luego cargar ese horario con la informacion detallada
+            this.schedule = schedule;
+            setState(() {
+              index = 1;
+            });
+          } else {
+            showDialog(
+              context: context,
+              builder: (context) => const AlertDialog(
+                title: Text('Ya estas inscrito en esta actividad',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(wordSpacing: 2)),
+                icon: Icon(Icons.sentiment_satisfied_alt_outlined,
+                    color: Colors.green, size: 50),
+              ),
+            );
+          }
         },
         style: ButtonStyle(
             shape: MaterialStateProperty.all(RoundedRectangleBorder(
