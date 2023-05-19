@@ -4,6 +4,7 @@ import 'package:gymapp/pages/reserves/my_reserves.dart';
 import 'package:gymapp/services/services.dart';
 import 'package:provider/provider.dart';
 import '../models/models.dart';
+import '../utils/utils.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -35,7 +36,7 @@ class _HomePageState extends State<HomePage> {
                   height: heightScreen * 2 / 5,
                   width: widthScreen,
                   child: Image.asset(
-                    'assets/images/gym1.jpg',
+                    'assets/images/gym.jpg',
                     fit: BoxFit.cover,
                   )),
             ]),
@@ -192,17 +193,8 @@ class _HomePageState extends State<HomePage> {
                                     child: FloatingActionButton(
                                         heroTag: 'btn4',
                                         onPressed: () async {
-                                          GymServices g = GymServices();
-
-                                          var a = await g.getReservesUser(widget.user.dni);
-
-                                          print(a);
-                                          print(a.userActivity());
-
-                                          var b = await g.getImageActivity('Yoga');
-
-                                          print(b);
-                                          },
+                                          print(Hash.encryptText('maria'));
+                                        },
                                         backgroundColor: Colors.white,
                                         child: const Icon(
                                           Icons.public,

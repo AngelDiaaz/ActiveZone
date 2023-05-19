@@ -65,7 +65,7 @@ class _ActiveAccountState extends State<ActiveAccount> {
                             passwordRepeatController.text) {
                           // Activo la cuenta para que el usuario pueda iniciar sesion
                           user.active = true;
-                          user.password = passwordController.text;
+                          user.password = Hash.encryptText(passwordController.text);
 
                           state!.updateUser(userController.text, user);
                           response = true;
@@ -98,7 +98,7 @@ class _ActiveAccountState extends State<ActiveAccount> {
     );
   }
 
-  ///
+  /// Formulario con los campos de usuario y correo electronico
   Form _credentials() {
     return Form(
       key: _formKey,

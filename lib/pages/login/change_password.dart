@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:gymapp/utils/error_message.dart';
 import '../../models/models.dart';
 import '../../services/services.dart';
 import 'package:provider/provider.dart';
+import '../../utils/utils.dart';
 
 /// Clase ChangePassword
 class ChangePassword extends StatefulWidget {
@@ -65,7 +65,7 @@ class _ChangePasswordState extends State<ChangePassword> {
 
                       if (passwordController.text ==
                           passwordRepeatController.text) {
-                        user.password = passwordController.text;
+                        user.password = Hash.encryptText(passwordController.text);
 
                         state!.updateUser(widget.user.dni, user);
                         response = true;
@@ -97,7 +97,7 @@ class _ChangePasswordState extends State<ChangePassword> {
     );
   }
 
-  /// Formulario con los campos de usuario y correo electronico
+  /// Formulario con los campos de contraseña y repetir contraseña
   Form _credentials() {
     return Form(
       key: _formKey,

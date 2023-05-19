@@ -61,7 +61,7 @@ class _MyReservesState extends State<MyReserves> {
                     height: heightScreen * 1 / 6,
                     width: widthScreen,
                     child: Image.asset(
-                      'assets/images/gym1.jpg',
+                      'assets/images/gym.jpg',
                       fit: BoxFit.cover,
                     )),
               ]),

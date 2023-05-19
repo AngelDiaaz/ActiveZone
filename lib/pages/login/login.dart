@@ -28,111 +28,118 @@ class _LoginState extends State<Login> {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            // Padding(
-            //   padding: const EdgeInsets.only(top: 60.0),
-            //   child: Center(
-            //     child: SizedBox(
-            //         width: 200,
-            //         height: 150,
-            //         child: Image.asset('assets/images/login.jpg')),
-            //   ),
-            // ),
-            const SizedBox(
-              height: 60,
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/login.jpg'),
+              fit:
+                  BoxFit.cover,
             ),
-            _credentials(),
-            const SizedBox(
-              height: 5,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      textStyle: const TextStyle(fontSize: 20),
+          ),
+          child: Column(
+            children: <Widget>[
+              const SizedBox(
+                height: 60,
+              ),
+              _credentials(),
+              const SizedBox(
+                height: 5,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        textStyle: const TextStyle(fontSize: 20),
+                      ),
+                      onPressed: () => Navigator.pushNamed(context, 'password'),
+                      child: const Text('Recuperar contraseña'),
                     ),
-                    onPressed: () => Navigator.pushNamed(context, 'password'),
-                    child: const Text('Recuperar contraseña'),
-                  ),
-                )
-              ],
-            ),
-            const SizedBox(
-              height: 80,
-            ),
-            Container(
-              height: 60,
-              width: 270,
-              decoration: BoxDecoration(
-                  color: Colors.lightBlue,
-                  borderRadius: BorderRadius.circular(20)),
-              child: FutureBuilder(builder:
-                  (BuildContext context, AsyncSnapshot<List> snapshot) {
-                return MaterialButton(
-                  onPressed: () async {
-                    final messenger = ScaffoldMessenger.of(context);
-                    bool response = false;
-                    if (_formKey.currentState!.validate()) {
-                      User user = await state!.getUser(userController.text);
-                      Gym gym = await state!.getGym();
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 80,
+              ),
+              Container(
+                height: 60,
+                width: 270,
+                decoration: BoxDecoration(
+                    color: Colors.lightBlue,
+                    borderRadius: BorderRadius.circular(20)),
+                child: FutureBuilder(builder:
+                    (BuildContext context, AsyncSnapshot<List> snapshot) {
+                  return MaterialButton(
+                    onPressed: () async {
+                      final messenger = ScaffoldMessenger.of(context);
+                      bool response = false;
+                      if (_formKey.currentState!.validate()) {
+                        User user = await state!.getUser(userController.text);
+                        Gym gym = await state!.getGym();
 
-                      if (user.dni.isNotEmpty && user.active!) {
-                        if (user.dni == userController.text &&
-                            user.password == passwordController.text) {
-                          response = true;
-                        }
-                        if (response) {
-                          if (!mounted) return;
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                              HomePage(gym: gym, user: user,)
-                          ));
+                        //Realizo el hash de la contraseña que le paso para compararlo con el de la base de datos
+                        if (user.dni.isNotEmpty && user.active!) {
+                          if (user.dni == userController.text &&
+                              user.password ==
+                                  Hash.encryptText(passwordController.text)) {
+                            response = true;
+                          }
+                          if (response) {
+                            if (!mounted) return;
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomePage(
+                                          gym: gym,
+                                          user: user,
+                                        )));
+                          } else {
+                            Error.errorMessage(messenger,
+                                'Error credenciales incorrectas', Colors.red);
+                          }
                         } else {
-                          Error.errorMessage(messenger,
-                              'Error credenciales incorrectas', Colors.red);
+                          Error.errorMessage(
+                              messenger,
+                              'No existe esta cuenta o está desactivada',
+                              Colors.red);
                         }
-                      } else {
-                        Error.errorMessage(messenger,
-                            'No existe esta cuenta o está desactivada', Colors.red);
                       }
-                    }
-                  },
-                  child: const Text(
-                    'Iniciar sesión',
-                    style: TextStyle(color: Colors.white, fontSize: 25),
-                  ),
-                );
-              }),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            SizedBox(
-              width: 270,
-              height: 60,
-              child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
+                    },
+                    child: const Text(
+                      'Iniciar sesión',
+                      style: TextStyle(color: Colors.white, fontSize: 25),
                     ),
-                    side: const BorderSide(width: 1, color: Colors.black12),
-                  ),
-                  child: const Text(
-                    "Activar cuenta",
-                    style: TextStyle(fontSize: 25),
-                  ),
-                  onPressed: () => Navigator.pushNamed(context, 'register')),
-            ),
-            const SizedBox(
-              height: 130,
-            ),
-          ],
+                  );
+                }),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              SizedBox(
+                width: 270,
+                height: 60,
+                child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      side: const BorderSide(width: 1, color: Colors.black12),
+                    ),
+                    child: const Text(
+                      "Activar cuenta",
+                      style: TextStyle(fontSize: 25),
+                    ),
+                    onPressed: () => Navigator.pushNamed(context, 'register')),
+              ),
+              const SizedBox(
+                height: 130,
+              ),
+            ],
+          ),
         ),
       ),
     );

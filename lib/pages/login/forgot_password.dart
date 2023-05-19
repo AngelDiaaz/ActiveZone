@@ -21,7 +21,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   final TextEditingController emailController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   var rng = Random();
-  AppState? state;
+  AppState state = AppState();
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +73,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     final messenger = ScaffoldMessenger.of(context);
                     bool response = false;
                     if (_formKey.currentState!.validate()) {
-                      User user = await state!.getUser(userController.text);
+                      User user = await state.getUser(userController.text);
 
                       if (user.dni.isNotEmpty && user.active!) {
                         if (user.dni == userController.text &&
