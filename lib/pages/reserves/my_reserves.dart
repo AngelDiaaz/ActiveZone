@@ -386,13 +386,19 @@ class _MyReservesState extends State<MyReserves> {
         Navigator.pop(context);
       },
     );
-    AlertDialog(
+    AlertDialog alert = AlertDialog(
       title: const Text("Eliminar reserva"),
       content: const Text("¿Quieres eliminar esta reserva?"),
       actions: [
         cancelButton,
         continueButton,
       ],
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }
