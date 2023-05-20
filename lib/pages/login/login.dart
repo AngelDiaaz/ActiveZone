@@ -18,15 +18,15 @@ class _LoginState extends State<Login> {
   final TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AppState? state;
-  Color principalColor = const Color.fromRGBO(0, 54, 100, 0.85);
+  Color principalColor = const Color.fromRGBO(67, 68, 82, 0.9);
   final image =
       'https://img.freepik.com/foto-gratis/deporte-fitness-salud-bicicletas-estaticas-gimnasio_613910-20283.jpg?w=360&t=st=1684577477~exp=1684578077~hmac=af0506c55f5c39d5c606ccf98330ab82e8ea89551327acb1810c1a35758920d';
 
   @override
   Widget build(BuildContext context) {
     state = Provider.of<AppState>(context, listen: true);
-    var widthScreen = MediaQuery.of(context).size.width;
-    var heightScreen = MediaQuery.of(context).size.height;
+    double widthScreen = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
     return Scaffold(
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
@@ -44,21 +44,32 @@ class _LoginState extends State<Login> {
             ),
             Center(
               child: Container(
-                width: widthScreen - 50,
-                height: heightScreen - 200,
+                width: widthScreen - (widthScreen * 0.15),
+                height: heightScreen - (heightScreen * 0.25),
                 decoration: BoxDecoration(
-                  color: const Color.fromRGBO(150, 150, 150, 0.6),
+                  color: const Color.fromRGBO(247, 237, 240, 0.85),
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: Column(
                   children: <Widget>[
-                    //TODO poner nombre app con logo o lo que sea
-                    const SizedBox(
-                      height: 100,
+                    SizedBox(
+                      height: heightScreen * 0.05,
+                    ),
+                    Center(
+                      child: Text(
+                        'ActiveZone+',
+                        style: TextStyle(
+                            color: principalColor,
+                            fontSize: 40,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                    SizedBox(
+                      height: heightScreen * 0.08,
                     ),
                     _credentials(),
-                    const SizedBox(
-                      height: 10,
+                    SizedBox(
+                      height: heightScreen * 0.015,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -78,15 +89,15 @@ class _LoginState extends State<Login> {
                         )
                       ],
                     ),
-                    const SizedBox(
-                      height: 60,
+                    SizedBox(
+                      height: heightScreen * 0.06,
                     ),
                     Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Container(
-                            height: 60,
-                            width: 270,
+                            height: heightScreen * 0.07,
+                            width: widthScreen * 0.65,
                             decoration: BoxDecoration(
                                 color: principalColor,
                                 borderRadius: BorderRadius.circular(20)),
@@ -141,12 +152,12 @@ class _LoginState extends State<Login> {
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            height: 20,
+                          SizedBox(
+                            height: heightScreen * 0.03,
                           ),
                           SizedBox(
-                              width: 270,
-                              height: 60,
+                              width: widthScreen * 0.65,
+                              height: heightScreen * 0.07,
                               child: OutlinedButton(
                                   style: OutlinedButton.styleFrom(
                                     shape: RoundedRectangleBorder(
@@ -179,7 +190,7 @@ class _LoginState extends State<Login> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
             child: TextFormField(
               controller: userController,
               style: TextStyle(
@@ -187,10 +198,23 @@ class _LoginState extends State<Login> {
                   fontWeight: FontWeight.w400,
                   color: principalColor),
               decoration: InputDecoration(
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(18),
+                    borderSide: BorderSide(color: principalColor),
+                  ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(18),
                     borderSide: BorderSide(color: principalColor),
                   ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(18),
+                    borderSide: BorderSide(color: principalColor),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(18),
+                    borderSide: BorderSide(color: principalColor),
+                  ),
+                  labelStyle: TextStyle(color: principalColor),
                   labelText: 'Usuario',
                   hintText: 'Introduce tu usuario'),
               validator: (value) {
@@ -211,10 +235,23 @@ class _LoginState extends State<Login> {
               controller: passwordController,
               obscureText: true,
               decoration: InputDecoration(
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(18),
+                    borderSide: BorderSide(color: principalColor),
+                  ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(18),
                     borderSide: BorderSide(color: principalColor),
                   ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(18),
+                    borderSide: BorderSide(color: principalColor),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(18),
+                    borderSide: BorderSide(color: principalColor),
+                  ),
+                  labelStyle: TextStyle(color: principalColor),
                   labelText: 'Contraseña',
                   hintText: 'Introduce la contraseña'),
               validator: (value) {
