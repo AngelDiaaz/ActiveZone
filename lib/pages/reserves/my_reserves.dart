@@ -41,9 +41,11 @@ class _MyReservesState extends State<MyReserves> {
     }
   }
 
+  //TODO poner texto generico para el error al mostras que no hay reservas
+
   @override
   Widget build(BuildContext context) {
-    if (first) infoEmptyText = 'hola';
+    if (first) infoEmptyText = 'Lo sentimos no dispones de ninguna reserva pendiente para esta actividad';
 
     state = Provider.of<AppState>(context, listen: true);
 
