@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gymapp/utils/page_settings.dart';
 import '../../models/models.dart';
 import '../../services/services.dart';
 import 'package:provider/provider.dart';
@@ -6,6 +7,7 @@ import '../../utils/utils.dart';
 import '../pages.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
+///Clase Login
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
@@ -17,10 +19,8 @@ class _LoginState extends State<Login> {
   final TextEditingController userController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  AppState? state;
-  Color principalColor = const Color.fromRGBO(67, 68, 82, 0.9);
-  final image =
-      'https://img.freepik.com/foto-gratis/deporte-fitness-salud-bicicletas-estaticas-gimnasio_613910-20283.jpg?w=360&t=st=1684577477~exp=1684578077~hmac=af0506c55f5c39d5c606ccf98330ab82e8ea89551327acb1810c1a35758920d';
+  AppState state = AppState();
+  Color principalColor = LoginSettings.loginColor();
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,7 @@ class _LoginState extends State<Login> {
             Positioned.fill(
               //Cacheo la imagen para al tener que iniciar mas veces sea mas rapido
               child: CachedNetworkImage(
-                imageUrl: image,
+                imageUrl: LoginSettings.loginImage(),
                 fit: BoxFit.cover,
               ),
             ),
@@ -65,18 +65,18 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                     SizedBox(
-                      height: heightScreen * 0.07,
+                      height: heightScreen * 0.06,
                     ),
                     _credentials(heightScreen),
 
                     SizedBox(
-                      height: heightScreen * 0.032,
+                      height: heightScreen * 0.02,
                     ),
                     Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Container(
-                            height: heightScreen * 0.07,
+                            height: heightScreen * 0.08,
                             width: widthScreen * 0.65,
                             decoration: BoxDecoration(
                                 color: principalColor,
@@ -90,8 +90,8 @@ class _LoginState extends State<Login> {
                                 bool response = false;
                                 if (_formKey.currentState!.validate()) {
                                   User user =
-                                      await state!.getUser(userController.text);
-                                  Gym gym = await state!.getGym();
+                                      await state.getUser(userController.text);
+                                  Gym gym = await state.getGym();
 
                                   //Realizo el hash de la contraseña que le paso para compararlo con el de la base de datos
                                   if (user.dni.isNotEmpty && user.active!) {
@@ -136,8 +136,8 @@ class _LoginState extends State<Login> {
                             height: heightScreen * 0.03,
                           ),
                           SizedBox(
+                              height: heightScreen * 0.08,
                               width: widthScreen * 0.65,
-                              height: heightScreen * 0.07,
                               child: OutlinedButton(
                                   style: OutlinedButton.styleFrom(
                                     shape: RoundedRectangleBorder(
@@ -164,7 +164,7 @@ class _LoginState extends State<Login> {
         )));
   }
 
-  ///Metodo que contiene los botones para iniciar sesion y activar la cuenta
+  ///Metodo que contiene los formularios con los campos de usuario y contraseña, y el boton de recuperar contraseña
   SizedBox _credentials(double heightScreen) {
     return SizedBox(
         height: heightScreen*0.32,
