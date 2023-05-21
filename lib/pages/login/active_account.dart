@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:gymapp/utils/page_settings.dart';
 import 'package:provider/provider.dart';
 import '../../models/models.dart';
 import '../../services/services.dart';
@@ -70,9 +69,9 @@ class _ActiveAccountState extends State<ActiveAccount> {
                       height: heightScreen * 0.04,
                     ),
                     _credentials(heightScreen),
-                    SizedBox(
-                      height: heightScreen * 0.09,
-                    ),
+                    // SizedBox(
+                    //   height: heightScreen * 0.09,
+                    // ),
                     Container(
                       height: heightScreen * 0.08,
                       width: widthScreen * 0.65,
@@ -104,6 +103,23 @@ class _ActiveAccountState extends State<ActiveAccount> {
                                   response = true;
                                 }
                                 if (response) {
+                                  //Muestro el mensaje de que se ha activado la cuenta
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => const AlertDialog(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(Radius.circular(30.0))),
+                                      contentPadding: EdgeInsets.only(top: 20.0),
+                                      title: Text('Enhorabuena la cuenta se ha activado correctamente',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(wordSpacing: 2)),
+                                      icon: Icon(Icons.celebration_outlined,
+                                          color: Colors.green, size: 50),
+                                      backgroundColor: Color.fromRGBO(247, 237, 240, 0.85),
+                                    ),
+                                  );
+                                  //Hago que se muestra el mensaje de la activacion durante dos segundos
+                                  await Future.delayed(const Duration(seconds: 2));
                                   navigator.pushNamed('login');
                                 } else {
                                   Error.errorMessage(
@@ -161,7 +177,7 @@ class _ActiveAccountState extends State<ActiveAccount> {
   /// Formulario con los campos de usuario y correo electronico
   SizedBox _credentials(double heightScreen) {
     return SizedBox(
-      height: heightScreen*0.4,
+      height: heightScreen * 0.495,
       child: Form(
         key: _formKey,
         child: Column(
@@ -170,7 +186,7 @@ class _ActiveAccountState extends State<ActiveAccount> {
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: TextFormField(
                 controller: userController,
-                decoration: decorationForm('Usuario', 'Introduce tu usuario'),
+                decoration: LoginSettings.decorationForm('Usuario', 'Introduce tu usuario'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Este campo es requerido';
@@ -179,15 +195,12 @@ class _ActiveAccountState extends State<ActiveAccount> {
                 },
               ),
             ),
-            // SizedBox(
-            //   height: heightScreen * 0.014,
-            // ),
             Padding(
               padding: const EdgeInsets.only(
                   left: 15.0, right: 15.0, top: 15, bottom: 0),
               child: TextFormField(
                 controller: authenticationCodeController,
-                decoration: decorationForm('Código autentificación',
+                decoration: LoginSettings.decorationForm('Código autentificación',
                     'Introduce el código de autentificación'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -197,17 +210,14 @@ class _ActiveAccountState extends State<ActiveAccount> {
                 },
               ),
             ),
-            // SizedBox(
-            //   height: heightScreen * 0.014,
-            // ),
             Padding(
               padding: const EdgeInsets.only(
-                  left: 15.0, right: 15.0, top: 15, bottom: 0),
+                  left: 15.0, right: 15.0, top: 15, bottom: 4),
               child: TextFormField(
                 controller: passwordController,
                 obscureText: true,
                 decoration:
-                    decorationForm('Contraseña', 'Introduce la contraseña'),
+                    LoginSettings.decorationForm('Contraseña', 'Introduce la contraseña'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Este campo es requerido';
@@ -216,16 +226,13 @@ class _ActiveAccountState extends State<ActiveAccount> {
                 },
               ),
             ),
-            SizedBox(
-              height: heightScreen * 0.014,
-            ),
             Padding(
               padding: const EdgeInsets.only(
-                  left: 15.0, right: 15.0, top: 15, bottom: 0),
+                  left: 15.0, right: 15.0, top: 15, bottom: 4),
               child: TextFormField(
                 controller: passwordRepeatController,
                 obscureText: true,
-                decoration: decorationForm(
+                decoration: LoginSettings.decorationForm(
                     'Repetir contraseña', 'Introduce la contraseña'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -237,34 +244,6 @@ class _ActiveAccountState extends State<ActiveAccount> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  InputDecoration decorationForm(String labelText, String hintText) {
-    return InputDecoration(
-      focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(18),
-        borderSide: BorderSide(color: principalColor),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(18),
-        borderSide: BorderSide(color: principalColor),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(18),
-        borderSide: BorderSide(color: principalColor),
-      ),
-      errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(18),
-        borderSide: BorderSide(color: principalColor),
-      ),
-      labelStyle: TextStyle(color: principalColor),
-      labelText: labelText,
-      hintText: hintText,
-      errorStyle: const TextStyle(
-        color: Colors.red,
-        fontSize: 14.0,
       ),
     );
   }

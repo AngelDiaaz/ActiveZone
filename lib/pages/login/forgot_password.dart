@@ -1,11 +1,12 @@
+import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'dart:convert';
 import 'dart:math';
-import 'package:flutter/material.dart';
-import 'package:gymapp/pages/login/change_password.dart';
-import '../../models/user.dart';
-import '../../services/services.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:gymapp/pages/pages.dart';
+import '../../models/models.dart';
+import '../../services/services.dart';
 import '../../utils/utils.dart';
 
 ///Clase ForgotPassword
@@ -22,99 +23,136 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   var rng = Random();
   AppState state = AppState();
+  Color principalColor = LoginSettings.loginColor();
 
   @override
   Widget build(BuildContext context) {
     // Genero el codigo para poder cambiar la contraseña
     var code = rng.nextInt(900000) + 100000;
     state = Provider.of<AppState>(context, listen: true);
+    double widthScreen = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text("Cambiar contraseña"),
-        centerTitle: true,
-      ),
       body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            // Padding(
-            //   padding: const EdgeInsets.only(top: 60.0),
-            //   child: Center(
-            //     child: SizedBox(
-            //         width: 200,
-            //         height: 150,
-            //         child: Image.asset('assets/images/login.jpg')),
-            //   ),
-            // ),
-            const SizedBox(
-              height: 60,
-            ),
-            const Padding(
-              padding: EdgeInsets.fromLTRB(15, 0, 15, 40),
-              child: Text(
-                'Introduce el nombre de usuario y el correo electrónico para cambiar la contraseña',
-                style: TextStyle(fontSize: 14),
+        child: SizedBox(
+          width: widthScreen,
+          height: heightScreen,
+          child: Stack(children: [
+            //Pongo la foto de fondo de pantalla
+            Positioned.fill(
+              //Cacheo la imagen para al tener que iniciar mas veces sea mas rapido
+              child: CachedNetworkImage(
+                imageUrl: LoginSettings.loginImage(),
+                fit: BoxFit.cover,
               ),
             ),
-            _credentials(),
-            const SizedBox(
-              height: 80,
-            ),
-            Container(
-              height: 60,
-              width: 270,
-              decoration: BoxDecoration(
-                  color: Colors.lightBlue,
-                  borderRadius: BorderRadius.circular(20)),
-              child: FutureBuilder(builder:
-                  (BuildContext context, AsyncSnapshot<List> snapshot) {
-                return MaterialButton(
-                  onPressed: () async {
-                    final messenger = ScaffoldMessenger.of(context);
-                    bool response = false;
-                    if (_formKey.currentState!.validate()) {
-                      User user = await state.getUser(userController.text);
+            Center(
+              child: Container(
+                width: widthScreen - (widthScreen * 0.15),
+                height: heightScreen - (heightScreen * 0.25),
+                decoration: BoxDecoration(
+                  color: const Color.fromRGBO(247, 237, 240, 0.85),
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                      height: heightScreen * 0.08,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(15, 0, 15, 40),
+                      child: Text(
+                        'Introduce el nombre de usuario y el correo electrónico para cambiar la contraseña',
+                        style: TextStyle(fontSize: 14),
+                      ),
+                    ),
+                    _credentials(heightScreen),
+                    SizedBox(
+                      height: heightScreen * 0.02,
+                    ),
+                    Container(
+                      height: heightScreen * 0.08,
+                      width: widthScreen * 0.65,
+                      decoration: BoxDecoration(
+                          color: principalColor,
+                          borderRadius: BorderRadius.circular(20)),
+                      child: FutureBuilder(builder:
+                          (BuildContext context, AsyncSnapshot<List> snapshot) {
+                        return MaterialButton(
+                          onPressed: () async {
+                            final messenger = ScaffoldMessenger.of(context);
+                            bool response = false;
+                            if (_formKey.currentState!.validate()) {
+                              User user =
+                                  await state.getUser(userController.text);
 
-                      if (user.dni.isNotEmpty && user.active!) {
-                        if (user.dni == userController.text &&
-                            user.email == emailController.text) {
-                          response = true;
-                        }
-                        if (response) {
-                          final send = await sendEmail(
-                              code: code.toString(),
-                              name: user.name,
-                              email: emailController.text);
+                              if (user.dni.isNotEmpty && user.active!) {
+                                if (user.dni == userController.text &&
+                                    user.email == emailController.text) {
+                                  response = true;
+                                }
+                                if (response) {
+                                  final send = await sendEmail(
+                                      code: code.toString(),
+                                      name: user.name,
+                                      email: emailController.text);
 
-                          if (send) {
-                            codePopup(code.toString(), user);
-                          } else {
-                            Error.errorMessage(messenger,
-                                'Error credenciales incorrectas', Colors.red);
-                          }
-                        } else {
-                          Error.errorMessage(messenger,
-                              'Error credenciales incorrectas', Colors.red);
-                        }
-                      } else {
-                        Error.errorMessage(
-                            messenger,
-                            'No existe esta cuenta o está desactivada',
-                            Colors.red);
-                      }
-                    }
-                  },
-                  child: const Text(
-                    'Enviar correo',
-                    style: TextStyle(color: Colors.white, fontSize: 25),
-                  ),
-                );
-              }),
+                                  if (send) {
+                                    codePopup(code.toString(), user);
+                                  } else {
+                                    Error.errorMessage(
+                                        messenger,
+                                        'Error credenciales incorrectas',
+                                        Colors.red);
+                                  }
+                                } else {
+                                  Error.errorMessage(
+                                      messenger,
+                                      'Error credenciales incorrectas',
+                                      Colors.red);
+                                }
+                              } else {
+                                Error.errorMessage(
+                                    messenger,
+                                    'No existe esta cuenta o está desactivada',
+                                    Colors.red);
+                              }
+                            }
+                          },
+                          child: const Text(
+                            'Enviar correo',
+                            style: TextStyle(color: Colors.white, fontSize: 25),
+                          ),
+                        );
+                      }),
+                    ),
+                    SizedBox(
+                      height: heightScreen * 0.03,
+                    ),
+                    SizedBox(
+                        height: heightScreen * 0.08,
+                        width: widthScreen * 0.65,
+                        child: OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                              side: BorderSide(width: 1, color: principalColor),
+                            ),
+                            child: Text(
+                              "Cancelar",
+                              style: TextStyle(
+                                  fontSize: 25, color: principalColor),
+                            ),
+                            onPressed: () {
+                              FocusScope.of(context).unfocus();
+                              Navigator.pop(context);
+                            })),
+                  ],
+                ),
+              ),
             ),
-            const SizedBox(
-              height: 30,
-            ),
-          ],
+          ]),
         ),
       ),
     );
@@ -153,48 +191,47 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   }
 
   /// Formulario con los campos de usuario y correo electronico
-  Form _credentials() {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: TextFormField(
-              controller: userController,
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Usuario',
-                  hintText: 'Introduce el usuario'),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Este campo es requerido';
-                }
-                return null;
-              },
+  SizedBox _credentials(double heightScreen) {
+    return SizedBox(
+      height: heightScreen * 0.32,
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: TextFormField(
+                controller: userController,
+                decoration: LoginSettings.decorationForm(
+                    'Usuario', 'Introduce el usuario'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Este campo es requerido';
+                  }
+                  return null;
+                },
+              ),
             ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(
-                left: 15.0, right: 15.0, top: 15, bottom: 0),
-            child: TextFormField(
-              controller: emailController,
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Correo Electrónico',
-                  hintText: 'Introduce el correo electrónico'),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Este campo es requerido';
-                }
-                return null;
-              },
+            const SizedBox(
+              height: 20,
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 15.0, right: 15.0, top: 15, bottom: 0),
+              child: TextFormField(
+                controller: emailController,
+                decoration: LoginSettings.decorationForm(
+                    'Correo Electrónico', 'Introduce el correo electrónico'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Este campo es requerido';
+                  }
+                  return null;
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

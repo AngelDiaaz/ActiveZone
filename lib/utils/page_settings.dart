@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
+
 ///Clase LoginSettings
 class LoginSettings {
   ///Metodo que devuelve la direccion web de la imagen del login
@@ -10,5 +12,31 @@ class LoginSettings {
   ///Metodo que devuelve el color principal del login
   static Color loginColor() {
     return const Color.fromRGBO(67, 68, 82, 0.9);
+  }
+
+  ///Metodo con la configuracion que quiero que se muestre en los formularios
+  static InputDecoration decorationForm(String labelText, String hintText) {
+    return InputDecoration(
+      errorStyle: const TextStyle(height: 0),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(18),
+        borderSide: BorderSide(color: loginColor()),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(18),
+        borderSide: BorderSide(color: loginColor()),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(18),
+        borderSide: BorderSide(color: loginColor()),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(18),
+        borderSide: const BorderSide(color: Colors.red),
+      ),
+      labelStyle: TextStyle(color: loginColor()),
+      labelText: labelText,
+      hintText: hintText,
+    );
   }
 }
