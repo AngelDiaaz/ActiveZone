@@ -65,32 +65,12 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                     SizedBox(
-                      height: heightScreen * 0.08,
+                      height: heightScreen * 0.07,
                     ),
-                    _credentials(),
+                    _credentials(heightScreen),
+
                     SizedBox(
-                      height: heightScreen * 0.015,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-                          child: TextButton(
-                            style: TextButton.styleFrom(
-                              textStyle: TextStyle(
-                                  fontSize: 18, color: principalColor),
-                            ),
-                            onPressed: () =>
-                                Navigator.pushNamed(context, 'password'),
-                            child: Text('Recuperar contraseña',
-                                style: TextStyle(color: principalColor)),
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: heightScreen * 0.06,
+                      height: heightScreen * 0.032,
                     ),
                     Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
@@ -184,86 +164,108 @@ class _LoginState extends State<Login> {
         )));
   }
 
-  Form _credentials() {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-            child: TextFormField(
-              controller: userController,
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w400,
-                  color: principalColor),
-              decoration: InputDecoration(
-                  focusedErrorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(18),
-                    borderSide: BorderSide(color: principalColor),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(18),
-                    borderSide: BorderSide(color: principalColor),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(18),
-                    borderSide: BorderSide(color: principalColor),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(18),
-                    borderSide: BorderSide(color: principalColor),
-                  ),
-                  labelStyle: TextStyle(color: principalColor),
-                  labelText: 'Usuario',
-                  hintText: 'Introduce tu usuario'),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Este campo es requerido';
-                }
-                return null;
-              },
-            ),
+  ///Metodo que contiene los botones para iniciar sesion y activar la cuenta
+  SizedBox _credentials(double heightScreen) {
+    return SizedBox(
+        height: heightScreen*0.32,
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: TextFormField(
+                  controller: userController,
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400,
+                      color: principalColor),
+                  decoration: InputDecoration(
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(18),
+                        borderSide: BorderSide(color: principalColor),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(18),
+                        borderSide: BorderSide(color: principalColor),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(18),
+                        borderSide: BorderSide(color: principalColor),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(18),
+                        borderSide: BorderSide(color: principalColor),
+                      ),
+                      labelStyle: TextStyle(color: principalColor),
+                      labelText: 'Usuario',
+                      hintText: 'Introduce tu usuario'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Este campo es requerido';
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 25, 20, 0),
+                child: TextFormField(
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400,
+                      color: principalColor),
+                  controller: passwordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(18),
+                        borderSide: BorderSide(color: principalColor),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(18),
+                        borderSide: BorderSide(color: principalColor),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(18),
+                        borderSide: BorderSide(color: principalColor),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(18),
+                        borderSide: BorderSide(color: principalColor),
+                      ),
+                      labelStyle: TextStyle(color: principalColor),
+                      labelText: 'Contraseña',
+                      hintText: 'Introduce la contraseña'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Este campo es requerido';
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 10, 20, 0),
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        textStyle: TextStyle(
+                            fontSize: 18, color: principalColor),
+                      ),
+                      onPressed: () =>
+                          Navigator.pushNamed(context, 'password'),
+                      child: Text('Recuperar contraseña',
+                          style: TextStyle(color: principalColor)),
+                    ),
+                  )
+                ],
+              ),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
-            child: TextFormField(
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w400,
-                  color: principalColor),
-              controller: passwordController,
-              obscureText: true,
-              decoration: InputDecoration(
-                  focusedErrorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(18),
-                    borderSide: BorderSide(color: principalColor),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(18),
-                    borderSide: BorderSide(color: principalColor),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(18),
-                    borderSide: BorderSide(color: principalColor),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(18),
-                    borderSide: BorderSide(color: principalColor),
-                  ),
-                  labelStyle: TextStyle(color: principalColor),
-                  labelText: 'Contraseña',
-                  hintText: 'Introduce la contraseña'),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Este campo es requerido';
-                }
-                return null;
-              },
-            ),
-          ),
-        ],
-      ),
-    );
+        ),
+      );
   }
 }
