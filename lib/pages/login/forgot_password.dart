@@ -57,19 +57,39 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 child: Column(
                   children: <Widget>[
                     SizedBox(
-                      height: heightScreen * 0.08,
+                      height: heightScreen * 0.05,
                     ),
-                    const Padding(
-                      padding: EdgeInsets.fromLTRB(15, 0, 15, 40),
+                    Center(
                       child: Text(
-                        'Introduce el nombre de usuario y el correo electrónico para cambiar la contraseña',
-                        style: TextStyle(fontSize: 14),
+                        'Recuperar contraseña',
+                        style: TextStyle(
+                            color: principalColor,
+                            fontSize: 30,
+                            fontWeight: FontWeight.w500),
                       ),
                     ),
-                    _credentials(heightScreen),
                     SizedBox(
                       height: heightScreen * 0.02,
                     ),
+                    Divider(
+                        color: principalColor,
+                        indent: 30,
+                        endIndent: 30,
+                        thickness: 0.8),
+                    SizedBox(
+                      height: heightScreen * 0.02,
+                    ),
+                    Center(
+                      child: Text(
+                        'Por favor, introduce el usuario y el correo electrónico',
+                        style: TextStyle(fontSize: 16, color: principalColor),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    SizedBox(
+                      height: heightScreen * 0.04,
+                    ),
+                    _credentials(heightScreen),
                     Container(
                       height: heightScreen * 0.08,
                       width: widthScreen * 0.65,
@@ -86,6 +106,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                               User user =
                                   await state.getUser(userController.text);
 
+                              //Si el usuario existe y no esta activo
                               if (user.dni.isNotEmpty && user.active!) {
                                 if (user.dni == userController.text &&
                                     user.email == emailController.text) {
@@ -121,7 +142,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           },
                           child: const Text(
                             'Enviar correo',
-                            style: TextStyle(color: Colors.white, fontSize: 25),
+                            style: TextStyle(
+                                color: Color.fromRGBO(255, 255, 255, 0.9),
+                                fontSize: 25),
                           ),
                         );
                       }),
@@ -193,15 +216,19 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   /// Formulario con los campos de usuario y correo electronico
   SizedBox _credentials(double heightScreen) {
     return SizedBox(
-      height: heightScreen * 0.32,
+      height: heightScreen * 0.27,
       child: Form(
         key: _formKey,
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
               child: TextFormField(
                 controller: userController,
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w400,
+                    color: principalColor),
                 decoration: LoginSettings.decorationForm(
                     'Usuario', 'Introduce el usuario'),
                 validator: (value) {
@@ -212,14 +239,15 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 },
               ),
             ),
-            const SizedBox(
-              height: 20,
-            ),
             Padding(
-              padding: const EdgeInsets.only(
-                  left: 15.0, right: 15.0, top: 15, bottom: 0),
+              padding: const EdgeInsets.fromLTRB(20, 25, 20, 0),
               child: TextFormField(
                 controller: emailController,
+                keyboardType: TextInputType.emailAddress,
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w400,
+                    color: principalColor),
                 decoration: LoginSettings.decorationForm(
                     'Correo Electrónico', 'Introduce el correo electrónico'),
                 validator: (value) {
@@ -243,11 +271,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       builder: (_) {
         final TextEditingController codeController = TextEditingController();
         return AlertDialog(
-          title: const Text('Inserte el código del correo'),
+          title: Text('Inserte el código del correo',
+              style: TextStyle(color: principalColor)),
           content: SingleChildScrollView(
             child: Column(
               children: [
                 TextFormField(
+                  keyboardType: TextInputType.number,
+                  style: TextStyle(color: principalColor),
                   controller: codeController,
                   decoration: const InputDecoration(hintText: 'Código'),
                 ),
@@ -257,7 +288,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancelar'),
+              child: Text(
+                'Cancelar',
+                style: TextStyle(color: principalColor),
+              ),
             ),
             TextButton(
               onPressed: () {
@@ -269,7 +303,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       ));
                 }
               },
-              child: const Text('Siguiente'),
+              child: Text(
+                'Siguiente',
+                style: TextStyle(color: principalColor),
+              ),
             ),
           ],
         );

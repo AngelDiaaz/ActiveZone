@@ -46,7 +46,7 @@ class _ActiveAccountState extends State<ActiveAccount> {
             Center(
               child: Container(
                 width: widthScreen - (widthScreen * 0.15),
-                height: heightScreen - (heightScreen * 0.15),
+                height: heightScreen - (heightScreen * 0.12),
                 decoration: BoxDecoration(
                   color: const Color.fromRGBO(247, 237, 240, 0.85),
                   borderRadius: BorderRadius.circular(30),
@@ -66,12 +66,13 @@ class _ActiveAccountState extends State<ActiveAccount> {
                       ),
                     ),
                     SizedBox(
-                      height: heightScreen * 0.04,
+                      height: heightScreen * 0.01,
+                    ),
+                    Divider(color: principalColor, indent: 30, endIndent: 30, thickness: 0.8),
+                    SizedBox(
+                      height: heightScreen * 0.01,
                     ),
                     _credentials(heightScreen),
-                    // SizedBox(
-                    //   height: heightScreen * 0.09,
-                    // ),
                     Container(
                       height: heightScreen * 0.08,
                       width: widthScreen * 0.65,
@@ -108,18 +109,23 @@ class _ActiveAccountState extends State<ActiveAccount> {
                                     context: context,
                                     builder: (context) => const AlertDialog(
                                       shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(Radius.circular(30.0))),
-                                      contentPadding: EdgeInsets.only(top: 20.0),
-                                      title: Text('Enhorabuena la cuenta se ha activado correctamente',
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(30.0))),
+                                      contentPadding:
+                                          EdgeInsets.only(top: 20.0),
+                                      title: Text(
+                                          'Enhorabuena la cuenta se ha activado correctamente',
                                           textAlign: TextAlign.center,
                                           style: TextStyle(wordSpacing: 2)),
                                       icon: Icon(Icons.celebration_outlined,
                                           color: Colors.green, size: 50),
-                                      backgroundColor: Color.fromRGBO(247, 237, 240, 0.85),
+                                      backgroundColor:
+                                          Color.fromRGBO(247, 237, 240, 0.85),
                                     ),
                                   );
                                   //Hago que se muestra el mensaje de la activacion durante dos segundos
-                                  await Future.delayed(const Duration(seconds: 2));
+                                  await Future.delayed(
+                                      const Duration(seconds: 2));
                                   navigator.pushNamed('login');
                                 } else {
                                   Error.errorMessage(
@@ -137,7 +143,9 @@ class _ActiveAccountState extends State<ActiveAccount> {
                           },
                           child: const Text(
                             'Activar cuenta',
-                            style: TextStyle(color: Colors.white, fontSize: 25),
+                            style: TextStyle(
+                                color: Color.fromRGBO(255, 255, 255, 0.9),
+                                fontSize: 25),
                           ),
                         );
                       }),
@@ -177,16 +185,21 @@ class _ActiveAccountState extends State<ActiveAccount> {
   /// Formulario con los campos de usuario y correo electronico
   SizedBox _credentials(double heightScreen) {
     return SizedBox(
-      height: heightScreen * 0.495,
+      height: heightScreen * 0.51,
       child: Form(
         key: _formKey,
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextFormField(
                 controller: userController,
-                decoration: LoginSettings.decorationForm('Usuario', 'Introduce tu usuario'),
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w400,
+                    color: principalColor),
+                decoration: LoginSettings.decorationForm(
+                    'Usuario', 'Introduce tu usuario'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Este campo es requerido';
@@ -197,10 +210,16 @@ class _ActiveAccountState extends State<ActiveAccount> {
             ),
             Padding(
               padding: const EdgeInsets.only(
-                  left: 15.0, right: 15.0, top: 15, bottom: 0),
+                  left: 20.0, right: 20.0, top: 15, bottom: 0),
               child: TextFormField(
                 controller: authenticationCodeController,
-                decoration: LoginSettings.decorationForm('Código autentificación',
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w400,
+                    color: principalColor),
+                keyboardType: TextInputType.text,
+                decoration: LoginSettings.decorationForm(
+                    'Código autentificación',
                     'Introduce el código de autentificación'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -212,12 +231,16 @@ class _ActiveAccountState extends State<ActiveAccount> {
             ),
             Padding(
               padding: const EdgeInsets.only(
-                  left: 15.0, right: 15.0, top: 15, bottom: 4),
+                  left: 20.0, right: 20.0, top: 15, bottom: 4),
               child: TextFormField(
                 controller: passwordController,
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w400,
+                    color: principalColor),
                 obscureText: true,
-                decoration:
-                    LoginSettings.decorationForm('Contraseña', 'Introduce la contraseña'),
+                decoration: LoginSettings.decorationForm(
+                    'Contraseña', 'Introduce la contraseña'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Este campo es requerido';
@@ -228,9 +251,13 @@ class _ActiveAccountState extends State<ActiveAccount> {
             ),
             Padding(
               padding: const EdgeInsets.only(
-                  left: 15.0, right: 15.0, top: 15, bottom: 4),
+                  left: 20.0, right: 20.0, top: 15, bottom: 4),
               child: TextFormField(
                 controller: passwordRepeatController,
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w400,
+                    color: principalColor),
                 obscureText: true,
                 decoration: LoginSettings.decorationForm(
                     'Repetir contraseña', 'Introduce la contraseña'),

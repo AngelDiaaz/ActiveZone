@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:provider/provider.dart';
 import '../../models/models.dart';
 import '../../services/services.dart';
-import 'package:provider/provider.dart';
 import '../../utils/utils.dart';
 
 /// Clase ChangePassword
@@ -19,129 +20,220 @@ class _ChangePasswordState extends State<ChangePassword> {
   final TextEditingController passwordRepeatController =
       TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  AppState? state;
+  AppState state = AppState();
+  Color principalColor = LoginSettings.loginColor();
 
   @override
   Widget build(BuildContext context) {
     state = Provider.of<AppState>(context, listen: true);
+    double widthScreen = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text("Cambiar contraseña"),
-        centerTitle: true,
-      ),
       body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            const SizedBox(
-              height: 60,
-            ),
-            const Padding(
-              padding: EdgeInsets.fromLTRB(15, 0, 15, 40),
-              child: Text(
-                'Introduce la nueva contraseña',
-                style: TextStyle(fontSize: 14),
+        child: SizedBox(
+          width: widthScreen,
+          height: heightScreen,
+          child: Stack(children: [
+            //Pongo la foto de fondo de pantalla
+            Positioned.fill(
+              //Cacheo la imagen para al tener que iniciar mas veces sea mas rapido
+              child: CachedNetworkImage(
+                imageUrl: LoginSettings.loginImage(),
+                fit: BoxFit.cover,
               ),
             ),
-            _credentials(),
-            const SizedBox(
-              height: 80,
-            ),
-            Container(
-              height: 60,
-              width: 270,
-              decoration: BoxDecoration(
-                  color: Colors.lightBlue,
-                  borderRadius: BorderRadius.circular(20)),
-              child: FutureBuilder(builder:
-                  (BuildContext context, AsyncSnapshot<List> snapshot) {
-                return MaterialButton(
-                  onPressed: () async {
-                    final navigator = Navigator.of(context);
-                    final messenger = ScaffoldMessenger.of(context);
-                    bool response = false;
-                    if (_formKey.currentState!.validate()) {
-                      User user = await state!.getUser(widget.user.dni);
+            Center(
+              child: Container(
+                width: widthScreen - (widthScreen * 0.15),
+                height: heightScreen - (heightScreen * 0.25),
+                decoration: BoxDecoration(
+                  color: const Color.fromRGBO(247, 237, 240, 0.85),
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                      height: heightScreen * 0.05,
+                    ),
+                    Center(
+                      child: Text(
+                        'Cambiar contraseña',
+                        style: TextStyle(
+                            color: principalColor,
+                            fontSize: 30,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                    SizedBox(
+                      height: heightScreen * 0.02,
+                    ),
+                    Divider(
+                        color: principalColor,
+                        indent: 30,
+                        endIndent: 30,
+                        thickness: 0.8),
+                    SizedBox(
+                      height: heightScreen * 0.02,
+                    ),
+                    Center(
+                      child: Text(
+                        'Por favor, introduce la nueva contraseña',
+                        style: TextStyle(fontSize: 16, color: principalColor),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    SizedBox(
+                      height: heightScreen * 0.04,
+                    ),
+                    _credentials(heightScreen),
+                    Container(
+                      height: heightScreen * 0.08,
+                      width: widthScreen * 0.65,
+                      decoration: BoxDecoration(
+                          color: principalColor,
+                          borderRadius: BorderRadius.circular(20)),
+                      child: FutureBuilder(builder:
+                          (BuildContext context, AsyncSnapshot<List> snapshot) {
+                        return MaterialButton(
+                          onPressed: () async {
+                            final navigator = Navigator.of(context);
+                            final messenger = ScaffoldMessenger.of(context);
+                            bool response = false;
+                            if (_formKey.currentState!.validate()) {
+                              User user = await state.getUser(widget.user.dni);
 
-                      if (passwordController.text ==
-                          passwordRepeatController.text) {
-                        user.password = Hash.encryptText(passwordController.text);
+                              if (passwordController.text ==
+                                  passwordRepeatController.text) {
+                                user.password =
+                                    Hash.encryptText(passwordController.text);
 
-                        state!.updateUser(widget.user.dni, user);
-                        response = true;
-                      }
-                      if (response) {
-                        navigator.pushNamed('login');
-                      } else {
-                        Error.errorMessage(messenger,
-                            'Error las contraseñas no coinciden', Colors.red);
-                      }
-                    } else {
-                      Error.errorMessage(messenger,
-                          'Error credenciales incorrectas', Colors.red);
-                    }
-                  },
-                  child: const Text(
-                    'Cambiar contraseña',
-                    style: TextStyle(color: Colors.white, fontSize: 25),
-                  ),
-                );
-              }),
+                                state.updateUser(widget.user.dni, user);
+                                response = true;
+                              }
+                              if (response) {
+                                //Muestro el mensaje de que se ha activado la cuenta
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => const AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(30.0))),
+                                    contentPadding:
+                                    EdgeInsets.only(top: 20.0),
+                                    title: Text(
+                                        'Se ha cambiado la contraseña correctamente',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(wordSpacing: 2)),
+                                    icon: Icon(Icons.mood_outlined,
+                                        color: Colors.green, size: 50),
+                                    backgroundColor:
+                                    Color.fromRGBO(247, 237, 240, 0.85),
+                                  ),
+                                );
+                                //Hago que se muestra el mensaje de la activacion durante dos segundos
+                                await Future.delayed(
+                                    const Duration(seconds: 2));
+                                navigator.pushNamed('login');
+                              } else {
+                                Error.errorMessage(
+                                    messenger,
+                                    'Error las contraseñas no coinciden',
+                                    Colors.red);
+                              }
+                            } else {
+                              Error.errorMessage(messenger,
+                                  'Error credenciales incorrectas', Colors.red);
+                            }
+                          },
+                          child: const Text(
+                            'Cambiar contraseña',
+                            style: TextStyle(color: Color.fromRGBO(255, 255, 255, 0.9), fontSize: 24),
+                          ),
+                        );
+                      }),
+                    ),
+                    SizedBox(
+                      height: heightScreen * 0.03,
+                    ),
+                    SizedBox(
+                        height: heightScreen * 0.08,
+                        width: widthScreen * 0.65,
+                        child: OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                              side: BorderSide(width: 1, color: principalColor),
+                            ),
+                            child: Text(
+                              "Cancelar",
+                              style: TextStyle(
+                                  fontSize: 25, color: principalColor),
+                            ),
+                            onPressed: () {
+                              FocusScope.of(context).unfocus();
+                              Navigator.pushNamed(context, 'login');
+                            })),
+                  ],
+                ),
+              ),
             ),
-            const SizedBox(
-              height: 30,
-            ),
-          ],
+          ]),
         ),
       ),
     );
   }
 
-  /// Formulario con los campos de contraseña y repetir contraseña
-  Form _credentials() {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: TextFormField(
-              controller: passwordController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Nueva Contraseña',
-                  hintText: 'Introduce la nueva contraseña'),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Este campo es requerido';
-                }
-                return null;
-              },
+  /// Metodo que contiene los formularios con los campos de contraseña y repetir contraseña
+  SizedBox _credentials(double heightScreen) {
+    return SizedBox(
+      height: heightScreen * 0.29,
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: TextFormField(
+                controller: passwordController,
+                obscureText: true,
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w400,
+                    color: principalColor),
+                decoration: LoginSettings.decorationForm('Nueva Contraseña', 'Introduce la nueva contraseña'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Este campo es requerido';
+                  }
+                  return null;
+                },
+              ),
             ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(
-                left: 15.0, right: 15.0, top: 15, bottom: 0),
-            child: TextFormField(
-              controller: passwordRepeatController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Repitir Nueva Contraseña',
-                  hintText: 'Introduce la nueva contraseña'),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Este campo es requerido';
-                }
-                return null;
-              },
+            const SizedBox(
+              height: 20,
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 20.0, right: 20.0, top: 15, bottom: 0),
+              child: TextFormField(
+                controller: passwordRepeatController,
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w400,
+                    color: principalColor),
+                obscureText: true,
+                decoration: LoginSettings.decorationForm('Repitir Nueva Contraseña', 'Introduce la nueva contraseña'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Este campo es requerido';
+                  }
+                  return null;
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
