@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:gymapp/pages/pages.dart';
 import 'package:gymapp/pages/reserves/my_reserves.dart';
 import 'package:gymapp/services/services.dart';
+import 'package:gymapp/utils/maps.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/models.dart';
-import '../utils/utils.dart';
 
 /// Clase HomePage
 class HomePage extends StatefulWidget {
@@ -145,15 +145,10 @@ class _HomePageState extends State<HomePage> {
                                     child: FloatingActionButton(
                                         heroTag: 'btn3',
                                         onPressed: () async {
-                                          var latitude = '36.72665343235891';
-                                          var longitude = '-4.445549769317426';
-                                          String mapsUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+                                          var latitude = '36.726036604039884';
+                                          var longitude = '-4.445619911326344';
 
-                                          if (await canLaunchUrl(Uri.parse(mapsUrl))) {
-                                            await launchUrl(Uri.parse(mapsUrl));
-                                          } else {
-                                            throw 'No se pudo abrir la aplicación de Google Maps.';
-                                          }
+                                          Maps.openGoogleMaps(latitude, longitude);
                                         },
                                         backgroundColor: Colors.white,
                                         child: const Icon(
@@ -185,7 +180,13 @@ class _HomePageState extends State<HomePage> {
                                     child: FloatingActionButton(
                                         heroTag: 'btn4',
                                         onPressed: () async {
-                                          print(Hash.encryptText('maria'));
+                                          var username = 'mcfit_es';
+                                          var url = Uri.parse('https://www.instagram.com/$username/');
+                                          if (await canLaunchUrl(url)) {
+                                            await launchUrl(url);
+                                          } else {
+                                            throw 'No se pudo abrir el perfil de Instagram';
+                                          }
                                         },
                                         backgroundColor: Colors.white,
                                         child: const Icon(
