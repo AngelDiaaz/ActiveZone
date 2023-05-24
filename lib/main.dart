@@ -24,7 +24,6 @@ class MyApp extends StatelessWidget {
     Gym gym = Gym(name: "", id: "", direction: "", activities: []);
     User user = User(name: "", password: "", email: "", surname1: "", surname2: "",
         active: true, dni: "", phone: "");
-    Activity activity = Activity(name: "", capacity: 0, image: "");
     return ChangeNotifierProvider(
       create: (BuildContext context) => AppState(),
       child: MaterialApp(

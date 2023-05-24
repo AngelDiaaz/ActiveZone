@@ -3,10 +3,11 @@ import 'package:gymapp/pages/pages.dart';
 import 'package:gymapp/pages/reserves/my_reserves.dart';
 import 'package:gymapp/services/services.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../models/models.dart';
 import '../utils/utils.dart';
 
-
+/// Clase HomePage
 class HomePage extends StatefulWidget {
   final Gym gym;
   final User user;
@@ -144,24 +145,15 @@ class _HomePageState extends State<HomePage> {
                                     child: FloatingActionButton(
                                         heroTag: 'btn3',
                                         onPressed: () async {
-                                          LoginServices l = LoginServices();
+                                          var latitude = '36.72665343235891';
+                                          var longitude = '-4.445549769317426';
+                                          String mapsUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
 
-                                          User updateUser = User(
-                                            dni: '1',
-                                            name: '1',
-                                            password: '1',
-                                            phone: '1',
-                                            email: 'a_angel.diaz.aviles@iespablopicasso.es',
-                                            surname1: '1',
-                                            surname2: '1',
-                                            active: true,
-                                            key: '1',
-                                            authenticationCode: '1',
-                                          );
-
-                                          l.updateUser(updateUser.dni, updateUser);
-
-
+                                          if (await canLaunchUrl(Uri.parse(mapsUrl))) {
+                                            await launchUrl(Uri.parse(mapsUrl));
+                                          } else {
+                                            throw 'No se pudo abrir la aplicación de Google Maps.';
+                                          }
                                         },
                                         backgroundColor: Colors.white,
                                         child: const Icon(
