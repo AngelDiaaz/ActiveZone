@@ -1,10 +1,9 @@
+import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:gymapp/pages/pages.dart';
 import 'package:gymapp/pages/reserves/my_reserves.dart';
 import 'package:gymapp/services/services.dart';
-import 'package:gymapp/utils/maps.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../models/models.dart';
 
 /// Clase HomePage
@@ -145,10 +144,15 @@ class _HomePageState extends State<HomePage> {
                                     child: FloatingActionButton(
                                         heroTag: 'btn3',
                                         onPressed: () async {
-                                          var latitude = '36.726036604039884';
-                                          var longitude = '-4.445619911326344';
-
-                                          Maps.openGoogleMaps(latitude, longitude);
+                                          // var latitude = '36.726036604039884';
+                                          // var longitude = '-4.445619911326344';
+                                          //
+                                          // Maps.openGoogleMaps(latitude, longitude);
+                                          final intent = AndroidIntent(
+                                              action: 'action_view',
+                                              data: Uri.encodeFull('geo:36.726146081684796,-4.445624871089866?z=18'),
+                                              package: 'com.google.android.apps.maps');
+                                          intent.launch();
                                         },
                                         backgroundColor: Colors.white,
                                         child: const Icon(
@@ -180,13 +184,12 @@ class _HomePageState extends State<HomePage> {
                                     child: FloatingActionButton(
                                         heroTag: 'btn4',
                                         onPressed: () async {
-                                          var username = 'mcfit_es';
-                                          var url = Uri.parse('https://www.instagram.com/$username/');
-                                          if (await canLaunchUrl(url)) {
-                                            await launchUrl(url);
-                                          } else {
-                                            throw 'No se pudo abrir el perfil de Instagram';
-                                          }
+                                          var instagram = widget.gym.instagram;
+                                          final intent = AndroidIntent(
+                                              action: 'action_view',
+                                              data: Uri.encodeFull('http://instagram.com/$instagram'),
+                                              package: 'com.instagram.android');
+                                          intent.launch();
                                         },
                                         backgroundColor: Colors.white,
                                         child: const Icon(

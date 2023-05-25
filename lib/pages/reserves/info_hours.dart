@@ -110,6 +110,7 @@ class _InfoHoursState extends State<InfoHours> {
       child: FutureBuilder(
         future: loadSchedules(Timestamp.fromDate(pickedDate!)),
         builder: (context, snapshot) {
+          try {
           if (snapshot.hasData) {
             return TextField(
                 controller: dateController,
@@ -136,12 +137,19 @@ class _InfoHoursState extends State<InfoHours> {
                       dateController.text = formattedDate;
                     });
                     //await signup(Timestamp.fromDate(pickedDate!));
+                  } else {
+                    dateController.text =
+                        DateFormat('dd/MM/yyyy').format(DateTime.now()).toString();
+                    pickedDate = DateTime.now();
                   }
                   //Vuelvo a refrescar la pagina para que me aparezca los horarios correspondientes
                   setState(() {});
                 });
           } else {
             return const Center(child: CircularProgressIndicator());
+          }} catch (e) {
+            print(e);
+            return Row();
           }
         },
       ),

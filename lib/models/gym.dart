@@ -6,12 +6,16 @@ class Gym {
     required this.name,
     required this.id,
     required this.direction,
+    required this.geolocation,
+    required this.instagram,
     required this.activities,
   });
 
   String name;
   String direction;
   String id;
+  GeoPoint geolocation;
+  String instagram;
   List<Activity> activities;
 
   factory Gym.fromFirestore(
@@ -24,6 +28,8 @@ class Gym {
       id: data?['id'],
       activities: [],
       direction: data?['direction'],
+      geolocation: data?['geolocation'],
+      instagram: data?['instagram']
     );
   }
 
@@ -33,11 +39,13 @@ class Gym {
       "direction": direction,
       "class": activities,
       "id": id,
+      "instagram": instagram,
+      "geolocation": geolocation,
     };
   }
 
   @override
   String toString() {
-    return "Gym --> Id: $id, Name: $name, Direction $direction, Activities: $activities";
+    return "Gym --> Id: $id, Name: $name, Direction $direction, Activities: $activities, Instagram: $instagram, Geolocation: $geolocation";
   }
 }

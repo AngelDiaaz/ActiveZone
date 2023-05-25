@@ -33,6 +33,7 @@ class GymServices {
     return gyms;
   }
 
+  ///Metodo que obtiene un gimnasio de la base de datos
   Future<Gym> getGym() async {
     final ref = db.collection(collection).withConverter(
           fromFirestore: Gym.fromFirestore,
@@ -42,6 +43,22 @@ class GymServices {
     var docSnap = await ref.get();
 
     return docSnap.docs.elementAt(0).data();
+  }
+
+  ///Metodo que obtiene la geolocalizacion del gimnasio de la base de datos
+  Future<GeoPoint> getGeolocationGym() async {
+    try {
+      final ref = db.collection(collection).withConverter(
+            fromFirestore: Gym.fromFirestore,
+            toFirestore: (Gym gym, _) => gym.toFirestore(),
+          );
+
+      var docSnap = await ref.get();
+
+      return docSnap.docs.elementAt(0).data().geolocation;
+    } catch (e) {
+      return const GeoPoint(0, 0);
+    }
   }
 
   /// Metodo que obtiene todas las actividades de un gimnasio
@@ -158,7 +175,8 @@ class GymServices {
   }
 
   ///Metodo que elimina una reserva de una actividad de un usuario
-  Future<bool> deleteScheduleUser(String activityName, String userDni, Schedule schedule) async {
+  Future<bool> deleteScheduleUser(
+      String activityName, String userDni, Schedule schedule) async {
     try {
       //Resto uno al campo de los numeros de usarios en una actividad a una hora concreta
       db
@@ -179,7 +197,6 @@ class GymServices {
           .collection(this.schedule)
           .doc(schedule.id)
           .delete();
-
 
       return true;
     } catch (e) {

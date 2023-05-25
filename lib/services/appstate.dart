@@ -74,7 +74,7 @@ class AppState with ChangeNotifier {
     try {
       return await GymServices().getGym();
     } catch (e) {
-      return Gym(name: "", id: "", direction: "", activities: []);
+      return Gym(name: "", id: "", direction: "", activities: [], instagram: '', geolocation: const GeoPoint(0, 0));
     }
   }
 
