@@ -45,22 +45,6 @@ class GymServices {
     return docSnap.docs.elementAt(0).data();
   }
 
-  ///Metodo que obtiene la geolocalizacion del gimnasio de la base de datos
-  Future<GeoPoint> getGeolocationGym() async {
-    try {
-      final ref = db.collection(collection).withConverter(
-            fromFirestore: Gym.fromFirestore,
-            toFirestore: (Gym gym, _) => gym.toFirestore(),
-          );
-
-      var docSnap = await ref.get();
-
-      return docSnap.docs.elementAt(0).data().geolocation;
-    } catch (e) {
-      return const GeoPoint(0, 0);
-    }
-  }
-
   /// Metodo que obtiene todas las actividades de un gimnasio
   Future<List<Activity>> getActivities(bool schedules) async {
     final ref =

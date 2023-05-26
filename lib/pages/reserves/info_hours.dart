@@ -5,6 +5,7 @@ import '../../models/models.dart';
 import '../../services/services.dart';
 import 'confirm_reserve.dart';
 
+///Clase InfoHours
 class InfoHours extends StatefulWidget {
   final String activityName;
   final User user;
@@ -148,26 +149,11 @@ class _InfoHoursState extends State<InfoHours> {
           } else {
             return const Center(child: CircularProgressIndicator());
           }} catch (e) {
-            print(e);
             return Row();
           }
         },
       ),
     );
-  }
-
-  //TODO controlar hora para mostrar horarios
-
-  ///Metodo que devuelve una lista con las fechas de los horarios
-  List<String> seeDate(List<Schedule> schedules) {
-    List<String> dates = [];
-
-    for (Schedule s in schedules) {
-      if (!dates.contains(DateFormat('dd/MM/yyyy').format(s.date.toDate()))) {
-        dates.add(DateFormat('dd/MM/yyyy').format(s.date.toDate()));
-      }
-    }
-    return dates;
   }
 
   ///Metodo que carga los horarios de una fecha concreta
@@ -240,7 +226,7 @@ class _InfoHoursState extends State<InfoHours> {
             showDialog(
               context: context,
               builder: (context) => const AlertDialog(
-                title: Text('Ya estas inscrito en esta actividad',
+                title: Text('Ya estas inscrito en está actividad',
                     textAlign: TextAlign.center,
                     style: TextStyle(wordSpacing: 2)),
                 icon: Icon(Icons.sentiment_satisfied_alt_outlined,

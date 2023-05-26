@@ -144,13 +144,14 @@ class _HomePageState extends State<HomePage> {
                                     child: FloatingActionButton(
                                         heroTag: 'btn3',
                                         onPressed: () async {
-                                          // var latitude = '36.726036604039884';
-                                          // var longitude = '-4.445619911326344';
-                                          //
-                                          // Maps.openGoogleMaps(latitude, longitude);
+                                          var geolocation = widget.gym.geolocation;
+
+                                          var latitude = geolocation.latitude.toString();
+                                          var longitude = geolocation.longitude.toString();
+
                                           final intent = AndroidIntent(
                                               action: 'action_view',
-                                              data: Uri.encodeFull('geo:36.726146081684796,-4.445624871089866?z=18'),
+                                              data: Uri.encodeFull('geo:$latitude,$longitude'),
                                               package: 'com.google.android.apps.maps');
                                           intent.launch();
                                         },
