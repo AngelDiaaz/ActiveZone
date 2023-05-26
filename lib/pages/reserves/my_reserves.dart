@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../models/models.dart';
 
+///Clase MyReserves
 class MyReserves extends StatefulWidget {
   const MyReserves({Key? key, required this.user}) : super(key: key);
 
@@ -21,7 +22,7 @@ class _MyReservesState extends State<MyReserves> {
   String dropdownValue = '';
   bool end = false;
   Color buttonAvailable = Colors.white;
-  Color buttonEnd = Colors.white70;
+  Color buttonEnd = Colors.white60;
   String infoEmptyText = '';
 
   ///Metodo que carga las listas con los nombres de las actividades
@@ -76,27 +77,27 @@ class _MyReservesState extends State<MyReserves> {
                       children: [
                         SizedBox(
                           width: widthScreen / 2,
-                          height: 80,
+                          height: heightScreen * 0.1,
                           child: MaterialButton(
                               onPressed: () {
                                 setState(() {
                                   end = false;
                                   buttonAvailable = Colors.white;
-                                  buttonEnd = Colors.white70;
+                                  buttonEnd = Colors.white60;
                                   infoEmptyText =
                                       'Lo sentimos no dispones de ninguna reserva pendiente para esta actividad';
                                 });
                               },
                               color: buttonAvailable,
                               minWidth: widthScreen / 2,
-                              child: const Center(
+                              child: Center(
                                 child: Text('Reservas pendientes',
                                     style: TextStyle(
-                                        fontSize: 18, wordSpacing: 2)),
+                                        fontSize: heightScreen*0.021, wordSpacing: 3,fontWeight: FontWeight.w600)),
                               )),
                         ),
                         SizedBox(
-                          height: 80,
+                          height: heightScreen*0.1,
                           width: widthScreen / 2,
                           child: MaterialButton(
                               color: buttonEnd,
@@ -104,23 +105,24 @@ class _MyReservesState extends State<MyReserves> {
                               onPressed: () {
                                 setState(() {
                                   end = true;
-                                  buttonAvailable = Colors.white70;
+                                  buttonAvailable = Colors.white60;
                                   buttonEnd = Colors.white;
                                   infoEmptyText =
                                       'Lo sentimos no dispones de ninguna reserva finalizada para esta actividad';
                                 });
                               },
-                              child: const Center(
+                              child: Center(
                                 child: Text('Reservas finalizadas',
                                     style: TextStyle(
-                                        fontSize: 18, wordSpacing: 2)),
+                                        fontSize: heightScreen*0.021, wordSpacing: 3,fontWeight: FontWeight.w600)),
                               )),
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 20,
+                    SizedBox(
+                      height: heightScreen*0.023,
                     ),
+                    //TODO arreglar diseño a partir de aqui
                     FutureBuilder(
                         future: loadList(),
                         builder: (BuildContext context,
@@ -282,6 +284,7 @@ class _MyReservesState extends State<MyReserves> {
                   side: BorderSide(
                     color: Theme.of(context).colorScheme.outline,
                   ),
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
                 ),
                 elevation: 4,
                 margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 6),

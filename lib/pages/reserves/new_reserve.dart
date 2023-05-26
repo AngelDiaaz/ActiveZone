@@ -95,13 +95,21 @@ class _NewReserveState extends State<NewReserve> {
                     title: Text(
                       activity.name,
                       style: const TextStyle(
-                          fontSize: 30,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold),
+                        fontSize: 30,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        shadows: [
+                          Shadow(
+                            color: Colors.black,
+                            offset: Offset(2, 2),
+                            blurRadius: 4,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ))),
+              )))
     ]);
   }
 }
