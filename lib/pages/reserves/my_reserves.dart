@@ -46,7 +46,9 @@ class _MyReservesState extends State<MyReserves> {
 
   @override
   Widget build(BuildContext context) {
-    if (first) infoEmptyText = 'Lo sentimos no dispones de ninguna reserva pendiente para esta actividad';
+    if (first)
+      infoEmptyText =
+          'Lo sentimos no dispones de ninguna reserva pendiente para esta actividad';
 
     state = Provider.of<AppState>(context, listen: true);
 
@@ -93,11 +95,13 @@ class _MyReservesState extends State<MyReserves> {
                               child: Center(
                                 child: Text('Reservas pendientes',
                                     style: TextStyle(
-                                        fontSize: heightScreen*0.021, wordSpacing: 3,fontWeight: FontWeight.w600)),
+                                        fontSize: heightScreen * 0.021,
+                                        wordSpacing: 3,
+                                        fontWeight: FontWeight.w600)),
                               )),
                         ),
                         SizedBox(
-                          height: heightScreen*0.1,
+                          height: heightScreen * 0.1,
                           width: widthScreen / 2,
                           child: MaterialButton(
                               color: buttonEnd,
@@ -114,13 +118,15 @@ class _MyReservesState extends State<MyReserves> {
                               child: Center(
                                 child: Text('Reservas finalizadas',
                                     style: TextStyle(
-                                        fontSize: heightScreen*0.021, wordSpacing: 3,fontWeight: FontWeight.w600)),
+                                        fontSize: heightScreen * 0.021,
+                                        wordSpacing: 3,
+                                        fontWeight: FontWeight.w600)),
                               )),
                         ),
                       ],
                     ),
                     SizedBox(
-                      height: heightScreen*0.023,
+                      height: heightScreen * 0.023,
                     ),
                     //TODO arreglar diseño a partir de aqui
                     FutureBuilder(
@@ -138,10 +144,10 @@ class _MyReservesState extends State<MyReserves> {
                                     color: Colors.black),
                                 elevation: 16,
                                 alignment: Alignment.centerLeft,
-                                style: const TextStyle(
+                                style: TextStyle(
                                     color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 30),
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: heightScreen * 0.04),
                                 iconSize: 34,
                                 onChanged: (String? value) {
                                   setState(() {
@@ -165,19 +171,19 @@ class _MyReservesState extends State<MyReserves> {
                             return Row();
                           }
                         }),
-                    const SizedBox(
-                      height: 10,
+                    SizedBox(
+                      height: heightScreen * 0.01,
                     ),
                     const Divider(
                         height: 10,
                         indent: 30,
                         endIndent: 30,
                         color: Colors.black26),
-                    const SizedBox(
-                      height: 10,
+                    SizedBox(
+                      height: heightScreen * 0.01,
                     ),
                     SizedBox(
-                      height: heightScreen * 4 / 6 - 60,
+                      height: heightScreen * 0.618,
                       child: FutureBuilder(
                           future: loadList(),
                           builder: (BuildContext context,
@@ -206,6 +212,7 @@ class _MyReservesState extends State<MyReserves> {
                                                   reserveCard(
                                                       context,
                                                       widthScreen,
+                                                      heightScreen,
                                                       dropdownValue,
                                                       schedules.elementAt(i)),
                                               ],
@@ -271,7 +278,7 @@ class _MyReservesState extends State<MyReserves> {
 
   ///Metodo que devuelve la carta que muestra la informacion de una actividad ya reservada
   FutureBuilder<String> reserveCard(BuildContext context, double widthScreen,
-      String name, Schedule schedule) {
+      double heightScreen, String name, Schedule schedule) {
     return FutureBuilder(
       future: state.getImageActivity(name),
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
@@ -290,69 +297,68 @@ class _MyReservesState extends State<MyReserves> {
                 margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 6),
                 child: SizedBox(
                   width: widthScreen - 12,
-                  height: 150,
+                  height: heightScreen * 0.18,
                   child: Column(
                     children: [
                       Container(
                           alignment: Alignment.centerLeft,
                           padding: const EdgeInsets.fromLTRB(10, 20, 0, 0),
                           child: Row(children: [
-                            SizedBox(
-                              width: 100,
-                              height: 100,
-                              child: Image.network(image, fit: BoxFit.cover),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: SizedBox(
+                                width: heightScreen * 0.13,
+                                height: heightScreen * 0.13,
+                                child: Image.network(image, fit: BoxFit.cover),
+                              ),
                             ),
                             SizedBox(
-                              width: widthScreen / 2 - 155,
+                              width: widthScreen * 0.1,
                             ),
                             Column(
                               children: [
                                 Text(
                                   name,
-                                  style: const TextStyle(
-                                      fontSize: 24,
+                                  style: TextStyle(
+                                      fontSize: heightScreen * 0.03,
                                       color: Colors.black,
-                                      fontWeight: FontWeight.bold),
+                                      fontWeight: FontWeight.w500),
                                 ),
-                                const SizedBox(
-                                  height: 10,
+                                SizedBox(
+                                  height: heightScreen * 0.01,
                                 ),
                                 Text(
                                   DateFormat('dd/MM/yyyy')
                                       .format(schedule.date.toDate()),
-                                  style: const TextStyle(
-                                      fontSize: 24,
+                                  style: TextStyle(
+                                      fontSize: heightScreen * 0.03,
                                       color: Colors.black,
-                                      fontWeight: FontWeight.bold),
+                                      fontWeight: FontWeight.w500),
                                 ),
-                                const SizedBox(
-                                  height: 10,
+                                SizedBox(
+                                  height: heightScreen * 0.01,
                                 ),
                                 Text(
                                   schedule.hour,
-                                  style: const TextStyle(
-                                      fontSize: 24,
+                                  style: TextStyle(
+                                      fontSize: heightScreen * 0.03,
                                       color: Colors.black,
-                                      fontWeight: FontWeight.bold),
+                                      fontWeight: FontWeight.w500),
                                 ),
                               ],
                             ),
-                            const SizedBox(width: 16),
+                            SizedBox(width: widthScreen * 0.04),
                             //Si es una reserva que no ha finalizado
                             if (!end)
-                              SizedBox(
-                                width: 50,
-                                height: 50,
-                                child: IconButton(
-                                    onPressed: () {
-                                      showAlertDialog(context, schedule);
-                                    },
-                                    icon: const Icon(
-                                      Icons.delete_outline,
-                                      color: Colors.redAccent,
-                                      size: 30,
-                                    )),
-                              ),
+                              IconButton(
+                                  onPressed: () {
+                                    showAlertDialog(context, schedule);
+                                  },
+                                  icon: Icon(
+                                    Icons.delete_outline,
+                                    color: Colors.redAccent,
+                                    size: heightScreen * 0.04,
+                                  )),
                           ])),
                     ],
                   ),
