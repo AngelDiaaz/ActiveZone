@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gymapp/services/services.dart';
 import '../../models/models.dart';
@@ -18,17 +17,11 @@ class InfoNewReserve extends StatefulWidget {
 }
 
 class _InfoNewReserveState extends State<InfoNewReserve> {
-  double width = 0;
-  int index = 0;
-  Schedule schedule =
-      Schedule(id: '', hour: '', numberUsers: 0, date: Timestamp(0, 0));
   AppState state = AppState();
-  List<Schedule> a = [];
 
   @override
   Widget build(BuildContext context) {
     var widthScreen = MediaQuery.of(context).size.width;
-    width = widthScreen;
     var heightScreen = MediaQuery.of(context).size.height;
     return Scaffold(
       body: SizedBox(

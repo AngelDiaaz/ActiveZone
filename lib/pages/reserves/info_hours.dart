@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../models/models.dart';
 import '../../services/services.dart';
-import 'confirm_reserve.dart';
+import 'package:gymapp/pages/pages.dart';
 
 ///Clase InfoHours
 class InfoHours extends StatefulWidget {
@@ -18,9 +18,10 @@ class InfoHours extends StatefulWidget {
 }
 
 class _InfoHoursState extends State<InfoHours> {
-  var index = 0;
   AppState state = AppState();
-  double width = 0;
+  int index = 0;
+  double widthScreen = 0;
+  double heightScreen = 0;
   Schedule schedule =
       Schedule(id: '', hour: '', numberUsers: 0, date: Timestamp(0, 0));
   TextEditingController dateController = TextEditingController();
@@ -38,11 +39,11 @@ class _InfoHoursState extends State<InfoHours> {
         user: widget.user,
       )
     ];
-    width = MediaQuery.of(context).size.width;
-    var heightScreen = MediaQuery.of(context).size.height;
+    widthScreen = MediaQuery.of(context).size.width;
+    heightScreen = MediaQuery.of(context).size.height;
     return SizedBox(
       height: heightScreen * 4 / 6,
-      width: width,
+      width: widthScreen,
       child: pages[index],
     );
   }
@@ -59,15 +60,12 @@ class _InfoHoursState extends State<InfoHours> {
             )),
       ),
       const Divider(
-          height: 10, indent: 10, endIndent: 10, color: Colors.black54),
+          height: 10, indent: 20, endIndent: 20, color: Colors.black54),
       selectDate(),
-      const SizedBox(
-        height: 20,
-      ),
       const Divider(
-          height: 10, indent: 10, endIndent: 10, color: Colors.black87),
-      const SizedBox(
-        height: 10,
+          height: 10, indent: 20, endIndent: 20, color: Colors.black87),
+      SizedBox(
+        height: heightScreen * 0.01,
       ),
       FutureBuilder(
         future: state.getActivity(widget.activityName),
@@ -79,12 +77,16 @@ class _InfoHoursState extends State<InfoHours> {
 
                 return printHours(schedules, activity.capacity);
               } else {
-                return const AlertDialog(
-                  title: Text('No hay actividades disponibles para esta fecha',
+                return AlertDialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  elevation: 10,
+                  title: const Text('No hay actividades disponibles para esta fecha',
                       textAlign: TextAlign.center,
                       style: TextStyle(wordSpacing: 2)),
                   icon: Icon(Icons.priority_high,
-                      color: Colors.redAccent, size: 50),
+                      color: Colors.redAccent, size: heightScreen * 0.07),
                 );
               }
             } else {
@@ -115,15 +117,16 @@ class _InfoHoursState extends State<InfoHours> {
           if (snapshot.hasData) {
             return TextField(
                 controller: dateController,
-                decoration: const InputDecoration(
-                  icon: Icon(Icons.calendar_today, color: Colors.black),
-                  labelStyle: TextStyle(color: Colors.black),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
+                decoration: InputDecoration(
+                  icon: Icon(Icons.calendar_today, color: Colors.black87, size: heightScreen * 0.04),
+                  labelStyle: const TextStyle(color: Colors.black),
+                  focusedBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.transparent),
                   ),
                   focusColor: Colors.black,
                 ),
-                style: const TextStyle(color: Colors.black, fontSize: 20),
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.black, fontSize: heightScreen * 0.03),
                 readOnly: true,
                 onTap: () async {
                   pickedDate = await showDatePicker(
@@ -160,7 +163,7 @@ class _InfoHoursState extends State<InfoHours> {
   Future<List<Schedule>> loadSchedules(Timestamp date) async {
     //Le sumo un dia a la fecha que le paso, para traerme los horarios entre esa fecha y el dia siguiente
     Timestamp finalDate =
-        Timestamp.fromDate(date.toDate().add(const Duration(days: 1)));
+        Timestamp.fromDate(DateTime(date.toDate().year, date.toDate().month, date.toDate().day + 1, 0, 0, 0));
 
     schedules =
         await state.getShedulesByDate(date, widget.activityName, finalDate);
@@ -181,9 +184,7 @@ class _InfoHoursState extends State<InfoHours> {
             children: [
               for (int i = 0; i < 3; i++) ...[
                 if (count + 1 <= s.length) ...[
-                  Container(
-                    child: hourButton(s.elementAt(count++)),
-                  ),
+                  hourButton(s.elementAt(count++)),
                 ]
               ],
             ],
@@ -196,10 +197,13 @@ class _InfoHoursState extends State<InfoHours> {
   /// Metodo que devuelve un boton con la hora de una clase
   Container hourButton(Schedule schedule) {
     return Container(
-      width: width / 3 - 30,
-      height: 65,
+      width: widthScreen * 0.257,
+      height: heightScreen * 0.08,
       margin: const EdgeInsets.all(15.0),
       padding: const EdgeInsets.all(2.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: TextButton(
         onPressed: () async {
           bool find = false;
@@ -225,12 +229,12 @@ class _InfoHoursState extends State<InfoHours> {
           } else {
             showDialog(
               context: context,
-              builder: (context) => const AlertDialog(
-                title: Text('Ya estas inscrito en está actividad',
+              builder: (context) => AlertDialog(
+                title: const Text('Ya estas inscrito en está actividad',
                     textAlign: TextAlign.center,
                     style: TextStyle(wordSpacing: 2)),
                 icon: Icon(Icons.sentiment_satisfied_alt_outlined,
-                    color: Colors.green, size: 50),
+                    color: Colors.green, size: heightScreen * 0.075),
               ),
             );
           }
@@ -241,11 +245,11 @@ class _InfoHoursState extends State<InfoHours> {
                   color: Colors.black26, // your color here
                   width: 1,
                 ),
-                borderRadius: BorderRadius.circular(2)))),
+                borderRadius: BorderRadius.circular(8)))),
         child: Text(
           schedule.hour,
-          style: const TextStyle(
-              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+          style: TextStyle(
+              fontSize: heightScreen * 0.027, fontWeight: FontWeight.w500, color: Colors.black87),
         ),
       ),
     );

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../models/models.dart';
 import '../../services/services.dart';
 
+///Clase NewReserve
 class NewReserve extends StatefulWidget {
   final User user;
 
@@ -19,6 +20,7 @@ class _NewReserveState extends State<NewReserve> {
   @override
   Widget build(BuildContext context) {
     var widthScreen = MediaQuery.of(context).size.width;
+    var heightScreen = MediaQuery.of(context).size.height;
     state = Provider.of<AppState>(context, listen: true);
     return Scaffold(
       appBar: AppBar(
@@ -36,14 +38,13 @@ class _NewReserveState extends State<NewReserve> {
                 List<Activity> activities = snapshot.data!;
                 return ListView(
                   children: [
-                    const SizedBox(
-                      height: 10,
+                    SizedBox(
+                      height: heightScreen * 0.01,
                     ),
                     for (Activity activity in activities)
-                      _activityCard(context, widthScreen, activity),
-                    const SizedBox(
-                      height: 15,
-                    ),
+                      _activityCard(context, widthScreen, heightScreen, activity),
+                    SizedBox(
+                      height: heightScreen * 0.01,                    ),
                   ],
                 );
               } else {
@@ -60,7 +61,7 @@ class _NewReserveState extends State<NewReserve> {
 
   ///Metodo que devuelve la card con la informacion de la actividad que le pasamos
   Column _activityCard(
-      BuildContext context, double widthScreen, Activity activity) {
+      BuildContext context, double widthScreen, double heightScreen, Activity activity) {
     return Column(children: [
       Card(
           shape: RoundedRectangleBorder(
@@ -73,7 +74,7 @@ class _NewReserveState extends State<NewReserve> {
           margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 6),
           child: SizedBox(
               width: widthScreen,
-              height: 180,
+              height: heightScreen * 0.21,
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
@@ -94,15 +95,15 @@ class _NewReserveState extends State<NewReserve> {
                   child: ListTile(
                     title: Text(
                       activity.name,
-                      style: const TextStyle(
-                        fontSize: 30,
+                      style: TextStyle(
+                        fontSize: widthScreen * 0.08,
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
-                        shadows: [
+                        shadows: const [
                           Shadow(
-                            color: Colors.black,
+                            color: Colors.black87,
                             offset: Offset(2, 2),
-                            blurRadius: 4,
+                            blurRadius: 5,
                           ),
                         ],
                       ),

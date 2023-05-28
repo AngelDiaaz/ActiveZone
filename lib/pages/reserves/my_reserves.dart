@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gymapp/services/appstate.dart';
+import 'package:gymapp/services/services.dart';
+import 'package:gymapp/utils/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../models/models.dart';
@@ -23,7 +24,7 @@ class _MyReservesState extends State<MyReserves> {
   bool end = false;
   Color buttonAvailable = Colors.white;
   Color buttonEnd = Colors.white60;
-  String infoEmptyText = '';
+  String infoText = 'Lo sentimos no dispones de ninguna reserva';
 
   ///Metodo que carga las listas con los nombres de las actividades
   Future<bool> loadList() async {
@@ -42,14 +43,8 @@ class _MyReservesState extends State<MyReserves> {
     }
   }
 
-  //TODO poner texto generico para el error al mostras que no hay reservas
-
   @override
   Widget build(BuildContext context) {
-    if (first)
-      infoEmptyText =
-          'Lo sentimos no dispones de ninguna reserva pendiente para esta actividad';
-
     state = Provider.of<AppState>(context, listen: true);
 
     var widthScreen = MediaQuery.of(context).size.width;
@@ -86,8 +81,6 @@ class _MyReservesState extends State<MyReserves> {
                                   end = false;
                                   buttonAvailable = Colors.white;
                                   buttonEnd = Colors.white60;
-                                  infoEmptyText =
-                                      'Lo sentimos no dispones de ninguna reserva pendiente para esta actividad';
                                 });
                               },
                               color: buttonAvailable,
@@ -95,7 +88,7 @@ class _MyReservesState extends State<MyReserves> {
                               child: Center(
                                 child: Text('Reservas pendientes',
                                     style: TextStyle(
-                                        fontSize: heightScreen * 0.021,
+                                        fontSize: heightScreen * 0.02,
                                         wordSpacing: 3,
                                         fontWeight: FontWeight.w600)),
                               )),
@@ -111,14 +104,12 @@ class _MyReservesState extends State<MyReserves> {
                                   end = true;
                                   buttonAvailable = Colors.white60;
                                   buttonEnd = Colors.white;
-                                  infoEmptyText =
-                                      'Lo sentimos no dispones de ninguna reserva finalizada para esta actividad';
                                 });
                               },
                               child: Center(
                                 child: Text('Reservas finalizadas',
                                     style: TextStyle(
-                                        fontSize: heightScreen * 0.021,
+                                        fontSize: heightScreen * 0.02,
                                         wordSpacing: 3,
                                         fontWeight: FontWeight.w600)),
                               )),
@@ -128,7 +119,6 @@ class _MyReservesState extends State<MyReserves> {
                     SizedBox(
                       height: heightScreen * 0.023,
                     ),
-                    //TODO arreglar diseño a partir de aqui
                     FutureBuilder(
                         future: loadList(),
                         builder: (BuildContext context,
@@ -140,12 +130,12 @@ class _MyReservesState extends State<MyReserves> {
 
                               return DropdownButton(
                                 value: dropdownValue,
-                                icon: const Icon(Icons.arrow_downward,
-                                    color: Colors.black),
+                                icon: Icon(Icons.keyboard_arrow_down_outlined,
+                                    color: LoginSettings.loginColor(), size: heightScreen*0.045,),
                                 elevation: 16,
-                                alignment: Alignment.centerLeft,
+                                alignment: Alignment.center,
                                 style: TextStyle(
-                                    color: Colors.black,
+                                    color: LoginSettings.loginColor(),
                                     fontWeight: FontWeight.w500,
                                     fontSize: heightScreen * 0.04),
                                 iconSize: 34,
@@ -219,7 +209,7 @@ class _MyReservesState extends State<MyReserves> {
                                             );
                                           } else {
                                             return messageNotReserves(
-                                                widthScreen, infoEmptyText);
+                                                widthScreen, heightScreen, infoText);
                                           }
                                         } else {
                                           return const Center(
@@ -235,8 +225,7 @@ class _MyReservesState extends State<MyReserves> {
                                     child: CircularProgressIndicator());
                               }
                             } catch (e) {
-                              return messageNotReserves(widthScreen,
-                                  'Lo sentimos no dispones de ninguna reserva pendiente, ni finalizada');
+                              return messageNotReserves(widthScreen, heightScreen, infoText);
                             }
                           }),
                     ),
@@ -247,17 +236,22 @@ class _MyReservesState extends State<MyReserves> {
   }
 
   ///Metodo que muestra una alerta indicando que no hay reservas para esa solicitud
-  Stack messageNotReserves(double width, String text) {
+  Stack messageNotReserves(double width, double height,String text) {
     return Stack(children: [
       Positioned(
-        top: 80,
+        top: height * 0.08,
         width: width,
         child: AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          elevation: 10,
+
           title: Text(text,
               textAlign: TextAlign.center,
               style: const TextStyle(wordSpacing: 2)),
-          icon: const Icon(Icons.sentiment_dissatisfied_outlined,
-              color: Colors.redAccent, size: 50),
+          icon: Icon(Icons.sentiment_dissatisfied_outlined,
+              color: Colors.redAccent, size: height * 0.08),
         ),
       ),
     ]);
@@ -321,7 +315,7 @@ class _MyReservesState extends State<MyReserves> {
                                   name,
                                   style: TextStyle(
                                       fontSize: heightScreen * 0.03,
-                                      color: Colors.black,
+                                      color: LoginSettings.loginColor(),
                                       fontWeight: FontWeight.w500),
                                 ),
                                 SizedBox(
@@ -332,7 +326,7 @@ class _MyReservesState extends State<MyReserves> {
                                       .format(schedule.date.toDate()),
                                   style: TextStyle(
                                       fontSize: heightScreen * 0.03,
-                                      color: Colors.black,
+                                      color: LoginSettings.loginColor(),
                                       fontWeight: FontWeight.w500),
                                 ),
                                 SizedBox(
@@ -342,7 +336,7 @@ class _MyReservesState extends State<MyReserves> {
                                   schedule.hour,
                                   style: TextStyle(
                                       fontSize: heightScreen * 0.03,
-                                      color: Colors.black,
+                                      color: LoginSettings.loginColor(),
                                       fontWeight: FontWeight.w500),
                                 ),
                               ],
@@ -376,13 +370,19 @@ class _MyReservesState extends State<MyReserves> {
   ///Metodo que muestra una alert para confirmar si quieres eliminar la reserva o no
   showAlertDialog(BuildContext context, Schedule schedule) {
     Widget cancelButton = OutlinedButton(
-      child: const Text("No"),
+      style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5),
+      ),),
+      child: Text("No", style: TextStyle(color: LoginSettings.loginColor())),
       onPressed: () {
         Navigator.pop(context);
       },
     );
     Widget continueButton = OutlinedButton(
-      child: const Text("Sí"),
+      style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5),
+      ),),
+      child: Text("Sí", style: TextStyle(color: LoginSettings.loginColor()),),
       onPressed: () async {
         //Le restamos al horario el usuario inscrito
         schedule.numberUsers--;
@@ -398,6 +398,9 @@ class _MyReservesState extends State<MyReserves> {
       },
     );
     AlertDialog alert = AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
       title: const Text("Eliminar reserva"),
       content: const Text("¿Quieres eliminar esta reserva?"),
       actions: [
