@@ -22,15 +22,15 @@ class ConfirmReserve extends StatefulWidget {
 }
 
 class _ConfirmReserveState extends State<ConfirmReserve> {
-  double width = 0;
-  Color buttonColor = const Color.fromRGBO(114, 76, 45, 1);
+  Color buttonColor = const Color.fromRGBO(125, 99, 69, 1);
   AppState state = AppState();
+  double widthScreen = 0;
+  double heightScreen = 0;
 
   @override
   Widget build(BuildContext context) {
-    var widthScreen = MediaQuery.of(context).size.width;
-    width = widthScreen;
-    var heightScreen = MediaQuery.of(context).size.height;
+    widthScreen = MediaQuery.of(context).size.width;
+    heightScreen = MediaQuery.of(context).size.height;
 
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
         Widget>[
@@ -42,61 +42,70 @@ class _ConfirmReserveState extends State<ConfirmReserve> {
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  const SizedBox(height: 10),
+                  separate(),
                   showInfo('Clase:', widget.activityName),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  separate(),
                   divider(),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  separate(),
                   showInfo(
                       'Fecha:',
                       DateFormat('dd/MM/yyyy')
                           .format(widget.schedule.date.toDate())),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  separate(),
                   divider(),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  separate(),
                   showInfo('Hora:', widget.schedule.hour),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  separate(),
                   divider(),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  separate(),
                   showInfo('Duración:', widget.schedule.duration!),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  separate(),
                   divider(),
-                  const SizedBox(
-                    height: 50,
+                  SizedBox(
+                    height: heightScreen * 0.05,
                   ),
                   Center(
                     child: Container(
-                      height: heightScreen * 1 / 16,
-                      width: width * 3 / 5,
+                      height: heightScreen * 0.075,
+                      width: widthScreen * 0.6,
                       decoration: BoxDecoration(
                           color: buttonColor,
-                          borderRadius: BorderRadius.circular(10)),
+                          borderRadius: BorderRadius.circular(15)),
                       child: MaterialButton(
                         onPressed: () async {
                           Gym gym = await state.getGym();
-                          Activity a = await state.getActivity(widget.activityName);
+                          Activity a =
+                              await state.getActivity(widget.activityName);
                           a.schedule!.clear();
                           widget.schedule.numberUsers++;
 
                           state.insertUserActivity(
                               a, widget.schedule, widget.user);
 
-                          if (!mounted) return;
+                          //Muestro el mensaje de que se ha confirmado la reserva
+                          showDialog(
+                            context: context,
+                            builder: (context) => const AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(30.0))),
+                              contentPadding:
+                              EdgeInsets.only(top: 20.0),
+                              title: Text(
+                                  'Te has apuntado a la actividad',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(wordSpacing: 2)),
+                              icon: Icon(Icons.task_alt_outlined,
+                                  color: Colors.green, size: 50),
+                              backgroundColor:
+                              Color.fromRGBO(247, 237, 240, 1),
+                            ),
+                          );
+                          //Hago que se muestra el mensaje de la activacion durante dos segundos
+                          await Future.delayed(
+                              const Duration(seconds: 2));
 
+                          if (!mounted) return;
                           Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -105,19 +114,19 @@ class _ConfirmReserveState extends State<ConfirmReserve> {
                                         user: widget.user,
                                       )));
                         },
-                        child: const Text('Confirmar',
+                        child: Text('Confirmar',
                             style:
-                                TextStyle(color: Colors.white, fontSize: 20)),
+                                TextStyle(color: Colors.white, fontSize: heightScreen * 0.03)),
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 20,
+                  SizedBox(
+                    height: heightScreen * 0.025,
                   ),
                   Center(
                     child: Container(
-                      height: heightScreen * 1 / 16,
-                      width: width * 3 / 5,
+                      height: heightScreen * 0.075,
+                      width: widthScreen * 0.6,
                       decoration: BoxDecoration(
                           border: Border.all(color: buttonColor),
                           borderRadius: BorderRadius.circular(10)),
@@ -132,7 +141,7 @@ class _ConfirmReserveState extends State<ConfirmReserve> {
                                       )));
                         },
                         child: Text('Cancelar',
-                            style: TextStyle(color: buttonColor, fontSize: 20)),
+                            style: TextStyle(color: buttonColor, fontSize: heightScreen * 0.03)),
                       ),
                     ),
                   )
@@ -143,6 +152,13 @@ class _ConfirmReserveState extends State<ConfirmReserve> {
     ]);
   }
 
+  /// Metodo que devuelve el espacio que hay entre los textos
+  SizedBox separate() {
+    return SizedBox(
+      height: heightScreen * 0.016,
+    );
+  }
+
   /// Metodo que muestra la informacion de un campo
   Row showInfo(String title, String information) {
     return Row(
@@ -150,21 +166,25 @@ class _ConfirmReserveState extends State<ConfirmReserve> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(
-          width: width * 2 / 5,
-          height: 50,
+          width: widthScreen * 0.4,
+          height: heightScreen * 0.05,
           child: Center(
-              child: Text(
-            title,
-            style: const TextStyle(fontSize: 20),
-          )),
+            child: Text(title,
+                style: TextStyle(
+                  fontSize: heightScreen * 0.028,
+                  fontWeight: FontWeight.w400,
+                )),
+          ),
         ),
         Container(
-          width: width * 3 / 5,
-          height: 50,
-          alignment: Alignment.centerLeft,
+          width: widthScreen * 0.5,
+          height: heightScreen * 0.05,
+          alignment: Alignment.center,
           child: Text(
             information,
-            style: const TextStyle(fontSize: 20),
+            style: TextStyle(
+              fontSize: heightScreen * 0.028,
+              fontWeight: FontWeight.w400,),
           ),
         ),
       ],
@@ -173,7 +193,7 @@ class _ConfirmReserveState extends State<ConfirmReserve> {
 
   /// Metodo que devuelve un  divider
   Divider divider() {
-    return const Divider(
-        height: 10, indent: 20, endIndent: 20, color: Colors.black26);
+    return Divider(
+        height: heightScreen *0.012, indent: 20, endIndent: 20, color: buttonColor);
   }
 }
