@@ -14,6 +14,7 @@ class User {
     required this.dni,
     required this.phone,
     this.activity,
+    this.imageProfile,
   });
 
   String? key;
@@ -27,6 +28,7 @@ class User {
   String dni;
   String? phone;
   List<Activity>? activity;
+  String? imageProfile;
 
   factory User.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
@@ -45,6 +47,7 @@ class User {
       dni: data?['dni'],
       phone: data?['phone'],
       activity: data?['activity'],
+      imageProfile: data?['imageProfile'],
     );
   }
 
@@ -61,6 +64,7 @@ class User {
       if (authenticationCode != null) "authenticationCode": authenticationCode,
       if (key != null) "key": key,
       if (activity != null) "activity": activity,
+      if (imageProfile != null) "imageProfile": imageProfile,
     };
   }
 
