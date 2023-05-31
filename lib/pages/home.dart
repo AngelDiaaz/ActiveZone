@@ -239,7 +239,14 @@ class _HomePageState extends State<HomePage> {
                                     children: [
                                       TextButton(
                                         onPressed: () {
-                                          print('Iría para el perfil');
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Profile(
+                                                      user: widget.user,
+                                                    )),
+                                          );
                                         },
                                         child: Row(
                                           children: [
