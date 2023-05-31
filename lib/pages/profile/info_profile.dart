@@ -123,11 +123,13 @@ class _ProfileState extends State<Profile> {
               SizedBox(
                 height: heightScreen * 0.05,
               ),
-              changeText(widget.user.phone!, heightScreen * 0.03, phoneController),
+              changeText(
+                  widget.user.phone!, heightScreen * 0.03, phoneController),
               SizedBox(
                 height: heightScreen * 0.02,
               ),
-              changeText(widget.user.email!, heightScreen * 0.02, emailController),
+              changeText(
+                  widget.user.email!, heightScreen * 0.02, emailController),
               SizedBox(
                 height: heightScreen * 0.07,
               ),
@@ -148,7 +150,8 @@ class _ProfileState extends State<Profile> {
     )));
   }
 
-  SizedBox changeText(String text, double fontSize, TextEditingController controller) {
+  SizedBox changeText(
+      String text, double fontSize, TextEditingController controller) {
     return SizedBox(
       height: heightScreen * 0.05,
       width: widthScreen * 0.75,
@@ -177,12 +180,8 @@ class _ProfileState extends State<Profile> {
                 ),
                 //Para que a la hora de pulsar el boton Enter se cambie ya los cambios
                 onSubmitted: (value) {
-                  //Para saber que controlador es y cambiar luego el valor
-                  if(controller == emailController){
-                    newEmail = emailController.text;
-                  } else if (controller == phoneController){
-                    newPhone = phoneController.text;
-                  }
+                  newEmail = emailController.text;
+                  newPhone = phoneController.text;
 
                   setState(() {
                     showAlertDialog(context);
@@ -222,13 +221,12 @@ class _ProfileState extends State<Profile> {
         style: TextStyle(color: LoginSettings.loginColor()),
       ),
       onPressed: () async {
-
         widget.user.email = newEmail;
         widget.user.phone = newPhone;
 
         await state.updateUser(widget.user.dni, widget.user);
 
-        if(!mounted) return;
+        if (!mounted) return;
         Navigator.pop(context);
       },
     );

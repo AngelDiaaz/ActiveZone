@@ -46,7 +46,8 @@ class LoginServices {
         "surname2": user.surname2,
         "active": user.active,
         "key": user.key,
-        "authentication code": user.authenticationCode
+        "authentication code": user.authenticationCode,
+        'imageProfile': user.imageProfile
       };
 
       db.collection("users").doc(id).set(updateUser);
