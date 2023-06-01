@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:gymapp/pages/pages.dart';
@@ -259,7 +260,7 @@ class _HomePageState extends State<HomePage> {
                                                   width: 2.0,
                                                 ),
                                                 shape: BoxShape.circle,
-                                                image: DecorationImage( fit: BoxFit.cover, image: NetworkImage(widget.user.imageProfile!)),
+                                                image: DecorationImage( fit: BoxFit.cover, image: FileImage(File(widget.user.imageProfile!))),
                                             ),
                                             ),
                                             SizedBox(

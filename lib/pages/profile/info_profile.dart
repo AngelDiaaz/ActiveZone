@@ -8,6 +8,7 @@ import '../../utils/utils.dart';
 import 'package:image_picker/image_picker.dart';
 
 
+
 ///Clase Login
 class Profile extends StatefulWidget {
   const Profile({Key? key, required this.user}) : super(key: key);
@@ -106,20 +107,28 @@ class _ProfileState extends State<Profile> {
               SizedBox(
                 height: heightScreen * 0.02,
               ),
-              //TODO hacer foto perfil
+              //TODO mejorar esto
               InkWell(
                 onTap: _takePhoto,
-                child: CircleAvatar(
-                  radius: 50,
-                  backgroundImage: image != null ? FileImage(image!) : null,
-                  child: image == null ? const Icon(Icons.camera_alt) : null,
+                child: Stack(
+                  alignment: Alignment.bottomRight,
+                  children: [
+                    CircleAvatar(
+                      radius: 50,
+                      backgroundImage: image != null ? FileImage(image!) : FileImage(File(widget.user.imageProfile!)),
+                      // child: image == null ? const Icon(Icons.camera_alt) : null,
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 0, right: 5),
+                      child: const Icon(
+                        Icons.camera_alt,
+                        size: 30,
+                        color: Colors.black54,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              // CircleAvatar(
-              //   radius: heightScreen * 0.08, // Radio del círculo
-              //   backgroundImage: NetworkImage(
-              //       widget.user.imageProfile!), // Ruta de la imagen de perfil
-              // ),
               SizedBox(
                 height: heightScreen * 0.05,
               ),
@@ -239,6 +248,8 @@ class _ProfileState extends State<Profile> {
     final imageCamera = await ImagePicker().pickImage(source: ImageSource.camera);
 
     if (imageCamera != null) {
+      widget.user.imageProfile = File(imageCamera.path).path;
+      state.updateUser(widget.user.dni, widget.user);
       setState(() {
         image = File(imageCamera.path);
       });
