@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import '../../models/models.dart';
 import '../../services/services.dart';
 import 'package:provider/provider.dart';
 import '../../utils/utils.dart';
+import 'package:image_picker/image_picker.dart';
+
 
 ///Clase Login
 class Profile extends StatefulWidget {
@@ -19,7 +23,7 @@ class _ProfileState extends State<Profile> {
   double widthScreen = 0;
   double heightScreen = 0;
   var isEditing = false;
-
+  File? image;
   TextEditingController phoneController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   String newPhone = '';
@@ -58,7 +62,7 @@ class _ProfileState extends State<Profile> {
               Row(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(5, 5, 0, 0),
+                    padding: EdgeInsets.fromLTRB(widthScreen*0.012, heightScreen*0.005, 0, 0),
                     child: SizedBox(
                       height: heightScreen * 0.08,
                       width: heightScreen * 0.08,
@@ -73,14 +77,13 @@ class _ProfileState extends State<Profile> {
                   ),
                   const Spacer(),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 5, 5, 0),
+                    padding: EdgeInsets.fromLTRB(0, heightScreen*0.005, widthScreen*0.012, 0),
                     child: SizedBox(
                       height: heightScreen * 0.08,
                       width: heightScreen * 0.08,
                       child: IconButton(
-                        //TODO hacer que se cambie el icono para mostar el guardar
                         icon:
-                            Icon(Icons.edit_outlined, size: widthScreen * 0.1),
+                            Icon(isEditing ? Icons.save_as : Icons.edit_outlined, size: widthScreen * 0.1),
                         onPressed: () {
                           //Refresco la pagina y cambio los valores de editar
                           setState(() {
@@ -104,13 +107,21 @@ class _ProfileState extends State<Profile> {
                 height: heightScreen * 0.02,
               ),
               //TODO hacer foto perfil
-              CircleAvatar(
-                radius: heightScreen * 0.08, // Radio del círculo
-                backgroundImage: NetworkImage(
-                    widget.user.imageProfile!), // Ruta de la imagen de perfil
+              InkWell(
+                onTap: _takePhoto,
+                child: CircleAvatar(
+                  radius: 50,
+                  backgroundImage: image != null ? FileImage(image!) : null,
+                  child: image == null ? const Icon(Icons.camera_alt) : null,
+                ),
               ),
+              // CircleAvatar(
+              //   radius: heightScreen * 0.08, // Radio del círculo
+              //   backgroundImage: NetworkImage(
+              //       widget.user.imageProfile!), // Ruta de la imagen de perfil
+              // ),
               SizedBox(
-                height: heightScreen * 0.06,
+                height: heightScreen * 0.05,
               ),
               Text(widget.user.dni,
                   style: TextStyle(fontSize: heightScreen * 0.035)),
@@ -131,23 +142,107 @@ class _ProfileState extends State<Profile> {
               changeText(
                   widget.user.email!, heightScreen * 0.02, emailController),
               SizedBox(
-                height: heightScreen * 0.07,
+                height: heightScreen * 0.05,
               ),
-
-              //TODO hacer consulta reservas
-              Text('Total de reservas próximas: 4',
-                  style: TextStyle(fontSize: heightScreen * 0.02)),
-              // _credentials(heightScreen),
+              FutureBuilder(
+                future: state.getUserActivity(widget.user),
+                builder: (context, snapshot) {
+                  if(snapshot.hasData) {
+                    var next = nextReserves(snapshot.data!);
+                    return Text('Reservas próximas: $next',
+                        style: TextStyle(fontSize: heightScreen * 0.022, wordSpacing: widthScreen * 0.01));
+                  } else {
+                    return Row();
+                  }
+                },
+              ),
               SizedBox(
                 height: heightScreen * 0.03,
               ),
-              Text('Total de reservas finalizadas: 1',
-                  style: TextStyle(fontSize: heightScreen * 0.02)),
+              FutureBuilder(
+                future: state.getUserActivity(widget.user),
+                builder: (context, snapshot) {
+                  if(snapshot.hasData) {
+                    var end = endReserves(snapshot.data!);
+                    return Text('Reservas finalizadas: $end',
+                        style: TextStyle(fontSize: heightScreen * 0.022, wordSpacing: widthScreen * 0.01));
+                  } else {
+                    return const Center(
+                        child: CircularProgressIndicator());
+                  }
+                },
+              ),
+              SizedBox(
+                height: heightScreen * 0.03,
+              ),
+              FutureBuilder(
+                future: state.getUserActivity(widget.user),
+                builder: (context, snapshot) {
+                  if(snapshot.hasData) {
+                    var total = totalReserves(snapshot.data!);
+                    return Text('Reservas totales: $total',
+                        style: TextStyle(fontSize: heightScreen * 0.028, fontWeight: FontWeight.w500, wordSpacing: widthScreen * 0.01));
+                  } else {
+                    return Row();
+                  }
+                },
+              ),
             ]),
           ),
         ),
       ]),
     )));
+  }
+
+  ///Metodo que obtiene el total de las reservas que tiene el usuario
+  int totalReserves(List<Activity> activity){
+    var total = 0;
+    for(Activity a in activity){
+      total += a.schedule!.length;
+    }
+
+    return total;
+  }
+
+  ///Metodo que obtiene las proximas reservas de un usuario
+  int nextReserves(List<Activity> activity){
+    var next = 0;
+    //Recorro la lista de actividades
+    for(Activity a in activity){
+      //Recorro de cada actividad los horarios que hay registrados
+      for (Schedule s in a.schedule!){
+        //Si la fecha de este horario es despues que la de hoy
+        if (s.date.toDate().isAfter(DateTime.now())){
+          next++;
+        }
+      }
+    }
+    return next;
+  }
+
+  ///Metodo que obtiene las reservas finalizadas de un usuario
+  int endReserves(List<Activity> activity){
+      var end = 0;
+      for(Activity a in activity){
+        //Recorro de cada actividad los horarios que hay registrados
+        for (Schedule s in a.schedule!){
+          //Si la fecha de ese horario es antes de hoy
+          if (s.date.toDate().isBefore(DateTime.now())){
+            end++;
+          }
+        }
+      }
+    return end;
+  }
+
+  Future<void> _takePhoto() async {
+    final imageCamera = await ImagePicker().pickImage(source: ImageSource.camera);
+
+    if (imageCamera != null) {
+      setState(() {
+        image = File(imageCamera.path);
+      });
+    }
   }
 
   SizedBox changeText(
