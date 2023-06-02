@@ -43,6 +43,7 @@ dependencies:
   url_launcher: ^6.0.3
   android_intent_plus: ^4.0.1
   image_picker: ^0.8.4+4
+  firebase_storage: ^11.2.2
 
 
 

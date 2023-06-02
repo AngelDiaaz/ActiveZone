@@ -1,15 +1,13 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'dart:io';
 import '../../models/models.dart';
 import '../../services/services.dart';
 import 'package:provider/provider.dart';
 import '../../utils/utils.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
-
-
-///Clase Login
+///Clase Profile
 class Profile extends StatefulWidget {
   const Profile({Key? key, required this.user}) : super(key: key);
 
@@ -63,7 +61,8 @@ class _ProfileState extends State<Profile> {
               Row(
                 children: [
                   Padding(
-                    padding: EdgeInsets.fromLTRB(widthScreen*0.012, heightScreen*0.005, 0, 0),
+                    padding: EdgeInsets.fromLTRB(
+                        widthScreen * 0.012, heightScreen * 0.005, 0, 0),
                     child: SizedBox(
                       height: heightScreen * 0.08,
                       width: heightScreen * 0.08,
@@ -78,14 +77,18 @@ class _ProfileState extends State<Profile> {
                   ),
                   const Spacer(),
                   Padding(
-                    padding: EdgeInsets.fromLTRB(0, heightScreen*0.005, widthScreen*0.012, 0),
+                    padding: EdgeInsets.fromLTRB(
+                        0, heightScreen * 0.005, widthScreen * 0.012, 0),
                     child: SizedBox(
                       height: heightScreen * 0.08,
                       width: heightScreen * 0.08,
                       child: IconButton(
-                        icon:
-                            Icon(isEditing ? Icons.save_as : Icons.edit_outlined, size: widthScreen * 0.1),
+                        icon: Icon(
+                            isEditing ? Icons.save_as : Icons.edit_outlined,
+                            size: widthScreen * 0.1),
                         onPressed: () {
+                          FocusScope.of(context).unfocus();
+
                           //Refresco la pagina y cambio los valores de editar
                           setState(() {
                             if (isEditing) {
@@ -107,23 +110,26 @@ class _ProfileState extends State<Profile> {
               SizedBox(
                 height: heightScreen * 0.02,
               ),
-              //TODO mejorar esto
               InkWell(
                 onTap: _takePhoto,
                 child: Stack(
                   alignment: Alignment.bottomRight,
                   children: [
                     CircleAvatar(
-                      radius: 50,
-                      backgroundImage: image != null ? FileImage(image!) : FileImage(File(widget.user.imageProfile!)),
-                      // child: image == null ? const Icon(Icons.camera_alt) : null,
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 0, right: 5),
-                      child: const Icon(
-                        Icons.camera_alt,
-                        size: 30,
-                        color: Colors.black54,
+                      radius: heightScreen * 0.075,
+                      //TODO arreglar esto
+                      backgroundImage: widget.user.imageProfile!.isNotEmpty
+                          ? NetworkImage(widget.user.imageProfile!)
+                          : const NetworkImage('https://cdn-icons-png.flaticon.com/512/727/727399.png?w=826&t=st=1685696353~exp=1685696953~hmac=29df0af312f4bd3a4b4bb5107c19a0d04a4aa9aa43099a710eb703d987cfc7e4')),
+                    ClipOval(
+                      child: Container(
+                        color: Colors.brown,
+                        padding: const EdgeInsets.all(5),
+                        child: Icon(
+                          Icons.camera_alt,
+                          size: heightScreen * 0.035,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ],
@@ -156,10 +162,12 @@ class _ProfileState extends State<Profile> {
               FutureBuilder(
                 future: state.getUserActivity(widget.user),
                 builder: (context, snapshot) {
-                  if(snapshot.hasData) {
+                  if (snapshot.hasData) {
                     var next = nextReserves(snapshot.data!);
                     return Text('Reservas próximas: $next',
-                        style: TextStyle(fontSize: heightScreen * 0.022, wordSpacing: widthScreen * 0.01));
+                        style: TextStyle(
+                            fontSize: heightScreen * 0.022,
+                            wordSpacing: widthScreen * 0.01));
                   } else {
                     return Row();
                   }
@@ -171,13 +179,14 @@ class _ProfileState extends State<Profile> {
               FutureBuilder(
                 future: state.getUserActivity(widget.user),
                 builder: (context, snapshot) {
-                  if(snapshot.hasData) {
+                  if (snapshot.hasData) {
                     var end = endReserves(snapshot.data!);
                     return Text('Reservas finalizadas: $end',
-                        style: TextStyle(fontSize: heightScreen * 0.022, wordSpacing: widthScreen * 0.01));
+                        style: TextStyle(
+                            fontSize: heightScreen * 0.022,
+                            wordSpacing: widthScreen * 0.01));
                   } else {
-                    return const Center(
-                        child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   }
                 },
               ),
@@ -187,10 +196,13 @@ class _ProfileState extends State<Profile> {
               FutureBuilder(
                 future: state.getUserActivity(widget.user),
                 builder: (context, snapshot) {
-                  if(snapshot.hasData) {
+                  if (snapshot.hasData) {
                     var total = totalReserves(snapshot.data!);
                     return Text('Reservas totales: $total',
-                        style: TextStyle(fontSize: heightScreen * 0.028, fontWeight: FontWeight.w500, wordSpacing: widthScreen * 0.01));
+                        style: TextStyle(
+                            fontSize: heightScreen * 0.028,
+                            fontWeight: FontWeight.w500,
+                            wordSpacing: widthScreen * 0.01));
                   } else {
                     return Row();
                   }
@@ -204,9 +216,9 @@ class _ProfileState extends State<Profile> {
   }
 
   ///Metodo que obtiene el total de las reservas que tiene el usuario
-  int totalReserves(List<Activity> activity){
+  int totalReserves(List<Activity> activity) {
     var total = 0;
-    for(Activity a in activity){
+    for (Activity a in activity) {
       total += a.schedule!.length;
     }
 
@@ -214,14 +226,14 @@ class _ProfileState extends State<Profile> {
   }
 
   ///Metodo que obtiene las proximas reservas de un usuario
-  int nextReserves(List<Activity> activity){
+  int nextReserves(List<Activity> activity) {
     var next = 0;
     //Recorro la lista de actividades
-    for(Activity a in activity){
+    for (Activity a in activity) {
       //Recorro de cada actividad los horarios que hay registrados
-      for (Schedule s in a.schedule!){
+      for (Schedule s in a.schedule!) {
         //Si la fecha de este horario es despues que la de hoy
-        if (s.date.toDate().isAfter(DateTime.now())){
+        if (s.date.toDate().isAfter(DateTime.now())) {
           next++;
         }
       }
@@ -230,29 +242,53 @@ class _ProfileState extends State<Profile> {
   }
 
   ///Metodo que obtiene las reservas finalizadas de un usuario
-  int endReserves(List<Activity> activity){
-      var end = 0;
-      for(Activity a in activity){
-        //Recorro de cada actividad los horarios que hay registrados
-        for (Schedule s in a.schedule!){
-          //Si la fecha de ese horario es antes de hoy
-          if (s.date.toDate().isBefore(DateTime.now())){
-            end++;
-          }
+  int endReserves(List<Activity> activity) {
+    var end = 0;
+    for (Activity a in activity) {
+      //Recorro de cada actividad los horarios que hay registrados
+      for (Schedule s in a.schedule!) {
+        //Si la fecha de ese horario es antes de hoy
+        if (s.date.toDate().isBefore(DateTime.now())) {
+          end++;
         }
       }
+    }
     return end;
   }
 
+  ///Metodo que abre la camara del movil para tomar una foto y luego la almacena en la base de datos dicha foto
   Future<void> _takePhoto() async {
-    final imageCamera = await ImagePicker().pickImage(source: ImageSource.camera);
+    try {
+      //Abro la camara
+      final imageCamera =
+          await ImagePicker().pickImage(source: ImageSource.camera);
 
-    if (imageCamera != null) {
-      widget.user.imageProfile = File(imageCamera.path).path;
-      state.updateUser(widget.user.dni, widget.user);
-      setState(() {
-        image = File(imageCamera.path);
-      });
+      if (imageCamera != null) {
+        File imageFile = File(imageCamera.path);
+
+        //Creo la instancia en FirebaseStorage
+        firebase_storage.FirebaseStorage storage =
+            firebase_storage.FirebaseStorage.instanceFor(
+                bucket: 'gs://gymapp-8a4d2.appspot.com');
+
+        //Creo una referencia al archivo en FirebaseStorage
+        firebase_storage.Reference ref = storage.ref().child(imageFile.path);
+
+        //Subo el archivo al almacenamiento
+        await ref.putFile(imageFile);
+
+        //Obtengo la URL de descarga del archivo subido
+        String downloadURL = await ref.getDownloadURL();
+
+        //Guardo la URL en la base de datos
+        widget.user.imageProfile = downloadURL;
+        state.updateUser(widget.user.dni, widget.user);
+        setState(() {
+          image = imageFile;
+        });
+      }
+    } catch (e) {
+      return;
     }
   }
 
@@ -340,7 +376,8 @@ class _ProfileState extends State<Profile> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
       ),
-      content: const Text("¿Quieres guardar los cambios?"),
+      title: const Text("¿Quieres guardar los cambios?"),
+      content: const Text("Asegurase de introducir un correo válido para poder cambiar la contraseña"),
       actions: [
         cancelButton,
         continueButton,
