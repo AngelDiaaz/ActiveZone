@@ -259,7 +259,10 @@ class _HomePageState extends State<HomePage> {
                                                   width: 2.0,
                                                 ),
                                                 shape: BoxShape.circle,
-                                                image: DecorationImage( fit: BoxFit.cover, image: NetworkImage(widget.user.imageProfile!)),
+                                                image: DecorationImage( fit: BoxFit.cover,
+                                                  image: widget.user.imageProfile!.isEmpty
+                                                      ? const NetworkImage('https://firebasestorage.googleapis.com/v0/b/gymapp-8a4d2.appspot.com/o/image%2Factivity%2Fprofile.jpg?alt=media&token=c0d74362-e1bb-420d-9772-9681c73d5a76&_gl=1*10cz45j*_ga*MTcxNDQxNTU0LjE2NzQ1NTk2OTU.*_ga_CW55HF8NVT*MTY4NTcyMTc4NS44Ny4xLjE2ODU3MjE5NDkuMC4wLjA.')
+                                                      : NetworkImage(widget.user.imageProfile!),),
                                             ),
                                             ),
                                             SizedBox(
