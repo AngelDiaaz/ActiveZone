@@ -8,6 +8,7 @@ import '../models/models.dart';
 
 /// Clase HomePage
 class HomePage extends StatefulWidget {
+  //TODO arreglar lo de gym, hacer por consultas el geo y el insta
   final Gym gym;
   final User user;
 

@@ -5,10 +5,14 @@ import 'package:provider/provider.dart';
 import '../../utils/utils.dart';
 import '../pages.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 ///Clase Login
 class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+  Login({Key? key, this.userId}) : super(key: key);
+
+  String? userId;
 
   @override
   State<Login> createState() => _LoginState();
@@ -84,7 +88,13 @@ class _LoginState extends State<Login> {
                         final messenger = ScaffoldMessenger.of(context);
                         bool response = false;
                         if (_formKey.currentState!.validate()) {
-                          User user = await state.getUser(userController.text);
+                          SharedPreferences prefs = await SharedPreferences.getInstance();
+                          User user;
+                          if(userController.text.isNotEmpty) {
+                            user = await state.getUser(userController.text);
+                          } else {
+                            user = await state.getUser(widget.userId!);
+                          }
                           Gym gym = await state.getGym();
 
                           //Realizo el hash de la contraseña que le paso para compararlo con el de la base de datos
@@ -95,6 +105,9 @@ class _LoginState extends State<Login> {
                               response = true;
                             }
                             if (response) {
+                              prefs.setBool('isLoggedIn', true);
+                              prefs.setString('userId', userController.text);
+
                               if (!mounted) return;
                               Navigator.push(
                                   context,
