@@ -24,6 +24,10 @@ class _NewReserveState extends State<NewReserve> {
     state = Provider.of<AppState>(context, listen: true);
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black, size: widthScreen * 0.075),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
         title:
             const Text("Reservar cita", style: TextStyle(color: Colors.black)),
         centerTitle: true,
