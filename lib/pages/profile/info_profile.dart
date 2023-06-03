@@ -70,6 +70,8 @@ class _ProfileState extends State<Profile> {
                         icon: Icon(Icons.arrow_back_outlined,
                             size: widthScreen * 0.1),
                         onPressed: () {
+                          FocusScope.of(context).unfocus();
+
                           Navigator.pop(context);
                         },
                       ),
@@ -185,7 +187,7 @@ class _ProfileState extends State<Profile> {
                             fontSize: heightScreen * 0.022,
                             wordSpacing: widthScreen * 0.01));
                   } else {
-                    return const Center(child: CircularProgressIndicator());
+                    return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(LoginSettings.loginColor()),));
                   }
                 },
               ),
