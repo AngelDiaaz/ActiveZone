@@ -154,8 +154,8 @@ class _MyReservesState extends State<MyReserves> {
                                 }).toList(),
                               );
                             } else {
-                              return const Center(
-                                  child: CircularProgressIndicator());
+                              return Center(
+                                  child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(LoginSettings.loginColor())));
                             }
                           } catch (e) {
                             return Row();
