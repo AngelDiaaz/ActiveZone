@@ -105,11 +105,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           onPressed: () async {
                             final messenger = ScaffoldMessenger.of(context);
                             bool response = false;
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ChangePassword(user: User(name: 'name', password: 'password', email: 'email', surname1: 'surname1', surname2: 'surname2', active: true, dni: 'dni', phone: 'phone')),
-                                ));
+
                             if (_formKey.currentState!.validate()) {
                               User user =
                                   await state.getUser(userController.text);
