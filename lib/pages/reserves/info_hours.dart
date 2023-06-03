@@ -5,6 +5,8 @@ import '../../models/models.dart';
 import '../../services/services.dart';
 import 'package:gymapp/pages/pages.dart';
 
+import '../../utils/utils.dart';
+
 ///Clase InfoHours
 class InfoHours extends StatefulWidget {
   final String activityName;
@@ -90,7 +92,7 @@ class _InfoHoursState extends State<InfoHours> {
                 );
               }
             } else {
-              return const Center(child: CircularProgressIndicator());
+              return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(LoginSettings.loginColor())));
             }
           } catch (e) {
             return Row();

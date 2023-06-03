@@ -3,6 +3,7 @@ import 'package:gymapp/pages/pages.dart';
 import 'package:provider/provider.dart';
 import '../../models/models.dart';
 import '../../services/services.dart';
+import '../../utils/utils.dart';
 
 ///Clase NewReserve
 class NewReserve extends StatefulWidget {
@@ -52,9 +53,9 @@ class _NewReserveState extends State<NewReserve> {
                   ],
                 );
               } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+                return Center(
+                  child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(LoginSettings.loginColor()),
+                  ));
               }
             } catch (e) {
               return Row();

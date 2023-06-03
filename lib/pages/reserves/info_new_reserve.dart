@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gymapp/services/services.dart';
 import '../../models/models.dart';
 import 'package:gymapp/pages/pages.dart';
+import '../../utils/utils.dart';
 
 /// Clase InfoNewReserve
 class InfoNewReserve extends StatefulWidget {
@@ -41,7 +42,7 @@ class _InfoNewReserveState extends State<InfoNewReserve> {
                           fit: BoxFit.cover,
                           image: NetworkImage(snapshot.data!));
                     } else {
-                      return const Center(child: CircularProgressIndicator());
+                      return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(LoginSettings.loginColor())));
                     }
                   },
                 ),
