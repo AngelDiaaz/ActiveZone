@@ -212,17 +212,17 @@ class _MyReservesState extends State<MyReserves> {
                                                 widthScreen, heightScreen, infoText);
                                           }
                                         } else {
-                                          return const Center(
+                                          return Center(
                                               child:
-                                                  CircularProgressIndicator());
+                                                  CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(LoginSettings.loginColor())));
                                         }
                                       } catch (e) {
                                         return Row();
                                       }
                                     });
                               } else {
-                                return const Center(
-                                    child: CircularProgressIndicator());
+                                return Center(
+                                    child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(LoginSettings.loginColor())));
                               }
                             } catch (e) {
                               return messageNotReserves(widthScreen, heightScreen, infoText);
