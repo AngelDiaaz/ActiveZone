@@ -9,6 +9,7 @@ class Gym {
     required this.geolocation,
     required this.instagram,
     required this.activities,
+    this.image,
   });
 
   String name;
@@ -17,20 +18,21 @@ class Gym {
   GeoPoint geolocation;
   String instagram;
   List<Activity> activities;
+  String? image;
 
   factory Gym.fromFirestore(
-      DocumentSnapshot<Map<String, dynamic>> snapshot,
-      SnapshotOptions? options,
-      ) {
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
+    SnapshotOptions? options,
+  ) {
     final data = snapshot.data();
     return Gym(
-      name: data?['name'],
-      id: data?['id'],
-      activities: [],
-      direction: data?['direction'],
-      geolocation: data?['geolocation'],
-      instagram: data?['instagram']
-    );
+        name: data?['name'],
+        id: data?['id'],
+        activities: [],
+        direction: data?['direction'],
+        geolocation: data?['geolocation'],
+        instagram: data?['instagram'],
+        image: data?['image']);
   }
 
   Map<String, dynamic> toFirestore() {
@@ -41,6 +43,7 @@ class Gym {
       "id": id,
       "instagram": instagram,
       "geolocation": geolocation,
+      if (image != null) "image": image,
     };
   }
 

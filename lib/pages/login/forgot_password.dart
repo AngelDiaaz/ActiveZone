@@ -64,7 +64,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         'Recuperar contraseña',
                         style: TextStyle(
                             color: principalColor,
-                            fontSize: 30,
+                            fontSize: heightScreen *0.037,
                             fontWeight: FontWeight.w500),
                       ),
                     ),
@@ -82,7 +82,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     Center(
                       child: Text(
                         'Por favor, introduce el usuario y el correo electrónico',
-                        style: TextStyle(fontSize: 16, color: principalColor),
+                        style: TextStyle(fontSize: heightScreen * 0.02, color: principalColor),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -90,8 +90,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       height: heightScreen * 0.04,
                     ),
                     _credentials(heightScreen),
+                    SizedBox(
+                      height: heightScreen * 0.005,
+                    ),
                     Container(
-                      height: heightScreen * 0.08,
+                      height: heightScreen * 0.085,
                       width: widthScreen * 0.65,
                       decoration: BoxDecoration(
                           color: principalColor,
@@ -102,6 +105,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           onPressed: () async {
                             final messenger = ScaffoldMessenger.of(context);
                             bool response = false;
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ChangePassword(user: User(name: 'name', password: 'password', email: 'email', surname1: 'surname1', surname2: 'surname2', active: true, dni: 'dni', phone: 'phone')),
+                                ));
                             if (_formKey.currentState!.validate()) {
                               User user =
                                   await state.getUser(userController.text);
@@ -140,11 +148,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                               }
                             }
                           },
-                          child: const Text(
+                          child: Text(
                             'Enviar correo',
                             style: TextStyle(
-                                color: Color.fromRGBO(255, 255, 255, 0.9),
-                                fontSize: 25),
+                                color: const Color.fromRGBO(255, 255, 255, 0.9),
+                                fontSize: heightScreen*0.034),
                           ),
                         );
                       }),
@@ -165,7 +173,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             child: Text(
                               "Cancelar",
                               style: TextStyle(
-                                  fontSize: 25, color: principalColor),
+                                  fontSize: heightScreen*0.034, color: principalColor),
                             ),
                             onPressed: () {
                               FocusScope.of(context).unfocus();
@@ -226,7 +234,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               child: TextFormField(
                 controller: userController,
                 style: TextStyle(
-                    fontSize: 20,
+                    fontSize: heightScreen*0.026,
                     fontWeight: FontWeight.w400,
                     color: principalColor),
                 decoration: LoginSettings.decorationForm(
@@ -245,7 +253,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 controller: emailController,
                 keyboardType: TextInputType.emailAddress,
                 style: TextStyle(
-                    fontSize: 20,
+                    fontSize: heightScreen*0.026,
                     fontWeight: FontWeight.w400,
                     color: principalColor),
                 decoration: LoginSettings.decorationForm(

@@ -10,9 +10,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 ///Clase Login
 class Login extends StatefulWidget {
-  Login({Key? key, this.userId}) : super(key: key);
+  const Login({Key? key, this.userId}) : super(key: key);
 
-  String? userId;
+  final String? userId;
 
   @override
   State<Login> createState() => _LoginState();
@@ -55,14 +55,14 @@ class _LoginState extends State<Login> {
             child: Column(
               children: <Widget>[
                 SizedBox(
-                  height: heightScreen * 0.05,
+                  height: heightScreen * 0.045,
                 ),
                 Center(
                   child: Text(
                     'ActiveZone+',
                     style: TextStyle(
                         color: principalColor,
-                        fontSize: 40,
+                        fontSize: heightScreen*0.055,
                         fontWeight: FontWeight.w500),
                   ),
                 ),
@@ -95,7 +95,6 @@ class _LoginState extends State<Login> {
                           } else {
                             user = await state.getUser(widget.userId!);
                           }
-                          Gym gym = await state.getGym();
 
                           //Realizo el hash de la contraseña que le paso para compararlo con el de la base de datos
                           if (user.dni.isNotEmpty && user.active!) {
@@ -105,6 +104,7 @@ class _LoginState extends State<Login> {
                               response = true;
                             }
                             if (response) {
+                              //Para guardar en el cache si se ha iniciado sesion antes y el id del usuario
                               prefs.setBool('isLoggedIn', true);
                               prefs.setString('userId', userController.text);
 
@@ -113,7 +113,6 @@ class _LoginState extends State<Login> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => HomePage(
-                                            gym: gym,
                                             user: user,
                                           )));
                             } else {
@@ -128,11 +127,11 @@ class _LoginState extends State<Login> {
                           }
                         }
                       },
-                      child: const Text(
+                      child: Text(
                         'Iniciar sesión',
                         style: TextStyle(
-                            color: Color.fromRGBO(255, 255, 255, 0.9),
-                            fontSize: 25),
+                            color: const Color.fromRGBO(255, 255, 255, 0.9),
+                            fontSize: heightScreen*0.034),
                       ),
                     ),
                   ),
@@ -152,7 +151,7 @@ class _LoginState extends State<Login> {
                           child: Text(
                             "Activar cuenta",
                             style:
-                                TextStyle(fontSize: 25, color: principalColor),
+                                TextStyle(fontSize: heightScreen*0.034, color: principalColor),
                           ),
                           onPressed: () {
                             FocusScope.of(context).unfocus();
@@ -180,7 +179,7 @@ class _LoginState extends State<Login> {
               child: TextFormField(
                 controller: userController,
                 style: TextStyle(
-                    fontSize: 20,
+                    fontSize: heightScreen*0.026,
                     fontWeight: FontWeight.w400,
                     color: principalColor),
                 decoration: LoginSettings.decorationForm(
@@ -197,7 +196,7 @@ class _LoginState extends State<Login> {
               padding: const EdgeInsets.fromLTRB(20, 25, 20, 0),
               child: TextFormField(
                 style: TextStyle(
-                    fontSize: 20,
+                    fontSize: heightScreen*0.026,
                     fontWeight: FontWeight.w400,
                     color: principalColor),
                 controller: passwordController,
@@ -219,7 +218,7 @@ class _LoginState extends State<Login> {
                   padding: const EdgeInsets.fromLTRB(0, 10, 20, 0),
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      textStyle: TextStyle(fontSize: 18, color: principalColor),
+                      textStyle: TextStyle(fontSize: heightScreen*0.023, color: principalColor),
                     ),
                     onPressed: () => Navigator.pushNamed(context, 'password'),
                     child: Text('Recuperar contraseña',

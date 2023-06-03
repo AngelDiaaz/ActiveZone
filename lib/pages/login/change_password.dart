@@ -60,7 +60,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                         'Cambiar contraseña',
                         style: TextStyle(
                             color: principalColor,
-                            fontSize: 30,
+                            fontSize: heightScreen * 0.038,
                             fontWeight: FontWeight.w500),
                       ),
                     ),
@@ -78,7 +78,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                     Center(
                       child: Text(
                         'Por favor, introduce la nueva contraseña',
-                        style: TextStyle(fontSize: 16, color: principalColor),
+                        style: TextStyle(fontSize: heightScreen * 0.02, color: principalColor),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -114,19 +114,19 @@ class _ChangePasswordState extends State<ChangePassword> {
                                 //Muestro el mensaje de que se ha activado la cuenta
                                 showDialog(
                                   context: context,
-                                  builder: (context) => const AlertDialog(
-                                    shape: RoundedRectangleBorder(
+                                  builder: (context) => AlertDialog(
+                                    shape: const RoundedRectangleBorder(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(30.0))),
-                                    contentPadding:
+                                    contentPadding: const
                                     EdgeInsets.only(top: 20.0),
-                                    title: Text(
+                                    title: const Text(
                                         'Se ha cambiado la contraseña correctamente',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(wordSpacing: 2)),
                                     icon: Icon(Icons.mood_outlined,
-                                        color: Colors.green, size: 50),
-                                    backgroundColor:
+                                        color: Colors.green, size: heightScreen * 0.08),
+                                    backgroundColor: const
                                     Color.fromRGBO(247, 237, 240, 0.85),
                                   ),
                                 );
@@ -145,9 +145,9 @@ class _ChangePasswordState extends State<ChangePassword> {
                                   'Error credenciales incorrectas', Colors.red);
                             }
                           },
-                          child: const Text(
+                          child: Text(
                             'Cambiar contraseña',
-                            style: TextStyle(color: Color.fromRGBO(255, 255, 255, 0.9), fontSize: 24),
+                            style: TextStyle(color: const Color.fromRGBO(255, 255, 255, 0.9), fontSize: heightScreen*0.03),
                           ),
                         );
                       }),
@@ -168,7 +168,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                             child: Text(
                               "Cancelar",
                               style: TextStyle(
-                                  fontSize: 25, color: principalColor),
+                                  fontSize: heightScreen*0.03, color: principalColor),
                             ),
                             onPressed: () {
                               FocusScope.of(context).unfocus();
@@ -198,7 +198,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 controller: passwordController,
                 obscureText: true,
                 style: TextStyle(
-                    fontSize: 20,
+                    fontSize: heightScreen*0.026,
                     fontWeight: FontWeight.w400,
                     color: principalColor),
                 decoration: LoginSettings.decorationForm('Nueva Contraseña', 'Introduce la nueva contraseña'),
@@ -210,8 +210,8 @@ class _ChangePasswordState extends State<ChangePassword> {
                 },
               ),
             ),
-            const SizedBox(
-              height: 20,
+            SizedBox(
+              height: heightScreen*0.015,
             ),
             Padding(
               padding: const EdgeInsets.only(
@@ -219,7 +219,7 @@ class _ChangePasswordState extends State<ChangePassword> {
               child: TextFormField(
                 controller: passwordRepeatController,
                 style: TextStyle(
-                    fontSize: 20,
+                    fontSize: heightScreen*0.026,
                     fontWeight: FontWeight.w400,
                     color: principalColor),
                 obscureText: true,

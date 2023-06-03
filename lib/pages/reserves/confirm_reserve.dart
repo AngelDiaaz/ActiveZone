@@ -73,7 +73,6 @@ class _ConfirmReserveState extends State<ConfirmReserve> {
                           borderRadius: BorderRadius.circular(15)),
                       child: MaterialButton(
                         onPressed: () async {
-                          Gym gym = await state.getGym();
                           Activity a =
                               await state.getActivity(widget.activityName);
                           a.schedule!.clear();
@@ -110,7 +109,6 @@ class _ConfirmReserveState extends State<ConfirmReserve> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => HomePage(
-                                        gym: gym,
                                         user: widget.user,
                                       )));
                         },

@@ -3,17 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:gymapp/pages/pages.dart';
 import 'package:gymapp/pages/reserves/my_reserves.dart';
 import 'package:gymapp/services/services.dart';
+import 'package:gymapp/utils/page_settings.dart';
 import 'package:provider/provider.dart';
 import '../models/models.dart';
 
 /// Clase HomePage
 class HomePage extends StatefulWidget {
-  //TODO arreglar lo de gym, hacer por consultas el geo y el insta
-  final Gym gym;
   final User user;
 
-  const HomePage({Key? key, required this.gym, required this.user})
-      : super(key: key);
+  const HomePage({Key? key, required this.user}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -21,6 +19,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   AppState? state;
+  Gym? gym;
 
   @override
   Widget build(BuildContext context) {
@@ -35,263 +34,304 @@ class _HomePageState extends State<HomePage> {
       body: SizedBox(
         height: heightScreen,
         width: widthScreen,
-        child: Column(
-          children: [
-            Row(children: [
-              SizedBox(
-                  height: heightScreen * 0.35,
-                  width: widthScreen,
-                  child: Image.asset(
-                    'assets/images/gym.jpg',
-                    fit: BoxFit.cover,
-                  )),
-            ]),
-            Row(
-              children: [
-                SizedBox(
-                  height: heightScreen * 0.65,
-                  width: widthScreen,
-                  child: Column(
-                    children: [
-                      SizedBox(height: heightScreen *  0.01,),
-                      Row(
-                        children: [
-                          Container(
-                            alignment: Alignment.centerLeft,
-                            height: heightContainer,
-                            width: widthScreen / 2,
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                    height: heightScreen * 0.1,
-                                    width: heightScreen * 0.1,
-                                    child: FloatingActionButton(
-                                        heroTag: 'btn1',
-                                        onPressed: () {
-                                          if (!mounted) return;
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    MyReserves(
-                                                      user: widget.user,
-                                                    )),
-                                          );
-                                        },
-                                        backgroundColor: Colors.white,
-                                        child: Icon(
-                                          Icons.calendar_month_outlined,
-                                          color: Colors.black,
-                                          size: heightScreen * 0.06,
-                                        )),
-                                  ),
-                                  SizedBox(
-                                    height: sizeMargin,
-                                  ),
-                                  Text("Mis reservas",
-                                      style: TextStyle(fontSize: textSize)),
-                                ],
+        child: FutureBuilder(
+            future: state!.getGym(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                gym = snapshot.data!;
+                return Column(
+                  children: [
+                    Row(children: [
+                      SizedBox(
+                          height: heightScreen * 0.35,
+                          width: widthScreen,
+                          child: gym!.image!.isEmpty ? Image.asset(
+                            'assets/images/gym.jpg',
+                            fit: BoxFit.cover,
+                          ) : Image.network(gym!.image!)),
+                    ]),
+                    Row(
+                      children: [
+                        SizedBox(
+                          height: heightScreen * 0.65,
+                          width: widthScreen,
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: heightScreen * 0.01,
                               ),
-                            ),
-                          ),
-                          Container(
-                            alignment: Alignment.centerLeft,
-                            height: heightContainer,
-                            width: widthScreen / 2,
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                              Row(
                                 children: [
-                                  SizedBox(
-                                    height: heightScreen * 0.1,
-                                    width: heightScreen * 0.1,
-                                    child: FloatingActionButton(
-                                        heroTag: 'btn2',
-                                        onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    NewReserve(
-                                                      user: widget.user,
-                                                    )),
-                                          );
-                                        },
-                                        backgroundColor: Colors.white,
-                                        child: Icon(
-                                          Icons.edit_calendar_outlined,
-                                          color: Colors.black,
-                                          size: heightScreen * 0.06,
-                                        )),
-                                  ),
-                                  SizedBox(
-                                    height: sizeMargin,
-                                  ),
-                                  Text("Nueva reserva",
-                                      style: TextStyle(fontSize: textSize)),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Container(
-                            alignment: Alignment.centerLeft,
-                            height: heightContainer,
-                            width: widthScreen / 2,
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                    height: heightScreen * 0.1,
-                                    width: heightScreen * 0.1,
-                                    child: FloatingActionButton(
-                                        heroTag: 'btn3',
-                                        onPressed: () async {
-                                          var geolocation =
-                                              widget.gym.geolocation;
-
-                                          var latitude =
-                                              geolocation.latitude.toString();
-                                          var longitude =
-                                              geolocation.longitude.toString();
-
-                                          final intent = AndroidIntent(
-                                              action: 'action_view',
-                                              data: Uri.encodeFull(
-                                                  'geo:$latitude,$longitude'),
-                                              package:
-                                                  'com.google.android.apps.maps');
-                                          intent.launch();
-                                        },
-                                        backgroundColor: Colors.white,
-                                        child: Icon(
-                                          Icons.location_on,
-                                          color: Colors.black,
-                                          size: heightScreen * 0.06,
-                                        )),
-                                  ),
-                                  SizedBox(
-                                    height: sizeMargin,
-                                  ),
-                                  Text("Gimnasio",
-                                      style: TextStyle(fontSize: textSize)),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Container(
-                            alignment: Alignment.centerLeft,
-                            height: heightContainer,
-                            width: widthScreen / 2,
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                    height: heightScreen * 0.1,
-                                    width: heightScreen * 0.1,
-                                    child: FloatingActionButton(
-                                        heroTag: 'btn4',
-                                        onPressed: () async {
-                                          var instagram = widget.gym.instagram;
-                                          final intent = AndroidIntent(
-                                              action: 'action_view',
-                                              data: Uri.encodeFull(
-                                                  'http://instagram.com/$instagram'),
-                                              package: 'com.instagram.android');
-                                          intent.launch();
-                                        },
-                                        backgroundColor: Colors.white,
-                                        child: Icon(
-                                          Icons.public,
-                                          color: Colors.black,
-                                          size: heightScreen * 0.06,
-                                        )),
-                                  ),
-                                  SizedBox(
-                                    height: sizeMargin,
-                                  ),
-                                  Text("Instagram",
-                                      style: TextStyle(fontSize: textSize)),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Container(
-                            alignment: Alignment.center,
-                            height: heightContainer * 0.9,
-                            width: widthScreen,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    Profile(
-                                                      user: widget.user,
-                                                    )),
-                                          );
-                                        },
-                                        child: Row(
-                                          children: [
-                                            Container(
-                                              width: heightScreen * 0.1,
-                                              height: heightScreen * 0.1,
-                                              decoration: BoxDecoration(
-                                                border: Border.all(
-                                                  color: Colors.white,
-                                                  width: 2.0,
-                                                ),
-                                                shape: BoxShape.circle,
-                                                image: DecorationImage( fit: BoxFit.cover,
-                                                  image: widget.user.imageProfile!.isEmpty
-                                                      ? const NetworkImage('https://firebasestorage.googleapis.com/v0/b/gymapp-8a4d2.appspot.com/o/image%2Factivity%2Fprofile.jpg?alt=media&token=c0d74362-e1bb-420d-9772-9681c73d5a76&_gl=1*10cz45j*_ga*MTcxNDQxNTU0LjE2NzQ1NTk2OTU.*_ga_CW55HF8NVT*MTY4NTcyMTc4NS44Ny4xLjE2ODU3MjE5NDkuMC4wLjA.')
-                                                      : NetworkImage(widget.user.imageProfile!),),
-                                            ),
-                                            ),
-                                            SizedBox(
-                                              width: widthScreen * 0.08,
-                                            ),
-                                            Text(
-                                                '${widget.user.name} ${widget.user.surname1}',
-                                                style: TextStyle( color: Colors.black87, fontWeight: FontWeight.w400,
-                                                    fontSize:
-                                                        widthScreen * 0.052)),
-                                          ],
-                                        ),
+                                  Container(
+                                    alignment: Alignment.centerLeft,
+                                    height: heightContainer,
+                                    width: widthScreen / 2,
+                                    child: Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          SizedBox(
+                                            height: heightScreen * 0.1,
+                                            width: heightScreen * 0.1,
+                                            child: FloatingActionButton(
+                                                heroTag: 'btn1',
+                                                onPressed: () {
+                                                  if (!mounted) return;
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            MyReserves(
+                                                              user: widget.user,
+                                                            )),
+                                                  );
+                                                },
+                                                backgroundColor: Colors.white,
+                                                child: Icon(
+                                                  Icons.calendar_month_outlined,
+                                                  color: Colors.black,
+                                                  size: heightScreen * 0.06,
+                                                )),
+                                          ),
+                                          SizedBox(
+                                            height: sizeMargin,
+                                          ),
+                                          Text("Mis reservas",
+                                              style: TextStyle(
+                                                  fontSize: textSize)),
+                                        ],
                                       ),
-                                    ],
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
+                                  Container(
+                                    alignment: Alignment.centerLeft,
+                                    height: heightContainer,
+                                    width: widthScreen / 2,
+                                    child: Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          SizedBox(
+                                            height: heightScreen * 0.1,
+                                            width: heightScreen * 0.1,
+                                            child: FloatingActionButton(
+                                                heroTag: 'btn2',
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            NewReserve(
+                                                              user: widget.user,
+                                                            )),
+                                                  );
+                                                },
+                                                backgroundColor: Colors.white,
+                                                child: Icon(
+                                                  Icons.edit_calendar_outlined,
+                                                  color: Colors.black,
+                                                  size: heightScreen * 0.06,
+                                                )),
+                                          ),
+                                          SizedBox(
+                                            height: sizeMargin,
+                                          ),
+                                          Text("Nueva reserva",
+                                              style: TextStyle(
+                                                  fontSize: textSize)),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    alignment: Alignment.centerLeft,
+                                    height: heightContainer,
+                                    width: widthScreen / 2,
+                                    child: Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          SizedBox(
+                                            height: heightScreen * 0.1,
+                                            width: heightScreen * 0.1,
+                                            child: FloatingActionButton(
+                                                heroTag: 'btn3',
+                                                onPressed: () async {
+                                                  var geolocation =
+                                                      gym!.geolocation;
+
+                                                  var latitude = geolocation
+                                                      .latitude
+                                                      .toString();
+                                                  var longitude = geolocation
+                                                      .longitude
+                                                      .toString();
+
+                                                  final intent = AndroidIntent(
+                                                      action: 'action_view',
+                                                      data: Uri.encodeFull(
+                                                          'geo:$latitude,$longitude'),
+                                                      package:
+                                                          'com.google.android.apps.maps');
+                                                  intent.launch();
+                                                },
+                                                backgroundColor: Colors.white,
+                                                child: Icon(
+                                                  Icons.location_on,
+                                                  color: Colors.black,
+                                                  size: heightScreen * 0.06,
+                                                )),
+                                          ),
+                                          SizedBox(
+                                            height: sizeMargin,
+                                          ),
+                                          Text("Gimnasio",
+                                              style: TextStyle(
+                                                  fontSize: textSize)),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    alignment: Alignment.centerLeft,
+                                    height: heightContainer,
+                                    width: widthScreen / 2,
+                                    child: Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          SizedBox(
+                                            height: heightScreen * 0.1,
+                                            width: heightScreen * 0.1,
+                                            child: FloatingActionButton(
+                                                heroTag: 'btn4',
+                                                onPressed: () async {
+                                                  var instagram =
+                                                      gym!.instagram;
+                                                  final intent = AndroidIntent(
+                                                      action: 'action_view',
+                                                      data: Uri.encodeFull(
+                                                          'http://instagram.com/$instagram'),
+                                                      package:
+                                                          'com.instagram.android');
+                                                  intent.launch();
+                                                },
+                                                backgroundColor: Colors.white,
+                                                child: Icon(
+                                                  Icons.public,
+                                                  color: Colors.black,
+                                                  size: heightScreen * 0.06,
+                                                )),
+                                          ),
+                                          SizedBox(
+                                            height: sizeMargin,
+                                          ),
+                                          Text("Instagram",
+                                              style: TextStyle(
+                                                  fontSize: textSize)),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    alignment: Alignment.center,
+                                    height: heightContainer * 0.9,
+                                    width: widthScreen,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Center(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            Profile(
+                                                              user: widget.user,
+                                                            )),
+                                                  );
+                                                },
+                                                child: Row(
+                                                  children: [
+                                                    Container(
+                                                      width: heightScreen * 0.1,
+                                                      height:
+                                                          heightScreen * 0.1,
+                                                      decoration: BoxDecoration(
+                                                        border: Border.all(
+                                                          color: Colors.white,
+                                                          width: 2.0,
+                                                        ),
+                                                        shape: BoxShape.circle,
+                                                        image: DecorationImage(
+                                                          fit: BoxFit.cover,
+                                                          image: widget
+                                                                  .user
+                                                                  .imageProfile!
+                                                                  .isEmpty
+                                                              ? const NetworkImage(
+                                                                  'https://firebasestorage.googleapis.com/v0/b/gymapp-8a4d2.appspot.com/o/image%2Factivity%2Fprofile.jpg?alt=media&token=c0d74362-e1bb-420d-9772-9681c73d5a76&_gl=1*10cz45j*_ga*MTcxNDQxNTU0LjE2NzQ1NTk2OTU.*_ga_CW55HF8NVT*MTY4NTcyMTc4NS44Ny4xLjE2ODU3MjE5NDkuMC4wLjA.')
+                                                              : NetworkImage(widget
+                                                                  .user
+                                                                  .imageProfile!),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: widthScreen * 0.08,
+                                                    ),
+                                                    Text(
+                                                        '${widget.user.name} ${widget.user.surname1}',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.black87,
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            fontSize:
+                                                                widthScreen *
+                                                                    0.052)),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ],
-        ),
+                        )
+                      ],
+                    ),
+                  ],
+                );
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(LoginSettings.loginColor()),),
+                );
+              }
+            }),
       ),
     );
   }

@@ -32,9 +32,9 @@ void main() async {
 class MyApp extends StatelessWidget {
   MyApp({super.key, required this.isLoggedIn, this.userId});
 
-  bool isLoggedIn;
-  String? userId;
-  AppState state = AppState();
+  final bool isLoggedIn;
+  final String? userId;
+  final AppState state = AppState();
 
   Future<User> getUser() async {
     // Realiza una operación asíncrona aquí, por ejemplo, una solicitud de red
@@ -55,14 +55,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Gym gym = Gym(
-        name: "",
-        id: "",
-        direction: "",
-        activities: [],
-        geolocation: const GeoPoint(0, 0),
-        instagram: '');
-
     return FutureBuilder(
       future: getUser(),
       builder: (context, snapshot) {
@@ -77,7 +69,6 @@ class MyApp extends StatelessWidget {
               routes: {
                 '/': (_) =>
                     HomePage(
-                      gym: gym,
                       user: user,
                     ),
                 'login': (_) =>

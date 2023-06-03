@@ -54,14 +54,14 @@ class _ActiveAccountState extends State<ActiveAccount> {
                 child: Column(
                   children: <Widget>[
                     SizedBox(
-                      height: heightScreen * 0.04,
+                      height: heightScreen * 0.038,
                     ),
                     Center(
                       child: Text(
                         'Activar cuenta',
                         style: TextStyle(
                             color: principalColor,
-                            fontSize: 36,
+                            fontSize: heightScreen * 0.045,
                             fontWeight: FontWeight.w500),
                       ),
                     ),
@@ -107,20 +107,20 @@ class _ActiveAccountState extends State<ActiveAccount> {
                                   //Muestro el mensaje de que se ha activado la cuenta
                                   showDialog(
                                     context: context,
-                                    builder: (context) => const AlertDialog(
-                                      shape: RoundedRectangleBorder(
+                                    builder: (context) => AlertDialog(
+                                      shape: const RoundedRectangleBorder(
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(30.0))),
-                                      contentPadding:
+                                      contentPadding: const
                                           EdgeInsets.only(top: 20.0),
-                                      title: Text(
+                                      title: const Text(
                                           'Enhorabuena la cuenta se ha activado correctamente',
                                           textAlign: TextAlign.center,
                                           style: TextStyle(wordSpacing: 2)),
                                       icon: Icon(Icons.celebration_outlined,
-                                          color: Colors.green, size: 50),
+                                          color: Colors.green, size: heightScreen * 0.08),
                                       backgroundColor:
-                                          Color.fromRGBO(247, 237, 240, 0.85),
+                                         const Color.fromRGBO(247, 237, 240, 0.85),
                                     ),
                                   );
                                   //Hago que se muestra el mensaje de la activacion durante dos segundos
@@ -141,11 +141,11 @@ class _ActiveAccountState extends State<ActiveAccount> {
                               }
                             }
                           },
-                          child: const Text(
+                          child: Text(
                             'Activar cuenta',
                             style: TextStyle(
-                                color: Color.fromRGBO(255, 255, 255, 0.9),
-                                fontSize: 25),
+                                color: const Color.fromRGBO(255, 255, 255, 0.9),
+                                fontSize: heightScreen*0.034),
                           ),
                         );
                       }),
@@ -166,7 +166,7 @@ class _ActiveAccountState extends State<ActiveAccount> {
                             child: Text(
                               "Cancelar",
                               style: TextStyle(
-                                  fontSize: 25, color: principalColor),
+                                  fontSize: heightScreen*0.034, color: principalColor),
                             ),
                             onPressed: () {
                               FocusScope.of(context).unfocus();
@@ -195,7 +195,7 @@ class _ActiveAccountState extends State<ActiveAccount> {
               child: TextFormField(
                 controller: userController,
                 style: TextStyle(
-                    fontSize: 20,
+                    fontSize: heightScreen*0.026,
                     fontWeight: FontWeight.w400,
                     color: principalColor),
                 decoration: LoginSettings.decorationForm(
@@ -214,7 +214,7 @@ class _ActiveAccountState extends State<ActiveAccount> {
               child: TextFormField(
                 controller: authenticationCodeController,
                 style: TextStyle(
-                    fontSize: 20,
+                    fontSize: heightScreen*0.026,
                     fontWeight: FontWeight.w400,
                     color: principalColor),
                 keyboardType: TextInputType.text,
@@ -235,7 +235,7 @@ class _ActiveAccountState extends State<ActiveAccount> {
               child: TextFormField(
                 controller: passwordController,
                 style: TextStyle(
-                    fontSize: 20,
+                    fontSize: heightScreen*0.026,
                     fontWeight: FontWeight.w400,
                     color: principalColor),
                 obscureText: true,
@@ -255,7 +255,7 @@ class _ActiveAccountState extends State<ActiveAccount> {
               child: TextFormField(
                 controller: passwordRepeatController,
                 style: TextStyle(
-                    fontSize: 20,
+                    fontSize: heightScreen*0.026,
                     fontWeight: FontWeight.w400,
                     color: principalColor),
                 obscureText: true,
