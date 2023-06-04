@@ -231,7 +231,7 @@ class _InfoHoursState extends State<InfoHours> {
             showDialog(
               context: context,
               builder: (context) => AlertDialog(
-                title: const Text('Ya estas inscrito en está actividad',
+                title: const Text('Ya estás inscrito en esta actividad',
                     textAlign: TextAlign.center,
                     style: TextStyle(wordSpacing: 2)),
                 icon: Icon(Icons.sentiment_satisfied_alt_outlined,
