@@ -68,7 +68,7 @@ class _ProfileState extends State<Profile> {
                       width: heightScreen * 0.08,
                       child: IconButton(
                         icon: Icon(Icons.arrow_back_outlined,
-                            size: widthScreen * 0.1),
+                            size: widthScreen * 0.1, color: AppSettings.mainColor()),
                         onPressed: () {
                           FocusScope.of(context).unfocus();
 
@@ -87,7 +87,7 @@ class _ProfileState extends State<Profile> {
                       child: IconButton(
                         icon: Icon(
                             isEditing ? Icons.save_as : Icons.edit_outlined,
-                            size: widthScreen * 0.1),
+                            size: widthScreen * 0.1, color: AppSettings.mainColor()),
                         onPressed: () {
                           FocusScope.of(context).unfocus();
 
@@ -123,8 +123,7 @@ class _ProfileState extends State<Profile> {
                           ? const NetworkImage('https://firebasestorage.googleapis.com/v0/b/gymapp-8a4d2.appspot.com/o/image%2Factivity%2Fprofile.jpg?alt=media&token=c0d74362-e1bb-420d-9772-9681c73d5a76&_gl=1*10cz45j*_ga*MTcxNDQxNTU0LjE2NzQ1NTk2OTU.*_ga_CW55HF8NVT*MTY4NTcyMTc4NS44Ny4xLjE2ODU3MjE5NDkuMC4wLjA.')
                           : NetworkImage(widget.user.imageProfile!),),
                   ClipOval(
-                      child: Container(
-                        color: Colors.brown,
+                      child: Container( color: AppSettings.mainColor(),
                         padding: const EdgeInsets.all(5),
                         child: Icon(
                           Icons.camera_alt,
@@ -140,13 +139,13 @@ class _ProfileState extends State<Profile> {
                 height: heightScreen * 0.05,
               ),
               Text(widget.user.dni,
-                  style: TextStyle(fontSize: heightScreen * 0.035)),
+                  style: TextStyle(fontSize: heightScreen * 0.035, color: AppSettings.mainColor())),
               SizedBox(
                 height: heightScreen * 0.05,
               ),
               Text(
                   '${widget.user.name} ${widget.user.surname1} ${widget.user.surname2}',
-                  style: TextStyle(fontSize: heightScreen * 0.03)),
+                  style: TextStyle(fontSize: heightScreen * 0.03, color: AppSettings.mainColor())),
               SizedBox(
                 height: heightScreen * 0.05,
               ),
@@ -168,7 +167,7 @@ class _ProfileState extends State<Profile> {
                     return Text('Reservas próximas: $next',
                         style: TextStyle(
                             fontSize: heightScreen * 0.022,
-                            wordSpacing: widthScreen * 0.01));
+                            wordSpacing: widthScreen * 0.01, color: AppSettings.mainColor()));
                   } else {
                     return Row();
                   }
@@ -185,9 +184,9 @@ class _ProfileState extends State<Profile> {
                     return Text('Reservas finalizadas: $end',
                         style: TextStyle(
                             fontSize: heightScreen * 0.022,
-                            wordSpacing: widthScreen * 0.01));
+                            wordSpacing: widthScreen * 0.01, color: AppSettings.mainColor()));
                   } else {
-                    return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(LoginSettings.loginColor()),));
+                    return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(AppSettings.loginColor()),));
                   }
                 },
               ),
@@ -203,7 +202,7 @@ class _ProfileState extends State<Profile> {
                         style: TextStyle(
                             fontSize: heightScreen * 0.028,
                             fontWeight: FontWeight.w500,
-                            wordSpacing: widthScreen * 0.01));
+                            wordSpacing: widthScreen * 0.01, color: AppSettings.mainColor()));
                   } else {
                     return Row();
                   }
@@ -313,12 +312,12 @@ class _ProfileState extends State<Profile> {
                 maxLines: 1,
                 controller: controller,
                 autofocus: true,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black54),
+                    borderSide: BorderSide(color: AppSettings.mainColor()),
                   ),
                   focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black54),
+                    borderSide: BorderSide(color: AppSettings.mainColor()),
                   ),
                 ),
                 //Para que a la hora de pulsar el boton Enter se cambie ya los cambios
@@ -348,7 +347,7 @@ class _ProfileState extends State<Profile> {
           borderRadius: BorderRadius.circular(5),
         ),
       ),
-      child: Text("No", style: TextStyle(color: LoginSettings.loginColor())),
+      child: Text("No", style: TextStyle(color: AppSettings.loginColor())),
       onPressed: () {
         Navigator.pop(context);
       },
@@ -361,7 +360,7 @@ class _ProfileState extends State<Profile> {
       ),
       child: Text(
         "Sí",
-        style: TextStyle(color: LoginSettings.loginColor()),
+        style: TextStyle(color: AppSettings.loginColor()),
       ),
       onPressed: () async {
         widget.user.email = newEmail;

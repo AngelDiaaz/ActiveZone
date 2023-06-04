@@ -21,7 +21,7 @@ class _ChangePasswordState extends State<ChangePassword> {
       TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AppState state = AppState();
-  Color principalColor = LoginSettings.loginColor();
+  Color principalColor = AppSettings.loginColor();
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,7 @@ class _ChangePasswordState extends State<ChangePassword> {
             Positioned.fill(
               //Cacheo la imagen para al tener que iniciar mas veces sea mas rapido
               child: CachedNetworkImage(
-                imageUrl: LoginSettings.loginImage(),
+                imageUrl: AppSettings.loginImage(),
                 fit: BoxFit.cover,
               ),
             ),
@@ -203,7 +203,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                     fontSize: heightScreen*0.026,
                     fontWeight: FontWeight.w400,
                     color: principalColor),
-                decoration: LoginSettings.decorationForm('Nueva Contraseña', 'Introduce la nueva contraseña'),
+                decoration: AppSettings.decorationForm('Nueva Contraseña', 'Introduce la nueva contraseña'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Este campo es requerido';
@@ -225,7 +225,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                     fontWeight: FontWeight.w400,
                     color: principalColor),
                 obscureText: true,
-                decoration: LoginSettings.decorationForm('Repitir Nueva Contraseña', 'Introduce la nueva contraseña'),
+                decoration: AppSettings.decorationForm('Repitir Nueva Contraseña', 'Introduce la nueva contraseña'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Este campo es requerido';

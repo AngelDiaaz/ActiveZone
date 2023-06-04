@@ -6,7 +6,7 @@ import 'package:gymapp/pages/pages.dart';
 import 'package:gymapp/pages/reserves/my_reserves.dart';
 import 'package:gymapp/services/firebase_options.dart';
 import 'package:gymapp/services/services.dart';
-import 'package:gymapp/utils/page_settings.dart';
+import 'package:gymapp/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -106,7 +106,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             home: Scaffold(
                 body: Container(
-                  color: LoginSettings.loginColor(),
+                  color: AppSettings.loginColor(),
                   child: Center(
                     child: Image.asset('assets/images/gym.jpg'),
                   ),

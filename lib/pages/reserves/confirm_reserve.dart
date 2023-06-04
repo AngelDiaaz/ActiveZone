@@ -3,6 +3,7 @@ import 'package:gymapp/pages/pages.dart';
 import 'package:gymapp/services/services.dart';
 import 'package:intl/intl.dart';
 import '../../models/models.dart';
+import '../../utils/page_settings.dart';
 
 /// Clase ConfirmReserve
 class ConfirmReserve extends StatefulWidget {
@@ -22,7 +23,6 @@ class ConfirmReserve extends StatefulWidget {
 }
 
 class _ConfirmReserveState extends State<ConfirmReserve> {
-  Color buttonColor = const Color.fromRGBO(125, 99, 69, 1);
   AppState state = AppState();
   double widthScreen = 0;
   double heightScreen = 0;
@@ -69,7 +69,7 @@ class _ConfirmReserveState extends State<ConfirmReserve> {
                       height: heightScreen * 0.075,
                       width: widthScreen * 0.6,
                       decoration: BoxDecoration(
-                          color: buttonColor,
+                          color: AppSettings.mainColor(),
                           borderRadius: BorderRadius.circular(15)),
                       child: MaterialButton(
                         onPressed: () async {
@@ -126,7 +126,7 @@ class _ConfirmReserveState extends State<ConfirmReserve> {
                       height: heightScreen * 0.075,
                       width: widthScreen * 0.6,
                       decoration: BoxDecoration(
-                          border: Border.all(color: buttonColor),
+                          border: Border.all(color: AppSettings.mainColor()),
                           borderRadius: BorderRadius.circular(10)),
                       child: MaterialButton(
                         onPressed: () {
@@ -139,7 +139,7 @@ class _ConfirmReserveState extends State<ConfirmReserve> {
                                       )));
                         },
                         child: Text('Cancelar',
-                            style: TextStyle(color: buttonColor, fontSize: heightScreen * 0.03)),
+                            style: TextStyle(color: AppSettings.mainColor(), fontSize: heightScreen * 0.03)),
                       ),
                     ),
                   )
@@ -170,7 +170,7 @@ class _ConfirmReserveState extends State<ConfirmReserve> {
             child: Text(title,
                 style: TextStyle(
                   fontSize: heightScreen * 0.028,
-                  fontWeight: FontWeight.w400,
+                  fontWeight: FontWeight.w400, color: AppSettings.mainColor()
                 )),
           ),
         ),
@@ -182,7 +182,7 @@ class _ConfirmReserveState extends State<ConfirmReserve> {
             information,
             style: TextStyle(
               fontSize: heightScreen * 0.028,
-              fontWeight: FontWeight.w400,),
+              fontWeight: FontWeight.w400, color: AppSettings.mainColor()),
           ),
         ),
       ],
@@ -192,6 +192,6 @@ class _ConfirmReserveState extends State<ConfirmReserve> {
   /// Metodo que devuelve un  divider
   Divider divider() {
     return Divider(
-        height: heightScreen *0.012, indent: 20, endIndent: 20, color: buttonColor);
+        height: heightScreen *0.012, indent: 20, endIndent: 20, color: AppSettings.mainColor());
   }
 }

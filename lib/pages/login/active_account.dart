@@ -22,7 +22,7 @@ class _ActiveAccountState extends State<ActiveAccount> {
       TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AppState state = AppState();
-  Color principalColor = LoginSettings.loginColor();
+  Color principalColor = AppSettings.loginColor();
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class _ActiveAccountState extends State<ActiveAccount> {
             Positioned.fill(
               //Cacheo la imagen para al tener que iniciar mas veces sea mas rapido
               child: CachedNetworkImage(
-                imageUrl: LoginSettings.loginImage(),
+                imageUrl: AppSettings.loginImage(),
                 fit: BoxFit.cover,
               ),
             ),
@@ -199,7 +199,7 @@ class _ActiveAccountState extends State<ActiveAccount> {
                     fontSize: heightScreen*0.026,
                     fontWeight: FontWeight.w400,
                     color: principalColor),
-                decoration: LoginSettings.decorationForm(
+                decoration: AppSettings.decorationForm(
                     'Usuario', 'Introduce tu usuario'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -219,7 +219,7 @@ class _ActiveAccountState extends State<ActiveAccount> {
                     fontWeight: FontWeight.w400,
                     color: principalColor),
                 keyboardType: TextInputType.text,
-                decoration: LoginSettings.decorationForm(
+                decoration: AppSettings.decorationForm(
                     'Código autentificación',
                     'Introduce el código de autentificación'),
                 validator: (value) {
@@ -240,7 +240,7 @@ class _ActiveAccountState extends State<ActiveAccount> {
                     fontWeight: FontWeight.w400,
                     color: principalColor),
                 obscureText: true,
-                decoration: LoginSettings.decorationForm(
+                decoration: AppSettings.decorationForm(
                     'Contraseña', 'Introduce la contraseña'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -260,7 +260,7 @@ class _ActiveAccountState extends State<ActiveAccount> {
                     fontWeight: FontWeight.w400,
                     color: principalColor),
                 obscureText: true,
-                decoration: LoginSettings.decorationForm(
+                decoration: AppSettings.decorationForm(
                     'Repetir contraseña', 'Introduce la contraseña'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {

@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import '../../models/models.dart';
 import '../../services/services.dart';
 import 'package:gymapp/pages/pages.dart';
-
 import '../../utils/utils.dart';
 
 ///Clase InfoHours
@@ -58,14 +57,14 @@ class _InfoHoursState extends State<InfoHours> {
             padding: const EdgeInsets.fromLTRB(0, 16, 0, 10),
             child: Text(
               widget.activityName,
-              style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w500),
+              style: TextStyle(fontSize: 36, fontWeight: FontWeight.w500, color: AppSettings.mainColor()),
             )),
       ),
       const Divider(
           height: 10, indent: 20, endIndent: 20, color: Colors.black54),
       selectDate(),
       const Divider(
-          height: 10, indent: 20, endIndent: 20, color: Colors.black87),
+          height: 10, indent: 20, endIndent: 20, color: Colors.black54),
       SizedBox(
         height: heightScreen * 0.01,
       ),
@@ -92,7 +91,7 @@ class _InfoHoursState extends State<InfoHours> {
                 );
               }
             } else {
-              return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(LoginSettings.loginColor())));
+              return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(AppSettings.loginColor())));
             }
           } catch (e) {
             return Row();
@@ -120,15 +119,15 @@ class _InfoHoursState extends State<InfoHours> {
             return TextField(
                 controller: dateController,
                 decoration: InputDecoration(
-                  icon: Icon(Icons.calendar_today, color: Colors.black87, size: heightScreen * 0.04),
-                  labelStyle: const TextStyle(color: Colors.black),
+                  icon: Icon(Icons.calendar_today, color: AppSettings.mainColor(), size: heightScreen * 0.04),
+                  labelStyle: TextStyle(color: AppSettings.mainColor()),
                   focusedBorder: const UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.transparent),
                   ),
-                  focusColor: Colors.black,
+                  focusColor: AppSettings.mainColor(),
                 ),
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.black, fontSize: heightScreen * 0.03),
+                style: TextStyle(color: AppSettings.mainColor(), fontSize: heightScreen * 0.03),
                 readOnly: true,
                 onTap: () async {
                   pickedDate = await showDatePicker(
@@ -152,7 +151,7 @@ class _InfoHoursState extends State<InfoHours> {
                   setState(() {});
                 });
           } else {
-            return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(LoginSettings.loginColor())));
+            return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(AppSettings.loginColor())));
           }} catch (e) {
             return Row();
           }
@@ -251,7 +250,7 @@ class _InfoHoursState extends State<InfoHours> {
         child: Text(
           schedule.hour,
           style: TextStyle(
-              fontSize: heightScreen * 0.027, fontWeight: FontWeight.w500, color: Colors.black87),
+              fontSize: heightScreen * 0.027, fontWeight: FontWeight.w500, color: AppSettings.mainColor()),
         ),
       ),
     );

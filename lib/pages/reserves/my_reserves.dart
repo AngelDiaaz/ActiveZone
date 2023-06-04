@@ -25,6 +25,8 @@ class _MyReservesState extends State<MyReserves> {
   Color buttonAvailable = Colors.white;
   Color buttonEnd = Colors.white60;
   String infoText = 'Lo sentimos no dispones de ninguna reserva';
+  Color buttonColor = const Color.fromRGBO(20, 44, 68, 1);
+
 
   ///Metodo que carga las listas con los nombres de las actividades
   Future<bool> loadList() async {
@@ -90,7 +92,9 @@ class _MyReservesState extends State<MyReserves> {
                                     style: TextStyle(
                                         fontSize: heightScreen * 0.02,
                                         wordSpacing: 3,
-                                        fontWeight: FontWeight.w600)),
+                                        fontWeight: FontWeight.w600,
+                                      color: buttonColor,
+                                        )),
                               )),
                         ),
                         SizedBox(
@@ -111,7 +115,7 @@ class _MyReservesState extends State<MyReserves> {
                                     style: TextStyle(
                                         fontSize: heightScreen * 0.02,
                                         wordSpacing: 3,
-                                        fontWeight: FontWeight.w600)),
+                                        fontWeight: FontWeight.w600, color: buttonColor)),
                               )),
                         ),
                       ],
@@ -131,11 +135,11 @@ class _MyReservesState extends State<MyReserves> {
                               return DropdownButton(
                                 value: dropdownValue,
                                 icon: Icon(Icons.keyboard_arrow_down_outlined,
-                                    color: LoginSettings.loginColor(), size: heightScreen*0.045,),
+                                    color: buttonColor, size: heightScreen*0.045,),
                                 elevation: 16,
                                 alignment: Alignment.center,
                                 style: TextStyle(
-                                    color: LoginSettings.loginColor(),
+                                    color: buttonColor,
                                     fontWeight: FontWeight.w500,
                                     fontSize: heightScreen * 0.04),
                                 iconSize: 34,
@@ -155,7 +159,7 @@ class _MyReservesState extends State<MyReserves> {
                               );
                             } else {
                               return Center(
-                                  child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(LoginSettings.loginColor())));
+                                  child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(AppSettings.loginColor())));
                             }
                           } catch (e) {
                             return Row();
@@ -214,7 +218,7 @@ class _MyReservesState extends State<MyReserves> {
                                         } else {
                                           return Center(
                                               child:
-                                                  CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(LoginSettings.loginColor())));
+                                                  CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(AppSettings.loginColor())));
                                         }
                                       } catch (e) {
                                         return Row();
@@ -222,7 +226,7 @@ class _MyReservesState extends State<MyReserves> {
                                     });
                               } else {
                                 return Center(
-                                    child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(LoginSettings.loginColor())));
+                                    child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(AppSettings.loginColor())));
                               }
                             } catch (e) {
                               return messageNotReserves(widthScreen, heightScreen, infoText);
@@ -315,7 +319,7 @@ class _MyReservesState extends State<MyReserves> {
                                   name,
                                   style: TextStyle(
                                       fontSize: heightScreen * 0.03,
-                                      color: LoginSettings.loginColor(),
+                                      color: buttonColor,
                                       fontWeight: FontWeight.w500),
                                 ),
                                 SizedBox(
@@ -326,7 +330,7 @@ class _MyReservesState extends State<MyReserves> {
                                       .format(schedule.date.toDate()),
                                   style: TextStyle(
                                       fontSize: heightScreen * 0.03,
-                                      color: LoginSettings.loginColor(),
+                                      color: buttonColor,
                                       fontWeight: FontWeight.w500),
                                 ),
                                 SizedBox(
@@ -336,7 +340,7 @@ class _MyReservesState extends State<MyReserves> {
                                   schedule.hour,
                                   style: TextStyle(
                                       fontSize: heightScreen * 0.03,
-                                      color: LoginSettings.loginColor(),
+                                      color: buttonColor,
                                       fontWeight: FontWeight.w500),
                                 ),
                               ],
@@ -358,7 +362,7 @@ class _MyReservesState extends State<MyReserves> {
                   ),
                 ));
           } else {
-            return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(LoginSettings.loginColor())));
+            return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(AppSettings.loginColor())));
           }
         } catch (e) {
           return Row();
@@ -373,7 +377,7 @@ class _MyReservesState extends State<MyReserves> {
       style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5),
       ),),
-      child: Text("No", style: TextStyle(color: LoginSettings.loginColor())),
+      child: Text("No", style: TextStyle(color: AppSettings.loginColor())),
       onPressed: () {
         Navigator.pop(context);
       },
@@ -382,7 +386,7 @@ class _MyReservesState extends State<MyReserves> {
       style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5),
       ),),
-      child: Text("Sí", style: TextStyle(color: LoginSettings.loginColor()),),
+      child: Text("Sí", style: TextStyle(color: AppSettings.loginColor()),),
       onPressed: () async {
         //Le restamos al horario el usuario inscrito
         schedule.numberUsers--;

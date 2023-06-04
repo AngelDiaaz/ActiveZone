@@ -22,7 +22,7 @@ class _LoginState extends State<Login> {
   final TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AppState state = AppState();
-  Color principalColor = LoginSettings.loginColor();
+  Color principalColor = AppSettings.loginColor();
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class _LoginState extends State<Login> {
         Positioned.fill(
           //Cacheo la imagen para al tener que iniciar mas veces sea mas rapido
           child: CachedNetworkImage(
-            imageUrl: LoginSettings.loginImage(),
+            imageUrl: AppSettings.loginImage(),
             fit: BoxFit.cover,
           ),
         ),
@@ -184,7 +184,7 @@ class _LoginState extends State<Login> {
                     fontSize: heightScreen * 0.026,
                     fontWeight: FontWeight.w400,
                     color: principalColor),
-                decoration: LoginSettings.decorationForm(
+                decoration: AppSettings.decorationForm(
                     'Usuario', 'Introduce tu usuario'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -203,7 +203,7 @@ class _LoginState extends State<Login> {
                     color: principalColor),
                 controller: passwordController,
                 obscureText: true,
-                decoration: LoginSettings.decorationForm(
+                decoration: AppSettings.decorationForm(
                     'Contraseña', 'Introduce la contraseña'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {

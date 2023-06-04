@@ -26,11 +26,11 @@ class _NewReserveState extends State<NewReserve> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black, size: widthScreen * 0.075),
+          icon: Icon(Icons.arrow_back, color: AppSettings.mainColor(), size: widthScreen * 0.075),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title:
-            const Text("Reservar cita", style: TextStyle(color: Colors.black)),
+            Text("Reservar cita", style: TextStyle(color: AppSettings.mainColor(), fontSize: widthScreen * 0.06)),
         centerTitle: true,
         backgroundColor: Colors.white,
       ),
@@ -54,7 +54,7 @@ class _NewReserveState extends State<NewReserve> {
                 );
               } else {
                 return Center(
-                  child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(LoginSettings.loginColor()),
+                  child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(AppSettings.loginColor()),
                   ));
               }
             } catch (e) {

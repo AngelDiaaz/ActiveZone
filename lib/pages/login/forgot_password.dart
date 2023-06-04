@@ -23,7 +23,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   var rng = Random();
   AppState state = AppState();
-  Color principalColor = LoginSettings.loginColor();
+  Color principalColor = AppSettings.loginColor();
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             Positioned.fill(
               //Cacheo la imagen para al tener que iniciar mas veces sea mas rapido
               child: CachedNetworkImage(
-                imageUrl: LoginSettings.loginImage(),
+                imageUrl: AppSettings.loginImage(),
                 fit: BoxFit.cover,
               ),
             ),
@@ -240,7 +240,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     fontSize: heightScreen*0.026,
                     fontWeight: FontWeight.w400,
                     color: principalColor),
-                decoration: LoginSettings.decorationForm(
+                decoration: AppSettings.decorationForm(
                     'Usuario', 'Introduce el usuario'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -259,7 +259,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     fontSize: heightScreen*0.026,
                     fontWeight: FontWeight.w400,
                     color: principalColor),
-                decoration: LoginSettings.decorationForm(
+                decoration: AppSettings.decorationForm(
                     'Correo Electrónico', 'Introduce el correo electrónico'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {

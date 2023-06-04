@@ -42,7 +42,7 @@ class _InfoNewReserveState extends State<InfoNewReserve> {
                           fit: BoxFit.cover,
                           image: NetworkImage(snapshot.data!));
                     } else {
-                      return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(LoginSettings.loginColor())));
+                      return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(AppSettings.loginColor())));
                     }
                   },
                 ),
