@@ -7,7 +7,6 @@ import '../pages.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 ///Clase Login
 class Login extends StatefulWidget {
   const Login({Key? key, this.userId}) : super(key: key);
@@ -62,16 +61,17 @@ class _LoginState extends State<Login> {
                     'ActiveZone+',
                     style: TextStyle(
                         color: principalColor,
-                        fontSize: heightScreen*0.055,
-                        fontWeight: FontWeight.w500),
+                        fontSize: heightScreen * 0.058,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Geologica'),
                   ),
                 ),
                 SizedBox(
-                  height: heightScreen * 0.06,
+                  height: heightScreen * 0.045,
                 ),
                 _credentials(heightScreen),
                 SizedBox(
-                  height: heightScreen * 0.02,
+                  height: heightScreen * 0.035,
                 ),
                 Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
                   Container(
@@ -88,9 +88,10 @@ class _LoginState extends State<Login> {
                         final messenger = ScaffoldMessenger.of(context);
                         bool response = false;
                         if (_formKey.currentState!.validate()) {
-                          SharedPreferences prefs = await SharedPreferences.getInstance();
+                          SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
                           User user;
-                          if(userController.text.isNotEmpty) {
+                          if (userController.text.isNotEmpty) {
                             user = await state.getUser(userController.text);
                           } else {
                             user = await state.getUser(widget.userId!);
@@ -131,7 +132,7 @@ class _LoginState extends State<Login> {
                         'Iniciar sesión',
                         style: TextStyle(
                             color: const Color.fromRGBO(255, 255, 255, 0.9),
-                            fontSize: heightScreen*0.034),
+                            fontSize: heightScreen * 0.034, fontFamily: 'Geologica'),
                       ),
                     ),
                   ),
@@ -150,8 +151,9 @@ class _LoginState extends State<Login> {
                           ),
                           child: Text(
                             "Activar cuenta",
-                            style:
-                                TextStyle(fontSize: heightScreen*0.034, color: principalColor),
+                            style: TextStyle(
+                                fontSize: heightScreen * 0.034,
+                                color: principalColor, fontFamily: 'Geologica'),
                           ),
                           onPressed: () {
                             FocusScope.of(context).unfocus();
@@ -179,7 +181,7 @@ class _LoginState extends State<Login> {
               child: TextFormField(
                 controller: userController,
                 style: TextStyle(
-                    fontSize: heightScreen*0.026,
+                    fontSize: heightScreen * 0.026,
                     fontWeight: FontWeight.w400,
                     color: principalColor),
                 decoration: LoginSettings.decorationForm(
@@ -196,7 +198,7 @@ class _LoginState extends State<Login> {
               padding: const EdgeInsets.fromLTRB(20, 25, 20, 0),
               child: TextFormField(
                 style: TextStyle(
-                    fontSize: heightScreen*0.026,
+                    fontSize: heightScreen * 0.026,
                     fontWeight: FontWeight.w400,
                     color: principalColor),
                 controller: passwordController,
@@ -218,7 +220,9 @@ class _LoginState extends State<Login> {
                   padding: const EdgeInsets.fromLTRB(0, 10, 20, 0),
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      textStyle: TextStyle(fontSize: heightScreen*0.023, color: principalColor),
+                      textStyle: TextStyle(
+                          fontSize: heightScreen * 0.023,
+                          color: principalColor),
                     ),
                     onPressed: () => Navigator.pushNamed(context, 'password'),
                     child: Text('Recuperar contraseña',

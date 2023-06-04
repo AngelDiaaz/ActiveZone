@@ -61,7 +61,8 @@ class _ChangePasswordState extends State<ChangePassword> {
                         style: TextStyle(
                             color: principalColor,
                             fontSize: heightScreen * 0.038,
-                            fontWeight: FontWeight.w500),
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'Geologica'),
                       ),
                     ),
                     SizedBox(
@@ -147,7 +148,8 @@ class _ChangePasswordState extends State<ChangePassword> {
                           },
                           child: Text(
                             'Cambiar contraseña',
-                            style: TextStyle(color: const Color.fromRGBO(255, 255, 255, 0.9), fontSize: heightScreen*0.03),
+                            style: TextStyle(color: const Color.fromRGBO(255, 255, 255, 0.9), fontSize: heightScreen*0.028,
+                                fontFamily: 'Geologica'),
                           ),
                         );
                       }),
@@ -168,7 +170,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                             child: Text(
                               "Cancelar",
                               style: TextStyle(
-                                  fontSize: heightScreen*0.03, color: principalColor),
+                                  fontSize: heightScreen*0.03, color: principalColor, fontFamily: 'Geologica'),
                             ),
                             onPressed: () {
                               FocusScope.of(context).unfocus();

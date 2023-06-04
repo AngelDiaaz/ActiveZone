@@ -62,7 +62,8 @@ class _ActiveAccountState extends State<ActiveAccount> {
                         style: TextStyle(
                             color: principalColor,
                             fontSize: heightScreen * 0.045,
-                            fontWeight: FontWeight.w500),
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Geologica'),
                       ),
                     ),
                     SizedBox(
@@ -145,7 +146,7 @@ class _ActiveAccountState extends State<ActiveAccount> {
                             'Activar cuenta',
                             style: TextStyle(
                                 color: const Color.fromRGBO(255, 255, 255, 0.9),
-                                fontSize: heightScreen*0.034),
+                                fontSize: heightScreen*0.034, fontFamily: 'Geologica'),
                           ),
                         );
                       }),
@@ -166,7 +167,7 @@ class _ActiveAccountState extends State<ActiveAccount> {
                             child: Text(
                               "Cancelar",
                               style: TextStyle(
-                                  fontSize: heightScreen*0.034, color: principalColor),
+                                  fontSize: heightScreen*0.034, color: principalColor, fontFamily: 'Geologica'),
                             ),
                             onPressed: () {
                               FocusScope.of(context).unfocus();
