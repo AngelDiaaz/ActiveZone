@@ -14,7 +14,7 @@ class AppSettings {
 
   ///Metodo que devuelve el color principal de la app
   static Color mainColor(){
-    return const Color.fromRGBO(20, 44, 68, 1);
+    return const Color.fromRGBO(25, 40, 48, 1);
   }
 
   ///Metodo con la configuracion que quiero que se muestre en los formularios

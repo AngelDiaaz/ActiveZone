@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
 
+///Metodo que inicializa la aplicacion
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -34,6 +35,7 @@ void main() async {
   });
 }
 
+///Clase MyApp
 class MyApp extends StatelessWidget {
   MyApp({super.key, required this.isLoggedIn, this.userId});
 
@@ -108,7 +110,7 @@ class MyApp extends StatelessWidget {
               body: Container(
                 color: AppSettings.loginColor(),
                 child: Center(
-                  child: Image.asset('assets/images/gym.jpg'),
+                  child: Image.asset('assets/images/activezone+logo.png'),
                 ),
               ),
             ),

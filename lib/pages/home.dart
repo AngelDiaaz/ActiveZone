@@ -21,7 +21,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   AppState? state;
   Gym? gym;
-  Color buttonColor = const Color.fromRGBO(20, 44, 68, 1);
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +108,7 @@ class _HomePageState extends State<HomePage> {
                                                 backgroundColor: Colors.white,
                                                 child: Icon(
                                                   Icons.calendar_month_outlined,
-                                                  color: buttonColor,
+                                                  color: AppSettings.mainColor(),
                                                   size: heightScreen * 0.06,
                                                 )),
                                           ),
@@ -118,7 +117,7 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                           Text("Mis reservas",
                                               style: TextStyle(
-                                                  fontSize: textSize, color: buttonColor)),
+                                                  fontSize: textSize, color: AppSettings.mainColor())),
                                         ],
                                       ),
                                     ),
@@ -151,7 +150,7 @@ class _HomePageState extends State<HomePage> {
                                                 backgroundColor: Colors.white,
                                                 child: Icon(
                                                   Icons.edit_calendar_outlined,
-                                                  color: buttonColor,
+                                                  color: AppSettings.mainColor(),
                                                   size: heightScreen * 0.06,
                                                 )),
                                           ),
@@ -160,7 +159,7 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                           Text("Nueva reserva",
                                               style: TextStyle(
-                                                  fontSize: textSize, color: buttonColor)),
+                                                  fontSize: textSize, color: AppSettings.mainColor())),
                                         ],
                                       ),
                                     ),
@@ -206,7 +205,7 @@ class _HomePageState extends State<HomePage> {
                                                 backgroundColor: Colors.white,
                                                 child: Icon(
                                                   Icons.location_on,
-                                                  color: buttonColor,
+                                                  color: AppSettings.mainColor(),
                                                   size: heightScreen * 0.06,
                                                 )),
                                           ),
@@ -215,7 +214,7 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                           Text("Gimnasio",
                                               style: TextStyle(
-                                                  fontSize: textSize, color: buttonColor)),
+                                                  fontSize: textSize, color: AppSettings.mainColor())),
                                         ],
                                       ),
                                     ),
@@ -249,7 +248,7 @@ class _HomePageState extends State<HomePage> {
                                                 backgroundColor: Colors.white,
                                                 child: Icon(
                                                   Icons.public,
-                                                  color: buttonColor,
+                                                  color: AppSettings.mainColor(),
                                                   size: heightScreen * 0.06,
                                                 )),
                                           ),
@@ -258,7 +257,7 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                           Text("Instagram",
                                               style: TextStyle(
-                                                  fontSize: textSize, color: buttonColor)),
+                                                  fontSize: textSize, color: AppSettings.mainColor())),
                                         ],
                                       ),
                                     ),
@@ -323,7 +322,7 @@ class _HomePageState extends State<HomePage> {
                                                     Text(
                                                         '${widget.user.name} ${widget.user.surname1}',
                                                         style: TextStyle(
-                                                            color: buttonColor,
+                                                            color: AppSettings.mainColor(),
                                                             fontWeight:
                                                                 FontWeight.w400,
                                                             fontSize:
