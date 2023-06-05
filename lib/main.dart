@@ -9,6 +9,7 @@ import 'package:gymapp/services/services.dart';
 import 'package:gymapp/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,17 +17,21 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  WidgetsFlutterBinding.ensureInitialized();
-
+  //Leo la informacion que he almacenado en la cache
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
   String? userId = prefs.getString('userId');
 
-  runApp(MyApp(
-    isLoggedIn: isLoggedIn,
-    userId: userId,
-  ));
-  // runApp(const MyApp());
+  //Para que la aplicacion solo este en formato vertical
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((value) {
+    runApp(MyApp(
+      isLoggedIn: isLoggedIn,
+      userId: userId,
+    ));
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -58,7 +63,7 @@ class MyApp extends StatelessWidget {
     return FutureBuilder(
       future: getUser(),
       builder: (context, snapshot) {
-        if(snapshot.hasData) {
+        if (snapshot.hasData) {
           User user = snapshot.data!;
           return ChangeNotifierProvider(
             create: (BuildContext context) => AppState(),
@@ -67,51 +72,46 @@ class MyApp extends StatelessWidget {
               title: 'ActiveZone+',
               // Declaro las rutas que tiene la app
               routes: {
-                '/': (_) =>
-                    HomePage(
+                '/': (_) => HomePage(
                       user: user,
                     ),
-                'login': (_) =>
-                    Login(
+                'login': (_) => Login(
                       userId: userId,
                     ),
                 'register': (_) => const ActiveAccount(),
                 'password': (_) => const ForgotPassword(),
-                'my': (_) =>
-                    MyReserves(
+                'my': (_) => MyReserves(
                       user: user,
                     ),
-                'new': (_) =>
-                    NewReserve(
+                'new': (_) => NewReserve(
                       user: user,
                     ),
                 'hour': (_) => InfoNewReserve(user: user, activityName: ''),
-                'confirm': (_) =>
-                    ConfirmReserve(
-                        user: user,
-                        schedule: Schedule(
-                            id: '',
-                            hour: '',
-                            numberUsers: 0,
-                            date: Timestamp(0, 0)),
-                        activityName: '')
+                'confirm': (_) => ConfirmReserve(
+                    user: user,
+                    schedule: Schedule(
+                        id: '',
+                        hour: '',
+                        numberUsers: 0,
+                        date: Timestamp(0, 0)),
+                    activityName: '')
               },
               // Inicio la app por la ruta del login
               initialRoute: isLoggedIn ? '/' : 'login',
             ),
           );
-        }else {
+        } else {
           // Si ocurrió un error durante la carga
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             home: Scaffold(
-                body: Container(
-                  color: AppSettings.loginColor(),
-                  child: Center(
-                    child: Image.asset('assets/images/gym.jpg'),
-                  ),
+              body: Container(
+                color: AppSettings.loginColor(),
+                child: Center(
+                  child: Image.asset('assets/images/gym.jpg'),
                 ),
               ),
+            ),
           );
         }
       },
