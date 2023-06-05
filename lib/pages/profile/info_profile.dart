@@ -155,7 +155,7 @@ class _ProfileState extends State<Profile> {
                 height: heightScreen * 0.02,
               ),
               changeText(
-                  widget.user.email!, heightScreen * 0.02, emailController),
+                  widget.user.email!, heightScreen * 0.019, emailController),
               SizedBox(
                 height: heightScreen * 0.05,
               ),
