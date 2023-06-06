@@ -79,7 +79,9 @@ class _ChangePasswordState extends State<ChangePassword> {
                     Center(
                       child: Text(
                         'Por favor, introduce la nueva contraseña',
-                        style: TextStyle(fontSize: heightScreen * 0.02, color: principalColor),
+                        style: TextStyle(
+                            fontSize: heightScreen * 0.02,
+                            color: principalColor),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -119,16 +121,17 @@ class _ChangePasswordState extends State<ChangePassword> {
                                     shape: const RoundedRectangleBorder(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(30.0))),
-                                    contentPadding: const
-                                    EdgeInsets.only(top: 20.0),
+                                    contentPadding:
+                                        const EdgeInsets.only(top: 20.0),
                                     title: const Text(
                                         'Se ha cambiado la contraseña correctamente',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(wordSpacing: 2)),
                                     icon: Icon(Icons.mood_outlined,
-                                        color: Colors.green, size: heightScreen * 0.08),
-                                    backgroundColor: const
-                                    Color.fromRGBO(247, 237, 240, 0.85),
+                                        color: Colors.green,
+                                        size: heightScreen * 0.08),
+                                    backgroundColor: const Color.fromRGBO(
+                                        247, 237, 240, 0.85),
                                   ),
                                 );
                                 //Hago que se muestra el mensaje de la activacion durante dos segundos
@@ -148,7 +151,9 @@ class _ChangePasswordState extends State<ChangePassword> {
                           },
                           child: Text(
                             'Cambiar contraseña',
-                            style: TextStyle(color: const Color.fromRGBO(255, 255, 255, 0.9), fontSize: heightScreen*0.028,
+                            style: TextStyle(
+                                color: const Color.fromRGBO(255, 255, 255, 0.9),
+                                fontSize: heightScreen * 0.028,
                                 fontFamily: 'Geologica'),
                           ),
                         );
@@ -170,7 +175,9 @@ class _ChangePasswordState extends State<ChangePassword> {
                             child: Text(
                               "Cancelar",
                               style: TextStyle(
-                                  fontSize: heightScreen*0.03, color: principalColor, fontFamily: 'Geologica'),
+                                  fontSize: heightScreen * 0.03,
+                                  color: principalColor,
+                                  fontFamily: 'Geologica'),
                             ),
                             onPressed: () {
                               FocusScope.of(context).unfocus();
@@ -200,20 +207,25 @@ class _ChangePasswordState extends State<ChangePassword> {
                 controller: passwordController,
                 obscureText: true,
                 style: TextStyle(
-                    fontSize: heightScreen*0.026,
+                    fontSize: heightScreen * 0.026,
                     fontWeight: FontWeight.w400,
                     color: principalColor),
-                decoration: AppSettings.decorationForm('Nueva Contraseña', 'Introduce la nueva contraseña'),
+                decoration: AppSettings.decorationForm(
+                    'Nueva Contraseña', 'Introduce la nueva contraseña'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Este campo es requerido';
+                  } else if (value.length < 8) {
+                    return 'La contraseña debe tener al menos 8 caracteres';
+                  } else if (!value.contains(RegExp(r'[A-Z]'))) {
+                    return 'La contraseña debe contener alguna mayúscula';
                   }
                   return null;
                 },
               ),
             ),
             SizedBox(
-              height: heightScreen*0.015,
+              height: heightScreen * 0.015,
             ),
             Padding(
               padding: const EdgeInsets.only(
@@ -221,14 +233,20 @@ class _ChangePasswordState extends State<ChangePassword> {
               child: TextFormField(
                 controller: passwordRepeatController,
                 style: TextStyle(
-                    fontSize: heightScreen*0.026,
+                    fontSize: heightScreen * 0.026,
                     fontWeight: FontWeight.w400,
                     color: principalColor),
                 obscureText: true,
-                decoration: AppSettings.decorationForm('Repitir Nueva Contraseña', 'Introduce la nueva contraseña'),
+                decoration: AppSettings.decorationForm(
+                    'Repitir Nueva Contraseña',
+                    'Introduce la nueva contraseña'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Este campo es requerido';
+                  } else if (value.length < 8) {
+                    return 'La contraseña debe tener al menos 8 caracteres';
+                  } else if (!value.contains(RegExp(r'[A-Z]'))) {
+                    return 'La contraseña debe contener alguna mayúscula';
                   }
                   return null;
                 },

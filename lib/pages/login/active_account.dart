@@ -244,7 +244,11 @@ class _ActiveAccountState extends State<ActiveAccount> {
                     'Contraseña', 'Introduce la contraseña'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Este campo es requerido';
+                      return 'Este campo es requerido';
+                  } else if (value.length < 8){
+                    return 'La contraseña debe tener al menos 8 caracteres';
+                  } else if (!value.contains(RegExp(r'[A-Z]'))) {
+                    return 'La contraseña debe contener alguna mayúscula';
                   }
                   return null;
                 },
@@ -265,6 +269,10 @@ class _ActiveAccountState extends State<ActiveAccount> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Este campo es requerido';
+                  } else if (value.length < 8){
+                    return 'La contraseña debe tener al menos 8 caracteres';
+                  } else if (!value.contains(RegExp(r'[A-Z]'))) {
+                    return 'La contraseña debe contener alguna mayúscula';
                   }
                   return null;
                 },
