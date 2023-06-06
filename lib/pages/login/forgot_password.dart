@@ -173,7 +173,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                   fontSize: heightScreen*0.034, color: principalColor, fontFamily: 'Geologica'),
                             ),
                             onPressed: () {
-                              FocusScope.of(context).unfocus();
+                              FocusManager.instance.primaryFocus?.unfocus();
                               Navigator.pop(context);
                             })),
                   ],

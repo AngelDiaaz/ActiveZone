@@ -83,7 +83,7 @@ class _LoginState extends State<Login> {
                     child: MaterialButton(
                       onPressed: () async {
                         //Para quitar el teclado al pulsar el boton
-                        FocusScope.of(context).unfocus();
+                        FocusManager.instance.primaryFocus?.unfocus();
 
                         final messenger = ScaffoldMessenger.of(context);
                         bool response = false;
@@ -156,7 +156,7 @@ class _LoginState extends State<Login> {
                                 color: principalColor, fontFamily: 'Geologica'),
                           ),
                           onPressed: () {
-                            FocusScope.of(context).unfocus();
+                            FocusManager.instance.primaryFocus?.unfocus();
                             Navigator.pushNamed(context, 'register');
                           })),
                 ]),

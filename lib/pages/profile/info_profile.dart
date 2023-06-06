@@ -71,7 +71,7 @@ class _ProfileState extends State<Profile> {
                             size: widthScreen * 0.1,
                             color: AppSettings.mainColor()),
                         onPressed: () {
-                          FocusScope.of(context).unfocus();
+                          FocusManager.instance.primaryFocus?.unfocus();
 
                           Navigator.pop(context);
                         },
@@ -349,6 +349,7 @@ class _ProfileState extends State<Profile> {
     }
   }
 
+  ///Metodo que contiene los campos que podemos modificar del perfil
   SizedBox changeText(
       String text, double fontSize, TextEditingController controller) {
     return SizedBox(
@@ -379,6 +380,8 @@ class _ProfileState extends State<Profile> {
                 ),
                 //Para que a la hora de pulsar el boton Enter se cambie ya los cambios
                 onSubmitted: (value) {
+                  FocusManager.instance.primaryFocus?.unfocus();
+
                   newEmail = emailController.text;
                   newPhone = phoneController.text;
 
@@ -422,7 +425,7 @@ class _ProfileState extends State<Profile> {
         style: TextStyle(color: AppSettings.loginColor()),
       ),
       onPressed: () async {
-        FocusScope.of(context).unfocus();
+        FocusManager.instance.primaryFocus?.unfocus();
 
         //Si queremos eliminar la foto de perfil
         if (deleteImage) {

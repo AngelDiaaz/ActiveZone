@@ -170,7 +170,7 @@ class _ActiveAccountState extends State<ActiveAccount> {
                                   fontSize: heightScreen*0.034, color: principalColor, fontFamily: 'Geologica'),
                             ),
                             onPressed: () {
-                              FocusScope.of(context).unfocus();
+                              FocusManager.instance.primaryFocus?.unfocus();
                               Navigator.pop(context);
                             })),
                   ],

@@ -180,7 +180,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                                   fontFamily: 'Geologica'),
                             ),
                             onPressed: () {
-                              FocusScope.of(context).unfocus();
+                              FocusManager.instance.primaryFocus?.unfocus();
                               Navigator.pushNamed(context, 'login');
                             })),
                   ],
