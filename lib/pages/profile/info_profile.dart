@@ -68,7 +68,8 @@ class _ProfileState extends State<Profile> {
                       width: heightScreen * 0.08,
                       child: IconButton(
                         icon: Icon(Icons.arrow_back_outlined,
-                            size: widthScreen * 0.1, color: AppSettings.mainColor()),
+                            size: widthScreen * 0.1,
+                            color: AppSettings.mainColor()),
                         onPressed: () {
                           FocusScope.of(context).unfocus();
 
@@ -87,7 +88,8 @@ class _ProfileState extends State<Profile> {
                       child: IconButton(
                         icon: Icon(
                             isEditing ? Icons.save_as : Icons.edit_outlined,
-                            size: widthScreen * 0.1, color: AppSettings.mainColor()),
+                            size: widthScreen * 0.1,
+                            color: AppSettings.mainColor()),
                         onPressed: () {
                           FocusScope.of(context).unfocus();
 
@@ -98,7 +100,11 @@ class _ProfileState extends State<Profile> {
                               newEmail = emailController.text;
                               newPhone = phoneController.text;
 
-                              showAlertDialog(context);
+                              showAlertDialog(
+                                  context,
+                                  "¿Quieres guardar los cambios?",
+                                  "Asegurase de introducir un correo válido para poder cambiar la contraseña",
+                                  false);
                             } else {
                               isEditing = true;
                             }
@@ -115,23 +121,63 @@ class _ProfileState extends State<Profile> {
               InkWell(
                 onTap: _takePhoto,
                 child: Stack(
-                  alignment: Alignment.bottomRight,
                   children: [
                     CircleAvatar(
                       radius: heightScreen * 0.075,
-                      backgroundImage:widget.user.imageProfile!.isEmpty
-                          ? const NetworkImage('https://firebasestorage.googleapis.com/v0/b/gymapp-8a4d2.appspot.com/o/image%2Factivity%2Fprofile.jpg?alt=media&token=c0d74362-e1bb-420d-9772-9681c73d5a76&_gl=1*10cz45j*_ga*MTcxNDQxNTU0LjE2NzQ1NTk2OTU.*_ga_CW55HF8NVT*MTY4NTcyMTc4NS44Ny4xLjE2ODU3MjE5NDkuMC4wLjA.')
-                          : NetworkImage(widget.user.imageProfile!),),
-                  ClipOval(
-                      child: Container( color: AppSettings.mainColor(),
-                        padding: const EdgeInsets.all(5),
-                        child: Icon(
-                          Icons.camera_alt,
-                          size: heightScreen * 0.035,
-                          color: Colors.white,
+                      backgroundImage: widget.user.imageProfile!.isEmpty
+                          ? const NetworkImage(
+                              'https://firebasestorage.googleapis.com/v0/b/gymapp-8a4d2.appspot.com/o/image%2Factivity%2Fprofile.jpg?alt=media&token=c0d74362-e1bb-420d-9772-9681c73d5a76&_gl=1*10cz45j*_ga*MTcxNDQxNTU0LjE2NzQ1NTk2OTU.*_ga_CW55HF8NVT*MTY4NTcyMTc4NS44Ny4xLjE2ODU3MjE5NDkuMC4wLjA.')
+                          : NetworkImage(widget.user.imageProfile!),
+                    ),
+                    //Si esta en modo editar
+                    if (isEditing) ...{
+                      Positioned(
+                        right: 0,
+                        bottom: 0,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            ClipOval(
+                              child: Container(
+                                height: heightScreen * 0.046,
+                                width: heightScreen * 0.046,
+                                color: Colors.redAccent,
+                              ),
+                            ),
+                            IconButton(
+                              icon: Icon(
+                                Icons.delete_outline_outlined,
+                                size: heightScreen * 0.035,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                showAlertDialog(
+                                    context,
+                                    "¿Quieres eliminar la foto de perfil?",
+                                    "",
+                                    true);
+                              },
+                            ),
+                          ],
                         ),
                       ),
-                    ),
+                    } else ...{
+                      Positioned(
+                        right: 0,
+                        bottom: 0,
+                        child: ClipOval(
+                          child: Container(
+                            color: AppSettings.mainColor(),
+                            padding: const EdgeInsets.all(5),
+                            child: Icon(
+                              Icons.camera_alt,
+                              size: heightScreen * 0.035,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    }
                   ],
                 ),
               ),
@@ -139,13 +185,17 @@ class _ProfileState extends State<Profile> {
                 height: heightScreen * 0.05,
               ),
               Text(widget.user.dni,
-                  style: TextStyle(fontSize: heightScreen * 0.035, color: AppSettings.mainColor())),
+                  style: TextStyle(
+                      fontSize: heightScreen * 0.035,
+                      color: AppSettings.mainColor())),
               SizedBox(
                 height: heightScreen * 0.05,
               ),
               Text(
                   '${widget.user.name} ${widget.user.surname1} ${widget.user.surname2}',
-                  style: TextStyle(fontSize: heightScreen * 0.03, color: AppSettings.mainColor())),
+                  style: TextStyle(
+                      fontSize: heightScreen * 0.03,
+                      color: AppSettings.mainColor())),
               SizedBox(
                 height: heightScreen * 0.05,
               ),
@@ -167,7 +217,8 @@ class _ProfileState extends State<Profile> {
                     return Text('Reservas próximas: $next',
                         style: TextStyle(
                             fontSize: heightScreen * 0.022,
-                            wordSpacing: widthScreen * 0.01, color: AppSettings.mainColor()));
+                            wordSpacing: widthScreen * 0.01,
+                            color: AppSettings.mainColor()));
                   } else {
                     return Row();
                   }
@@ -184,9 +235,14 @@ class _ProfileState extends State<Profile> {
                     return Text('Reservas finalizadas: $end',
                         style: TextStyle(
                             fontSize: heightScreen * 0.022,
-                            wordSpacing: widthScreen * 0.01, color: AppSettings.mainColor()));
+                            wordSpacing: widthScreen * 0.01,
+                            color: AppSettings.mainColor()));
                   } else {
-                    return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(AppSettings.loginColor()),));
+                    return Center(
+                        child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          AppSettings.loginColor()),
+                    ));
                   }
                 },
               ),
@@ -202,7 +258,8 @@ class _ProfileState extends State<Profile> {
                         style: TextStyle(
                             fontSize: heightScreen * 0.028,
                             fontWeight: FontWeight.w500,
-                            wordSpacing: widthScreen * 0.01, color: AppSettings.mainColor()));
+                            wordSpacing: widthScreen * 0.01,
+                            color: AppSettings.mainColor()));
                   } else {
                     return Row();
                   }
@@ -326,7 +383,8 @@ class _ProfileState extends State<Profile> {
                   newPhone = phoneController.text;
 
                   setState(() {
-                    showAlertDialog(context);
+                    showAlertDialog(context, "¿Quieres guardar los cambios?",
+                        "Asegurase de introducir un correo válido para poder cambiar la contraseña", false);
 
                     isEditing = false;
                   });
@@ -339,8 +397,9 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  ///Metodo que muestra una alert para confirmar si quieres eliminar la reserva o no
-  showAlertDialog(BuildContext context) {
+  ///Metodo que muestra una alert para guardar los cambios o eliminar la foto de perfil
+  showAlertDialog(
+      BuildContext context, String title, String text, bool deleteImage) {
     Widget cancelButton = OutlinedButton(
       style: OutlinedButton.styleFrom(
         shape: RoundedRectangleBorder(
@@ -363,21 +422,32 @@ class _ProfileState extends State<Profile> {
         style: TextStyle(color: AppSettings.loginColor()),
       ),
       onPressed: () async {
-        widget.user.email = newEmail;
-        widget.user.phone = newPhone;
+        FocusScope.of(context).unfocus();
 
-        await state.updateUser(widget.user.dni, widget.user);
+        //Si queremos eliminar la foto de perfil
+        if (deleteImage) {
+          widget.user.imageProfile = '';
+          state.updateUser(widget.user.dni, widget.user);
+          setState(() {
+            image = File(widget.user.imageProfile!);
+          });
+        } else {
+          widget.user.email = newEmail;
+          widget.user.phone = newPhone;
 
-        if (!mounted) return;
-        Navigator.pop(context);
+          await state.updateUser(widget.user.dni, widget.user);
+
+        }
+          if (!mounted) return;
+          Navigator.pop(context);
       },
     );
     AlertDialog alert = AlertDialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
       ),
-      title: const Text("¿Quieres guardar los cambios?"),
-      content: const Text("Asegurase de introducir un correo válido para poder cambiar la contraseña"),
+      title: Text(title),
+      content: Text(text),
       actions: [
         cancelButton,
         continueButton,
