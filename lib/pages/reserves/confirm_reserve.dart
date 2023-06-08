@@ -105,12 +105,15 @@ class _ConfirmReserveState extends State<ConfirmReserve> {
                               const Duration(seconds: 2));
 
                           if (!mounted) return;
-                          Navigator.push(
+                          Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => HomePage(
-                                        user: widget.user,
-                                      )));
+                                    user: widget.user,
+                                  )
+                              ),
+                              ModalRoute.withName("/")
+                          );
                         },
                         child: Text('Confirmar',
                             style:
@@ -130,13 +133,16 @@ class _ConfirmReserveState extends State<ConfirmReserve> {
                           borderRadius: BorderRadius.circular(10)),
                       child: MaterialButton(
                         onPressed: () {
-                          Navigator.pushReplacement(
+                          Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => InfoNewReserve(
-                                        user: widget.user,
-                                        activityName: widget.activityName,
-                                      )));
+                                    user: widget.user,
+                                    activityName: widget.activityName,
+                                  )
+                              ),
+                              ModalRoute.withName("/")
+                          );
                         },
                         child: Text('Cancelar',
                             style: TextStyle(color: AppSettings.mainColor(), fontSize: heightScreen * 0.03)),

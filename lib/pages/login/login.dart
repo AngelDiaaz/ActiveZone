@@ -110,12 +110,16 @@ class _LoginState extends State<Login> {
                               prefs.setString('userId', userController.text);
 
                               if (!mounted) return;
-                              Navigator.push(
+                              //Para cuando naveguemos a la pantalla no podramos volver a la pantalla anterior
+                              Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => HomePage(
-                                            user: user,
-                                          )));
+                                        user: user,
+                                      )
+                                  ),
+                                  ModalRoute.withName("/")
+                              );
                             } else {
                               Error.errorMessage(messenger,
                                   'Error credenciales incorrectas', Colors.red);

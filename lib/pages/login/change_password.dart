@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:gymapp/pages/login/login.dart';
 import 'package:provider/provider.dart';
 import '../../models/models.dart';
 import '../../services/services.dart';
@@ -99,7 +100,6 @@ class _ChangePasswordState extends State<ChangePassword> {
                           (BuildContext context, AsyncSnapshot<List> snapshot) {
                         return MaterialButton(
                           onPressed: () async {
-                            final navigator = Navigator.of(context);
                             final messenger = ScaffoldMessenger.of(context);
                             bool response = false;
                             if (_formKey.currentState!.validate()) {
@@ -137,7 +137,15 @@ class _ChangePasswordState extends State<ChangePassword> {
                                 //Hago que se muestra el mensaje de la activacion durante dos segundos
                                 await Future.delayed(
                                     const Duration(seconds: 2));
-                                navigator.pushNamed('login');
+
+                                if(!mounted) return;
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => Login(userId: widget.user.dni,),
+                                    ),
+                                    ModalRoute.withName("login")
+                                );
                               } else {
                                 Error.errorMessage(
                                     messenger,
@@ -181,7 +189,14 @@ class _ChangePasswordState extends State<ChangePassword> {
                             ),
                             onPressed: () {
                               FocusManager.instance.primaryFocus?.unfocus();
-                              Navigator.pushNamed(context, 'login');
+
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Login(userId: widget.user.dni,),
+                                  ),
+                                  ModalRoute.withName("login")
+                              );
                             })),
                   ],
                 ),
@@ -207,7 +222,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 controller: passwordController,
                 obscureText: true,
                 style: TextStyle(
-                    fontSize: heightScreen * 0.026,
+                    fontSize: heightScreen * 0.022,
                     fontWeight: FontWeight.w400,
                     color: principalColor),
                 decoration: AppSettings.decorationForm(
@@ -233,7 +248,7 @@ class _ChangePasswordState extends State<ChangePassword> {
               child: TextFormField(
                 controller: passwordRepeatController,
                 style: TextStyle(
-                    fontSize: heightScreen * 0.026,
+                    fontSize: heightScreen * 0.022,
                     fontWeight: FontWeight.w400,
                     color: principalColor),
                 obscureText: true,

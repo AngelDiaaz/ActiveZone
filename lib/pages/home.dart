@@ -388,7 +388,13 @@ class _HomePageState extends State<HomePage> {
         prefs.setBool('isLoggedIn', false);
 
         if (!mounted) return;
-        Navigator.pushNamed(context, 'login');
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const Login()
+            ),
+            ModalRoute.withName("/")
+        );
       },
     );
     AlertDialog alert = AlertDialog(
