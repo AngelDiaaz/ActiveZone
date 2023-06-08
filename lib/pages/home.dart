@@ -60,6 +60,7 @@ class _HomePageState extends State<HomePage> {
                             Icons.logout,
                             size: heightScreen * 0.05,
                             color: Colors.white,
+                            shadows: const <Shadow>[Shadow(color: Colors.black, blurRadius: 10.0)],
                           ),
                           onPressed: () {
                             showAlertDialog(context);

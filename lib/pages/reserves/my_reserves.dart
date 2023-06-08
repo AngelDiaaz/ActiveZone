@@ -56,7 +56,7 @@ class _MyReservesState extends State<MyReserves> {
             height: heightScreen,
             width: widthScreen,
             child: Column(children: [
-              Row(children: [
+              Stack(children: [
                 SizedBox(
                     height: heightScreen * 1 / 6,
                     width: widthScreen,
@@ -64,6 +64,19 @@ class _MyReservesState extends State<MyReserves> {
                       'assets/images/gym.jpg',
                       fit: BoxFit.cover,
                     )),
+                Positioned(
+                  top: heightScreen * 0.05,
+                  left: widthScreen * 0.04,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.arrow_back,
+                      size: heightScreen * 0.045,
+                      color: Colors.white,
+                      shadows: const <Shadow>[Shadow(color: Colors.black, blurRadius: 10.0)],
+                    ),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ),
               ]),
               Row(children: [
                 SizedBox(

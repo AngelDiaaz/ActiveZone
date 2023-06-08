@@ -30,7 +30,7 @@ class _InfoNewReserveState extends State<InfoNewReserve> {
         height: heightScreen,
         child: Column(
           children: [
-            Row(children: [
+            Stack(children: [
               SizedBox(
                 height: heightScreen * 2 / 6,
                 width: widthScreen,
@@ -45,6 +45,19 @@ class _InfoNewReserveState extends State<InfoNewReserve> {
                       return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(AppSettings.loginColor())));
                     }
                   },
+                ),
+              ),
+              Positioned(
+                top: heightScreen * 0.05,
+                left: widthScreen * 0.04,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.arrow_back,
+                    size: heightScreen * 0.05,
+                    color: Colors.white,
+                    shadows: const <Shadow>[Shadow(color: Colors.black, blurRadius: 10.0)],
+                  ),
+                  onPressed: () => Navigator.pop(context),
                 ),
               ),
             ]),
