@@ -161,7 +161,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                             'Cambiar contraseña',
                             style: TextStyle(
                                 color: const Color.fromRGBO(255, 255, 255, 0.9),
-                                fontSize: heightScreen * 0.028,
+                                fontSize: heightScreen * 0.026,
                                 fontFamily: 'Geologica'),
                           ),
                         );
@@ -183,7 +183,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                             child: Text(
                               "Cancelar",
                               style: TextStyle(
-                                  fontSize: heightScreen * 0.03,
+                                  fontSize: heightScreen * 0.028,
                                   color: principalColor,
                                   fontFamily: 'Geologica'),
                             ),
